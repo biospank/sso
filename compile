@@ -1,0 +1,10 @@
+# apps/sso_web (default - defined in phoenix_static_buildpack.config)
+info "Building Phoenix static assets"
+brunch build --production
+mix phoenix.digest
+
+# example apps/backoffice
+# cd ../backoffice
+# npm install
+# brunch build --production
+# mix phoenix.digest

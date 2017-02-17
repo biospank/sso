@@ -5,6 +5,8 @@ defmodule Dardy.Mixfile do
     [apps_path: "apps",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     version: "1.0.0-dev",
+     name: "Dardy",
      deps: deps]
   end
 
