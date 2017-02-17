@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 
-  <body id="app" class="bg-main">
+  <body id="app">
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>
