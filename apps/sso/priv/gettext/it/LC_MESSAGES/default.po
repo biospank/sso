@@ -1,0 +1,62 @@
+## `msgid`s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove `msgid`s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use `mix gettext.extract --merge` or `mix gettext.merge`
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: it\n"
+
+#: web/controllers/user/activation_controller.ex:31
+msgid "Activation code not found"
+msgstr "Codice di attivazione non trovato"
+
+#: web/lib/token.ex:10
+msgid "Authentication required (invalid token)"
+msgstr "Richiesta autenticazione (token non valido)"
+
+#: web/lib/token.ex:16
+msgid "Authorization required"
+msgstr "Richiesta autorizzazioneAuthorization required"
+
+#: web/controllers/user/activation_controller.ex:42
+#: web/controllers/user/password_reset_controller.ex:40
+msgid "Email not found"
+msgstr "Email non trovata"
+
+#: web/controllers/user/password_reset_controller.ex:62
+msgid "Reset code not found"
+msgstr "Codice reset password non trovato"
+
+#: web/controllers/user/profile_controller.ex:35
+#: web/controllers/user/session_controller.ex:32
+msgid "User not found"
+msgstr "Utente non trovato"
+
+#: web/controllers/session_controller.ex:22
+msgid "Account not found"
+msgstr "Account non trovato"
+
+#: web/controllers/session_controller.ex:30
+msgid "Account temporary disabled"
+msgstr "Account temporaneamente disabilitato"
+
+#: web/controllers/session_controller.ex:26
+msgid "Account unauthorized"
+msgstr "Account non autorizzato"
+
+#: web/controllers/user/session_controller.ex:40
+msgid "User temporary disabled"
+msgstr "Utente temporaneamente disabilitato"
+
+#: web/controllers/user/session_controller.ex:36
+msgid "User unauthorized"
+msgstr "Utente non autorizzato"
+
+#, fuzzy
+#: web/controllers/user/session_controller.ex:44
+msgid "User not verified"
+msgstr "Utente non verificato"

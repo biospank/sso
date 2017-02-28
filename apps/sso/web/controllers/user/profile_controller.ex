@@ -32,7 +32,7 @@ defmodule Sso.User.ProfileController do
       true ->
         conn
         |> put_status(:not_found)
-        |> render(Sso.ErrorView, :"404", errors: %{message: "User not found"})
+        |> render(Sso.ErrorView, :"404", errors: %{message: gettext("User not found")})
     end
   end
 end

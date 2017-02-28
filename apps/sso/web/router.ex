@@ -4,6 +4,7 @@ defmodule Sso.Router do
   pipeline :api do
     plug :accepts, ["v1"]
     plug Sso.Plugs.Version
+    plug Sso.Plugs.Locale
   end
 
   pipeline :api_auth do

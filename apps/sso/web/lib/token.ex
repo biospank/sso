@@ -7,12 +7,12 @@ defmodule Sso.Token do
   def unauthenticated(conn, _params) do
     conn
     |> put_status(498)
-    |> render(Sso.ErrorView, :"498", errors: %{message: "Authentication required (invalid token)"})
+    |> render(Sso.ErrorView, :"498", errors: %{message: gettext("Authentication required (invalid token)")})
   end
 
   def unauthorized(conn, _params) do
     conn
     |> put_status(401)
-    |> render(Sso.ErrorView, :"401", errors: %{message: "Authorization required"})
+    |> render(Sso.ErrorView, :"401", errors: %{message: gettext("Authorization required")})
   end
 end

@@ -37,7 +37,7 @@ defmodule Sso.User.PasswordResetController do
       true ->
         conn
         |> put_status(404)
-        |> render(Sso.ErrorView, :"404", errors: %{message: "Email not found"})
+        |> render(Sso.ErrorView, :"404", errors: %{message: gettext("Email not found")})
     end
   end
 
@@ -59,7 +59,7 @@ defmodule Sso.User.PasswordResetController do
       true ->
         conn
         |> put_status(:not_found)
-        |> render(Sso.ErrorView, :"404", errors: %{message: "Reset code not found"})
+        |> render(Sso.ErrorView, :"404", errors: %{message: gettext("Reset code not found")})
     end
   end
 end

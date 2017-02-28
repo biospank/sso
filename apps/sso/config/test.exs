@@ -14,7 +14,7 @@ config :sso, Sso.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
-  database: "sso_test",
+  database: "sso_#{Mix.env}",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 

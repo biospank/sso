@@ -29,19 +29,19 @@ defmodule Sso.User.SessionController do
       {:error, :not_found, conn} ->
         conn
         |> put_status(404)
-        |> render(Sso.ErrorView, :"404", errors: %{message: "user not found"})
+        |> render(Sso.ErrorView, :"404", errors: %{message: gettext("User not found")})
       {:error, :unauthorized, conn} ->
         conn
         |> put_status(401)
-        |> render(Sso.ErrorView, :"401", errors: %{message: "user unauthorized"})
+        |> render(Sso.ErrorView, :"401", errors: %{message: gettext("User unauthorized")})
       {:error, :inactive, conn} ->
         conn
         |> put_status(423)
-        |> render(Sso.ErrorView, :"423", errors: %{message: "user temporary disabled"})
+        |> render(Sso.ErrorView, :"423", errors: %{message: gettext("User temporary disabled")})
       {:error, :unverified, conn} ->
         conn
         |> put_status(451)
-        |> render(Sso.ErrorView, :"451", errors: %{message: "user not verified"})
+        |> render(Sso.ErrorView, :"451", errors: %{message: gettext("User not verified")})
     end
   end
 

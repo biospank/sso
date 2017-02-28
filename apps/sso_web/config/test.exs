@@ -12,8 +12,8 @@ config :logger, level: :warn
 # Configure your database
 config :sso_web, SsoWeb.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "sso",
-  password: "sso",
-  database: "sso_test",
+  username: "postgres",
+  password: "postgres",
+  database: "sso_#{Mix.env}",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

@@ -19,15 +19,15 @@ defmodule Sso.SessionController do
       {:error, :not_found, conn} ->
         conn
         |> put_status(404)
-        |> render(Sso.ErrorView, :"404", errors: %{message: "account not found"})
+        |> render(Sso.ErrorView, :"404", errors: %{message: gettext("Account not found")})
       {:error, :unauthorized, conn} ->
         conn
         |> put_status(401)
-        |> render(Sso.ErrorView, :"401", errors: %{message: "account unauthorized"})
+        |> render(Sso.ErrorView, :"401", errors: %{message: gettext("Account unauthorized")})
       {:error, :locked, conn} ->
         conn
         |> put_status(423)
-        |> render(Sso.ErrorView, :"423", errors: %{message: "account temporary disabled"})
+        |> render(Sso.ErrorView, :"423", errors: %{message: gettext("Account temporary disabled")})
     end
   end
 

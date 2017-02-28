@@ -38,6 +38,6 @@ config :sso_web, SsoWeb.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "sso",
   password: "sso",
-  database: "sso_dev",
+  database: "sso_#{Mix.env}",
   hostname: "localhost",
   pool_size: 3

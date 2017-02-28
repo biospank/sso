@@ -39,7 +39,7 @@ defmodule Sso.SessionControllerTest do
         account: Map.put(@valid_attrs, :access_key, "invalid-access-key")
       )
       assert json_response(conn, 404)["errors"] == %{
-        "detail" => "account not found"
+        "detail" => "Account not found"
       }
 
       # assert_error_sent :not_found, fn ->
@@ -58,7 +58,20 @@ defmodule Sso.SessionControllerTest do
         account: Map.put(@valid_attrs, :secret_key, "invalid-secret-key")
       )
       assert json_response(conn, 401)["errors"] == %{
-        "detail" => "account unauthorized"
+        "detail" => "Account unauthorized"
+      }
+    end
+
+    test "with invalid secret key (it locale)", %{conn: conn} do
+      conn =
+        conn
+        |> put_req_header("accept-language", "it")
+        |> post(
+          session_path(conn, :create),
+          account: Map.put(@valid_attrs, :secret_key, "invalid-secret-key")
+        )
+      assert json_response(conn, 401)["errors"] == %{
+        "detail" => "Account non autorizzato"
       }
     end
   end
@@ -80,7 +93,7 @@ defmodule Sso.SessionControllerTest do
         }
       )
       assert json_response(post_conn, 423)["errors"] == %{
-        "detail" => "account temporary disabled"
+        "detail" => "Account temporary disabled"
       }
     end
   end

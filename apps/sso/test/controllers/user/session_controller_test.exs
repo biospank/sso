@@ -42,7 +42,7 @@ defmodule Sso.User.SessionControllerTest do
         user: Map.put(@valid_attrs, :email, "invalid@email.com")
       )
       assert json_response(conn, 404)["errors"] == %{
-        "detail" => "user not found"
+        "detail" => "User not found"
       }
     end
 
@@ -53,7 +53,7 @@ defmodule Sso.User.SessionControllerTest do
         user: Map.put(@valid_attrs, :password, "invalid-password")
       )
       assert json_response(conn, 401)["errors"] == %{
-        "detail" => "user unauthorized"
+        "detail" => "User unauthorized"
       }
     end
   end
@@ -85,7 +85,7 @@ defmodule Sso.User.SessionControllerTest do
       )
 
       assert json_response(conn, 404)["errors"] == %{
-        "detail" => "user not found"
+        "detail" => "User not found"
       }
 
     end
@@ -105,7 +105,7 @@ defmodule Sso.User.SessionControllerTest do
         user: @valid_attrs
       )
       assert json_response(post_conn, 423)["errors"] == %{
-        "detail" => "user temporary disabled"
+        "detail" => "User temporary disabled"
       }
     end
   end
@@ -124,7 +124,7 @@ defmodule Sso.User.SessionControllerTest do
         user: @valid_attrs
       )
       assert json_response(post_conn, 451)["errors"] == %{
-        "detail" => "user not verified"
+        "detail" => "User not verified"
       }
     end
   end

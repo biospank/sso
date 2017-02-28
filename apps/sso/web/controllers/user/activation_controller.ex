@@ -28,7 +28,7 @@ defmodule Sso.User.ActivationController do
       true ->
         conn
         |> put_status(404)
-        |> render(Sso.ErrorView, :"404", errors: %{message: "Activation code not found"})
+        |> render(Sso.ErrorView, :"404", errors: %{message: gettext("Activation code not found")})
     end
   end
 
@@ -39,7 +39,7 @@ defmodule Sso.User.ActivationController do
       nil ->
         conn
         |> put_status(:not_found)
-        |> render(Sso.ErrorView, :"404", errors: %{message: "Email not found"})
+        |> render(Sso.ErrorView, :"404", errors: %{message: gettext("Email not found")})
       user ->
         link = User.gen_registration_link(user, user_params)
         account =
