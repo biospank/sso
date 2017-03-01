@@ -30,4 +30,8 @@ defmodule Sso.Router do
       put "/:id/profile", ProfileController, :update
     end
   end
+
+  scope "/sso", Sso do
+    get "/doc", DocController, :index
+  end
 end
