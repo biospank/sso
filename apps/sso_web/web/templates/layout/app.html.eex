@@ -8,10 +8,10 @@
     <meta name="author" content="">
 
     <title>Hello SsoWeb!</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link rel="stylesheet" href="<%= SsoWeb.PageView.sso_web_static_path(@conn, "/css/app.css") %>">
   </head>
 
   <body id="app">
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <script src="<%= SsoWeb.PageView.sso_web_static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>
