@@ -18,7 +18,7 @@ defmodule MasterProxy.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :cowboy, :plug, :sso, :sso_web],
+    [applications: [:logger, :cowboy, :plug, :sso, :sso_bo],
      mod: {MasterProxy.Application, []}]
   end
 
@@ -39,6 +39,6 @@ defmodule MasterProxy.Mixfile do
     [{:plug, "~> 1.2"},
      {:cowboy, "~> 1.0"},
      {:sso, in_umbrella: true},
-     {:sso_web, in_umbrella: true}]
+     {:sso_bo, in_umbrella: true}]
   end
 end

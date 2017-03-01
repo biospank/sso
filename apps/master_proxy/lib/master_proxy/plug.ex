@@ -6,7 +6,7 @@ defmodule MasterProxy.Plug do
   def call(conn, _opts) do
     cond do
       conn.request_path =~ ~r{/sso/admin} ->
-        SsoWeb.Endpoint.call(conn, [])
+        SsoBo.Endpoint.call(conn, [])
       true ->
         Sso.Endpoint.call(conn, [])
     end
