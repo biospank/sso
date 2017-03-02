@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Hello SsoBo!</title>
+    <title>Sso Backoffice</title>
     <link rel="stylesheet" href="<%= SsoBo.PageView.sso_bo_static_path(@conn, "/css/app.css") %>">
   </head>
 

@@ -1,4 +1,4 @@
-defmodule SsoBo.Auth.Admin do
+defmodule SsoBo.Auth.Backoffice do
   @moduledoc """
   Provides set of functions to authenticate.
   """
@@ -6,12 +6,12 @@ defmodule SsoBo.Auth.Admin do
 
   @realm "Dardy"
 
-  def login(conn, admin, opts \\ []) do
+  def login(conn, user, opts \\ []) do
     conn = case opts do
       [ttl: expires] ->
-        Guardian.Plug.api_sign_in(conn, admin, :token, ttl: expires)
+        Guardian.Plug.api_sign_in(conn, user, :token, ttl: expires)
       _ ->
-        Guardian.Plug.api_sign_in(conn, admin)
+        Guardian.Plug.api_sign_in(conn, user)
     end
 
     conn
@@ -21,12 +21,12 @@ defmodule SsoBo.Auth.Admin do
 
   def login_by_username_and_password(conn, username, password, opts) do
     repo = Keyword.fetch!(opts, :repo)
-    admin = repo.get_by(Sso.Admin, username: username)
+    user = repo.get_by(SsoBo.User, username: username)
 
     cond do
-      admin && checkpw(password, admin.password_hash) ->
-        {:ok, admin, login(conn, admin, opts)}
-      admin ->
+      user && checkpw(password, user.password_hash) ->
+        {:ok, user, login(conn, user, opts)}
+      user ->
         {:error, :unauthorized, conn}
       true ->
         dummy_checkpw()
