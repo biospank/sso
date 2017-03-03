@@ -45,16 +45,7 @@ const content = ({state}) => {
             feedbackLabel: 'Authenticating...',
             style: 'ui fluid primary huge submit button'
           })
-          // m('.ui fluid large primary big submit button', {
-          //   onclick: state.createSession
-          // }, 'Login')
         ])
-        // ,
-        // m('.ui message', [
-        //   m('p', state.model.email()),
-        //   m('p', state.model.password()),
-        //   m('p', state.model.remember_me())
-        // ])
       ])
     ])
   ]
@@ -73,7 +64,7 @@ const signIn = {
       //   }, 1000)
       // })
 
-      return Session.create().then((user) => {
+      return Session.create().then((data) => {
         m.route.set("/dashboard");
       }, (e) => {
         vnode.state.errors(JSON.parse(e.message).errors);

@@ -3,6 +3,9 @@ defmodule SsoBo.SessionController do
 
   alias SsoBo.Auth.Backoffice, as: Auth
 
+  # insert an new bo_users
+  # %SsoBo.User{} |> Ecto.Changeset.change(username: "admin", password_hash: Comeonin.Bcrypt.hashpwsalt("Backoffice_001")) |> SsoBo.Repo.insert!
+
   def create(conn, %{"user" => user_params}) do
     opts = Keyword.new repo: Repo
     opts = case user_params["remember_me"] do

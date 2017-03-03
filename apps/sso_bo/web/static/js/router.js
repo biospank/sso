@@ -4,6 +4,6 @@ import dashboard from './views/dashboard/dashboard';
 
 export default m.route(document.getElementById('app'), "/", {
   // Login routing
-  '/': signIn,
-  '/dashboard': dashboard
+  "/": signIn,
+  "/dashboard": dashboard
 });
