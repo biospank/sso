@@ -7,8 +7,8 @@ import Session from '../../models/session';
 
 const content = ({state}) => {
   return [
-    m('.ui raised very padded segment', [
-      m('h2.ui teal header', 'Accedi al backoffice'),
+    m('.ui raised padded segment', [
+      m('h3.ui teal header', 'Accedi al backoffice'),
       m('.ui teal segment', [
         m('form.ui form error', [
           m(textField, {
@@ -43,7 +43,7 @@ const content = ({state}) => {
             action: state.createSession,
             label: 'Login',
             feedbackLabel: 'Authenticating...',
-            style: 'ui fluid primary huge submit button'
+            style: 'ui fluid teal submit button'
           })
         ])
       ])

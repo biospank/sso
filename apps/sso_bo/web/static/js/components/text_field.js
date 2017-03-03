@@ -35,7 +35,7 @@ const textField = {
   view({attrs}) {
     return [
       m('.field', {className: attrs.error ? "error" : ""}, [
-        m('.ui left icon big input', [
+        m('.ui left icon input', [
           m('i', {className: `${attrs.icon} icon`}),
           m('input', {
             type: attrs.type,
