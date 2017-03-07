@@ -1,0 +1,8 @@
+.button {
+  &.positive {
+    background-color: $positive-button !important;
+    //@include box-shadow(0 0 0 1px $positive-button inset!important);
+    //@include border($positive-button);
+    color: $positive-button;
+  }
+}

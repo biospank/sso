@@ -1,0 +1,17 @@
+.users {
+  .user__item {
+    @include transition(all 0.3s ease);
+    &:hover {
+      background-color: #f8f8f9;
+    }
+    &-avatar {
+      display: inline-block;
+      .image {
+        margin-right: 0.85rem !important;
+      }
+    }
+    &-name {
+      color: black;
+    }
+  }
+}

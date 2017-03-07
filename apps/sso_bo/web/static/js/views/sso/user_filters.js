@@ -28,7 +28,7 @@ const userFilters = {
           ])
         ]),
         m(".field", [
-          m(".ui submit button", "Filtra")
+          m("button", { class: "ui submit teal button" }, "Filtra")
         ])
       ])
     ]);
