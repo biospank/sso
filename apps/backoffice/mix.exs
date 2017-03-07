@@ -44,8 +44,7 @@ defmodule Backoffice.Mixfile do
      {:cowboy, "~> 1.0"},
      {:guardian, "~> 0.14.2"},
      {:comeonin, "~> 3.0"},
-     {:sso, in_umbrella: true},
-     {:auth, in_umbrella: true}]
+     {:sso, in_umbrella: true}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

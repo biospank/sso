@@ -35,9 +35,6 @@ defmodule Auth.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [
-      # {:sso, in_umbrella: true},
-      # {:backoffice, in_umbrella: true}
-    ]
+    []
   end
 end

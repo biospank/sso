@@ -1,4 +1,4 @@
-defmodule Auth.Serializers.GuardianSerializer do
+defmodule MasterProxy.Serializers.GuardianSerializer do
   @moduledoc """
   Provides Guardian callback functions.
   """
