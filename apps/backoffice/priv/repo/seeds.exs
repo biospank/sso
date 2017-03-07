@@ -9,3 +9,9 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+%Backoffice.User{}
+|> Ecto.Changeset.change(
+  username: "admin",
+  password_hash: Comeonin.Bcrypt.hashpwsalt("Backoffice_001"))
+|> Backoffice.Repo.insert!
