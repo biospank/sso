@@ -2,7 +2,7 @@ import m from 'mithril';
 
 const userFilters = {
   view() {
-    return m(".ui form segment mtb-40", [
+    return m(".ui form segment mb-40", [
       m(".five fields mb-0", [
         m(".field", [
           m("input", { type: "text", placeholder: "Filtra per Nome" })

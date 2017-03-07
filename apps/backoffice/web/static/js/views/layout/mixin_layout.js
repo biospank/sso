@@ -14,9 +14,9 @@ const mixinLayout = (content, layout) => {
     },
     standard(content) {
       return [
-        m('.ui secondary pointing menu', [
-          m('.item', [
-            m('img.big', {src: '/images/phoenix.png'})
+        m("nav", { class: "ui fixed menu" }, [
+          m("a", { class: "header item" }, [
+            m("img", { src: '/images/phoenix.png', class: "logo ui", width: "200" })
           ]),
           m('a.item teal', {
             className: (m.route.get() === '/') ? 'active' : '',
@@ -30,17 +30,30 @@ const mixinLayout = (content, layout) => {
           }, 'Utenti'),
           m('a.item teal', 'Configurazione'),
           m('.right menu', [
-            m('a.ui item teal', {
-              onclick(event) {
-                event.preventDefault();
-                Session.reset();
-                m.route.set("/signin");
-              }
-            }, 'Esci')
+            m(".ui inline dropdown p-all-side-15", [
+              m(".text", [
+                m("img", { src: "/images/square-image.png", class: "ui medium circular image" }),
+                "Jenny Hess"
+              ]),
+              m("i", { class: "dropdown icon" }),
+              m(".menu", [
+                m(".header", "Profilo"),
+                m(".item", { "data-text": "exit" }, "Profilo"),
+                m(".item", { "data-text": "exit" }, "Cambia Password"),
+                m(".item", { "data-text": "exit" }, "Esci")
+              ])
+            ])
+            // m('a.ui item teal', {
+            //   onclick(event) {
+            //     event.preventDefault();
+            //     Session.reset();
+            //     m.route.set("/signin");
+            //   }
+            // }, 'Esci')
           ])
         ]),
-        m('.ui container', [
-          m('.ui', [
+        m('.ui container mt-60', [
+          m('.ui pt-40', [
             content
           ])
         ])

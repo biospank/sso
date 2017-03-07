@@ -2,7 +2,7 @@ import m from 'mithril';
 import mixinLayout from '../layout/mixin_layout';
 
 const content = () => {
-  return m("form", { class: "ui form segment p-all-side-30 mt-50" }, [
+  return m("form", { class: "ui form segment p-all-side-30" }, [
     m("h3", { class: "ui dividing header pb-10 mb-25 teal" }, "Dettagli utente"),
     m(".mb-50", [
       m(".field", [
