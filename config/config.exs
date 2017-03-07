@@ -9,6 +9,16 @@ use Mix.Config
 # back to each application for organization purposes.
 import_config "../apps/*/config/config.exs"
 
+# Guardian configuration
+config :guardian, Guardian,
+  allowed_algos: ["HS512"],
+  verify_module: Guardian.JWT,
+  issuer: "Dardy",
+  ttl: { 1, :day},
+  verify_issuer: true,
+  secret_key: System.get_env("GUARDIAN_SECRET_KEY"),
+  serializer: MasterProxy.Serializers.GuardianSerializer
+
 # Sample configuration (overrides the imported configuration above):
 #
 #     config :logger, :console,
