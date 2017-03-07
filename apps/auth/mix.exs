@@ -1,8 +1,8 @@
-defmodule MasterProxy.Mixfile do
+defmodule Auth.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :master_proxy,
+    [app: :auth,
      version: "0.1.0",
      build_path: "../../_build",
      config_path: "../../config/config.exs",
@@ -18,8 +18,7 @@ defmodule MasterProxy.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :cowboy, :plug, :sso, :backoffice],
-     mod: {MasterProxy.Application, []}]
+    [applications: [:logger]]
   end
 
   # Dependencies can be Hex packages:
@@ -36,9 +35,6 @@ defmodule MasterProxy.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:plug, "~> 1.2"},
-     {:cowboy, "~> 1.0"},
-     {:sso, in_umbrella: true},
-     {:backoffice, in_umbrella: true}]
+    []
   end
 end

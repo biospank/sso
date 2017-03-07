@@ -37,11 +37,11 @@ config :plug, :statuses, %{
 }
 ##### end
 
-# Guardian configuration
+# Guardian configuration overridden by umbrella config
 config :guardian, Guardian,
   allowed_algos: ["HS512"],
   verify_module: Guardian.JWT,
-  issuer: "Sso",
+  issuer: "Dardy",
   ttl: { 1, :day},
   verify_issuer: true,
   secret_key: System.get_env("GUARDIAN_SECRET_KEY"),
