@@ -40,7 +40,7 @@ const mixinLayout = (content, layout) => {
           ])
         ]),
         m('.ui container', [
-          m('.ui segment', [
+          m('.ui', [
             content
           ])
         ])

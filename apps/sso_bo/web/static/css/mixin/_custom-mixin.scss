@@ -1,0 +1,133 @@
+@mixin spaces($padding, $margin){
+  padding: $padding;
+  margin: $margin;
+}
+
+@mixin border($color, $size: 1px, $side: nil, $type: solid){
+  @if ($side == 'nil') {
+    border: $size $type $color;
+  } @else {
+    border-#{$side}: $size $type $color;
+  }
+}
+
+@mixin font-style($size, $color, $weight: 300, $line-height: inherit){
+  font-size: $size;
+  color: $color;
+  font-weight: $weight;
+  line-height: $line-height;
+}
+
+@mixin bg-size($size: cover){
+  -webkit-background-size: $size;
+  -moz-background-size: $size;
+  -o-background-size: $size;
+  background-size: $size;
+}
+
+@mixin position($x, $Xval, $y, $Yval, $type: absolute){
+  position: $type;
+  #{$x}: $Xval;
+  #{$y}: $Yval;
+}
+
+@mixin arrow($size, $side, $color) {
+  width: 0;
+  height: 0;
+
+  @if($side == 'up') {
+    // UP
+    border-left: $size solid transparent;
+    border-right: $size solid transparent;
+    border-bottom: $size solid $color;
+    // end
+  } @elseif($side == 'down') {
+    // DOWN
+    border-left: $size solid transparent;
+    border-right: $size solid transparent;
+    border-top: $size solid #f00;
+    // end
+  } @elseif($side == 'right') {
+    // RIGHT
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-left: $size solid green;
+    // end
+  } @else {
+    // LEFT
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-right: $size solid blue;
+    // end
+  }
+}
+
+@mixin respond-to($type-1, $query-1, $type-2: 'nil', $query-2: 'nil') {
+  @if ($type-2 == 'nil') {
+    @media($type-1: $query-1) {
+      @content;
+    }
+  } @else {
+    @media($type-1: $query-1) and ($type-2: $query-2){
+      @content;
+    }
+  }
+}
+
+
+@mixin animation($animation, $iteration-count, $transform-origin, $animation-fill-mode) {
+  animation: $animation;
+  animation-iteration-count: $iteration-count;
+  transform-origin: $transform-origin;
+  animation-fill-mode:$animation-fill-mode; /*when the spec is finished*/
+  -webkit-animation: $animation;
+  -webkit-animation-iteration-count: $iteration-count;
+  -webkit-transform-origin: $transform-origin;
+  -webkit-animation-fill-mode:$animation-fill-mode; /*Chrome 16+, Safari 4+*/
+  -moz-animation: $animation;
+  -moz-animation-iteration-count: $iteration-count;
+  -moz-transform-origin: $transform-origin;
+  -moz-animation-fill-mode:$animation-fill-mode; /*FF 5+*/
+  -o-animation: $animation;
+  -o-animation-iteration-count: $iteration-count;
+  -o-transform-origin: $transform-origin;
+  -o-animation-fill-mode:$animation-fill-mode; /*Not implemented yet*/
+  -ms-animation: $animation;
+  -ms-animation-iteration-count: $iteration-count;
+  -ms-transform-origin: $transform-origin;
+  -ms-animation-fill-mode:$animation-fill-mode; /*IE 10+*/
+}
+
+@mixin zoom($val, $origin: 0 0) {
+  zoom: $val;
+  -moz-transform: scale($val);
+  -moz-transform-origin: $origin;
+  -o-transform: scale($val);
+  -o-transform-origin: $origin;
+  -webkit-transform: scale($val);
+  -webkit-transform-origin: $origin;
+  transform: scale($val); /* Standard Property */
+  transform-origin: $origin;  /* Standard Property */
+}
+
+@mixin translate($x: "nil", $y: "nil") {
+  @if ($x == "nil") {
+    -webkit-transform: translateY($y);
+       -moz-transform: translateY($y);
+        -ms-transform: translateY($y);
+         -o-transform: translateY($y);
+            transform: translateY($y);
+  } @else if ($y == "nil") {
+    -webkit-transform: translateX($x);
+       -moz-transform: translateX($x);
+        -ms-transform: translateX($x);
+         -o-transform: translateX($x);
+            transform: translateX($x);
+  } @else {
+    -webkit-transform: translate($x, $y);
+       -moz-transform: translate($x, $y);
+        -ms-transform: translate($x, $y);
+         -o-transform: translate($x, $y);
+            transform: translate($x, $y);
+  }
+}
