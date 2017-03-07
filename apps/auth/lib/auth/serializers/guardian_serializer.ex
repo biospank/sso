@@ -2,6 +2,10 @@ defmodule Auth.Serializers.GuardianSerializer do
   @moduledoc """
   Provides Guardian callback functions.
   """
+
+  require Sso.Account
+  require Backoffice.User
+  
   def for_token(account = %Sso.Account{}), do: {:ok, "Account:#{account.id}"}
   def for_token(user = %Backoffice.User{}), do: {:ok, "User:#{user.id}"}
   def for_token(_), do: {:error, "Unknown resource type"}

@@ -52,7 +52,8 @@ defmodule Sso.Mixfile do
      {:comeonin, "~> 3.0"},
      {:bamboo_smtp, "~> 1.3.0"},
      {:ecto_enum, "~> 1.0"},
-     {:credo, "~> 0.5.3", only: [:dev, :test]}]
+     {:credo, "~> 0.5.3", only: [:dev, :test]},
+     {:auth, in_umbrella: true}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
