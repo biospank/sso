@@ -26,6 +26,7 @@ defmodule Backoffice.ConnCase do
       import Ecto.Query
 
       import Backoffice.Router.Helpers
+      import Backoffice.TestHelpers
 
       # The default endpoint for testing
       @endpoint Backoffice.Endpoint

@@ -94,4 +94,24 @@ defmodule Sso.User do
   def gen_password_reset_link(_, _) do
     nil
   end
+
+  def filter_by(query, filter) do
+    from u in query,
+      where: ilike(u.email, ^"%#{filter || ""}%")
+      # or
+      #   ilike(u.description, ^"%#{filter || ""}%")
+  end
+
+  def order_by(query, order) do
+    case order do
+      ts when ts in [:inserted_at, :updated_at] ->
+        from v in query, order_by: [desc: field(v, ^order)]
+      _ ->
+        from v in query, order_by: field(v, ^order)
+    end
+  end
+
+  def limit(query, size) do
+    from v in query, limit: ^size
+  end
 end

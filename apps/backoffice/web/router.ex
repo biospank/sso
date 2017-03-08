@@ -34,6 +34,7 @@ defmodule Backoffice.Router do
   scope "/backoffice/api", Backoffice do
     pipe_through [:api, :api_auth]
 
+    resources "/users", UserController, only: [:index]
   end
   # Other scopes may use custom stacks.
   # scope "/api", Backoffice do

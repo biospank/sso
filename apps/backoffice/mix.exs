@@ -23,7 +23,7 @@ defmodule Backoffice.Mixfile do
   def application do
     [mod: {Backoffice, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :sso]]
+                    :phoenix_ecto, :postgrex, :scrivener_ecto, :sso]]
   end
 
   # Specifies which paths to compile per environment.
@@ -44,6 +44,7 @@ defmodule Backoffice.Mixfile do
      {:cowboy, "~> 1.0"},
      {:guardian, "~> 0.14.2"},
      {:comeonin, "~> 3.0"},
+     {:scrivener_ecto, "~> 1.0"},
      {:sso, in_umbrella: true}]
   end
 

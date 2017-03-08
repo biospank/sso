@@ -3,9 +3,6 @@ defmodule Backoffice.SessionController do
 
   alias Backoffice.Auth.User, as: Auth
 
-  # insert an new bo_users
-  # %Backoffice.User{} |> Ecto.Changeset.change(username: "admin", password_hash: Comeonin.Bcrypt.hashpwsalt("Backoffice_001")) |> Backoffice.Repo.insert!
-
   def create(conn, %{"user" => user_params}) do
     opts = Keyword.new repo: Repo
     opts = case user_params["remember_me"] do
@@ -20,14 +17,7 @@ defmodule Backoffice.SessionController do
           user_params["username"],
           user_params["password"],
           opts) do
-      {:ok, user, _} ->
-        conn = case user_params["remember_me"] do
-          true ->
-            Auth.login(conn, user, ttl: { 7, :days })
-          false ->
-            Auth.login(conn, user)
-        end
-
+      {:ok, user, conn} ->
         conn
         |> put_status(:created)
         |> render(Backoffice.UserView, "show.json", user: user)

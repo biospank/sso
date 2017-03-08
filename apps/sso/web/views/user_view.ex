@@ -18,4 +18,14 @@ defmodule Sso.UserView do
       profile: user.profile
     }
   end
+
+  def render("paginated_users.json", %{page: page}) do
+    %{
+      users: render_many(page.entries, Sso.UserView, "user.json"),
+      page_number: page.page_number,
+      page_size: page.page_size,
+      total_pages: page.total_pages,
+      total_entries: page.total_entries
+    }
+  end
 end
