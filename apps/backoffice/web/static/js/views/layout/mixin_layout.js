@@ -30,7 +30,12 @@ const mixinLayout = (content, layout) => {
           }, 'Utenti'),
           m('a.item teal', 'Configurazione'),
           m('.right menu', [
-            m(".ui inline dropdown p-all-side-15", [
+            m(".ui simple dropdown p-all-side-15", {
+              config: function(element, isInit, context) {
+                if(!isInit)
+                  $(".ui.dropdown").dropdown("show");
+              }
+            }, [
               m(".text", [
                 m("img", { src: "/images/user.png", class: "ui medium circular image" }),
                 "Jenny Hess"
@@ -43,13 +48,6 @@ const mixinLayout = (content, layout) => {
                 m(".item", { "data-text": "exit" }, "Esci")
               ])
             ])
-            // m('a.ui item teal', {
-            //   onclick(event) {
-            //     event.preventDefault();
-            //     Session.reset();
-            //     m.route.set("/signin");
-            //   }
-            // }, 'Esci')
           ])
         ]),
         m('.ui container mt-60', [
