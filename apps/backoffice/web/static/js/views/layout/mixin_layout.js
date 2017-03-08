@@ -32,7 +32,7 @@ const mixinLayout = (content, layout) => {
           m('.right menu', [
             m(".ui inline dropdown p-all-side-15", [
               m(".text", [
-                m("img", { src: "/images/square-image.png", class: "ui medium circular image" }),
+                m("img", { src: "/images/user.png", class: "ui medium circular image" }),
                 "Jenny Hess"
               ]),
               m("i", { class: "dropdown icon" }),
