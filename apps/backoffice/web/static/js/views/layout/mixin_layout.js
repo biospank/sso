@@ -42,16 +42,29 @@ const mixinLayout = (content, layout) => {
               ]),
               m("i", { class: "dropdown icon" }),
               m(".menu", [
-                m(".header", "Profilo"),
-                m(".item", { "data-text": "exit" }, "Profilo"),
-                m(".item", { "data-text": "exit" }, "Cambia Password"),
-                m(".item", { "data-text": "exit" }, "Esci")
+                // m(".header", "Profilo"),
+                m("a", { class: "item", "data-text": "exit" }, "Profilo"),
+                m("a", {
+                  href: "/password/change",
+                  oncreate: m.route.link,
+                  class: "item",
+                  "data-text": "exit"
+                }, "Cambia Password"),
+                m("a", {
+                  class: "item",
+                  "data-text": "exit",
+                  onclick(event) {
+                    event.preventDefault();
+                    Session.reset();
+                    m.route.set("/signin");
+                  }
+                }, "Esci")
               ])
             ])
           ])
         ]),
         m('.ui container mt-60', [
-          m('.ui pt-40', [
+          m('.ui pt-50', [
             content
           ])
         ])

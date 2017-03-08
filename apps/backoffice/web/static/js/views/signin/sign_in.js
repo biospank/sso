@@ -7,45 +7,43 @@ import Session from '../../models/session';
 
 const content = ({state}) => {
   return [
-    m('.ui raised padded segment', [
-      m('h3.ui teal header', 'Accedi al backoffice'),
-      m('.ui teal segment', [
-        m('form.ui form error', [
-          m(textField, {
-            type: 'text',
-            name: 'username',
-            id: 'username',
-            placeholder: 'Nome utente',
-            icon: 'user',
-            oninput: m.withAttr("value", state.model.username),
-            error: state.errors()['username']
-          }),
-          m(textField, {
-            type: 'password',
-            name: 'password',
-            id: 'password',
-            placeholder: 'Password',
-            icon: 'lock',
-            oninput: m.withAttr("value", state.model.password),
-            error: state.errors()['password']
-          }),
-          m('.inline field', [
-            m('.ui checkbox', [
-              m('input[type=checkbox]', {
-                id: 'keep-signed',
-                onclick: m.withAttr("checked", state.model.remember_me),
-                checked: state.model.remember_me()
-              }),
-              m('label[for=keep-signed]', 'Ricordami per una settimana')
-            ])
-          ]),
-          m(feedbackButton, {
-            action: state.createSession,
-            label: 'Login',
-            feedbackLabel: 'Authenticating...',
-            style: 'ui fluid teal submit button'
-          })
-        ])
+    m('.ui raised teal p-all-side-30 segment mt-50', [
+      m('h3.ui teal header mb-30 weight-light', 'Accedi al backoffice'),
+      m('form.ui form error', [
+        m(textField, {
+          type: 'text',
+          name: 'username',
+          id: 'username',
+          placeholder: 'Nome utente',
+          icon: 'user',
+          oninput: m.withAttr("value", state.model.username),
+          error: state.errors()['username']
+        }),
+        m(textField, {
+          type: 'password',
+          name: 'password',
+          id: 'password',
+          placeholder: 'Password',
+          icon: 'lock',
+          oninput: m.withAttr("value", state.model.password),
+          error: state.errors()['password']
+        }),
+        m('.inline field', [
+          m('.ui checkbox', [
+            m('input[type=checkbox]', {
+              id: 'keep-signed',
+              onclick: m.withAttr("checked", state.model.remember_me),
+              checked: state.model.remember_me()
+            }),
+            m('label[for=keep-signed]', 'Ricordami per una settimana')
+          ])
+        ]),
+        m(feedbackButton, {
+          action: state.createSession,
+          label: 'Login',
+          feedbackLabel: 'Authenticating...',
+          style: 'ui fluid teal submit button large weight-light mt-30'
+        })
       ])
     ])
   ]

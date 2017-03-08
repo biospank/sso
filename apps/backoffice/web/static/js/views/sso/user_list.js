@@ -4,7 +4,11 @@ const userList = {
   view() {
     return m('.ui segments list users', [
       m('.item ui segment p-all-side-10 user__item', [
-        m("a", { href: "", config: m.route, class: "user__item-avatar" }, [
+        m("a", {
+            href: "", 
+            oncreate: m.route.link,
+            class: "user__item-avatar"
+          }, [
           m('img.ui avatar mini image', {src: "/images/user.png"}),
           m("span", { class: "user__item-name" }, "Lena")
         ]),
@@ -20,7 +24,11 @@ const userList = {
         ])
       ]),
       m('.item ui segment p-all-side-10 user__item', [
-        m("a", { href: "", config: m.route, class: "user__item-avatar" }, [
+        m("a", {
+            href: "",
+            oncreate: m.route.link,
+            class: "user__item-avatar"
+          }, [
           m('img.ui avatar mini image', {src: "/images/user.png"}),
           m('span', { class: "user__item-name" }, 'Lena')
         ]),
@@ -36,7 +44,11 @@ const userList = {
         ])
       ]),
       m('.item ui segment p-all-side-10 user__item', [
-        m("a", { href: "", config: m.route, class: "user__item-avatar" }, [
+        m("a", {
+            href: "",
+            oncreate: m.route.link,
+            class: "user__item-avatar"
+          }, [
           m('img.ui avatar mini image', {src: "/images/user.png"}),
           m('span', { class: "user__item-name" }, 'Lena')
         ]),
@@ -52,7 +64,11 @@ const userList = {
         ])
       ]),
       m('.item ui segment p-all-side-10 user__item', [
-        m("a", { href: "", config: m.route, class: "user__item-avatar" }, [
+        m("a", {
+            href: "",
+            oncreate: m.route.link,
+            class: "user__item-avatar"
+          }, [
           m('img.ui avatar mini image', {src: "/images/user.png"}),
           m('span', { class: "user__item-name" }, 'Lena')
         ]),

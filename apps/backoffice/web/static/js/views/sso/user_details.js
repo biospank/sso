@@ -2,8 +2,8 @@ import m from 'mithril';
 import mixinLayout from '../layout/mixin_layout';
 
 const content = () => {
-  return m("form", { class: "ui form segment p-all-side-30" }, [
-    m("h3", { class: "ui dividing header pb-10 mb-25 teal" }, "Dettagli utente"),
+  return m("form", { class: "ui form segment teal p-all-side-30" }, [
+    m("h3", { class: "ui dividing header pb-10 mb-25 teal weight-light" }, "Dettagli utente"),
     m(".mb-50", [
       m(".field", [
         m("label", "Email"),
@@ -29,7 +29,7 @@ const content = () => {
         ])
       ])
     ]),
-    m("h3", { class: "ui dividing header pb-10 mb-25 teal" }, "Dettagli profilo"),
+    m("h3", { class: "ui dividing header pb-10 mb-25 teal weight-light" }, "Dettagli profilo"),
     m("div", [
       m(".two fields", [
         m(".field", [
