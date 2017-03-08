@@ -1,5 +1,5 @@
 import m from 'mithril';
-import mixinLayout from '../layout/mixin_layout';
+import mixinLayout from '../../layout/mixin_layout';
 
 const content = () => {
   return m("form", { class: "ui form segment teal p-all-side-30" }, [

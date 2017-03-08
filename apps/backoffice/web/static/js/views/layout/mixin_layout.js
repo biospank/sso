@@ -23,14 +23,24 @@ const mixinLayout = (content, layout) => {
             href: "/",
             oncreate: m.route.link
           }, 'Dashboard'),
-          m('a.item teal', {
-            className: (m.route.get() === '/sso/users') ? 'active' : '',
-            href: "/sso/users",
-            oncreate: m.route.link
-          }, 'Utenti'),
-          m('a.item teal', 'Configurazione'),
+          m(".ui simple dropdown link item", [
+            m("span", { class: "text" }, "Single Sign On"),
+            m("i", { class: "dropdown icon" }),
+            m(".menu", [
+              m("a.item teal", {
+                className: (m.route.get() === '/sso/users') ? 'active' : '',
+                href: "/sso/users",
+                oncreate: m.route.link
+              }, "Utenti"),
+              m("a", {
+                href: "/credentials",
+                oncreate: m.route.link,
+                class: "item" 
+              }, "Credenziali")
+            ])
+          ]),
           m('.right menu', [
-            m(".ui simple dropdown p-all-side-15", {
+            m(".ui simple dropdown link item p-all-side-15", {
               config: function(element, isInit, context) {
                 if(!isInit)
                   $(".ui.dropdown").dropdown("show");
