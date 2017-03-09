@@ -30,7 +30,8 @@ defmodule Sso.Mixfile do
        :gettext,
        :phoenix_ecto,
        :postgrex,
-       :bamboo]
+       :bamboo,
+       :faker]
      ]
   end
 
@@ -52,6 +53,7 @@ defmodule Sso.Mixfile do
      {:comeonin, "~> 3.0"},
      {:bamboo_smtp, "~> 1.3.0"},
      {:ecto_enum, "~> 1.0"},
+     {:faker, "~> 0.7", only: [:dev, :test]},
      {:credo, "~> 0.5.3", only: [:dev, :test]}]
   end
 
