@@ -30,15 +30,17 @@ const userList = {
     this.errors = {};
     this.filter = stream("");
     this.pageInfo = {};
+    this.showLoader = stream(false);
 
     if(Session.isExpired()) {
       m.route.set("/signin");
     }
 
     this.getUsers = (params) => {
-      this.users(undefined);
+      this.showLoader(true);
       return User.all(params).then(this.unwrapSuccess).then((users) => {
         this.users(users);
+        this.showLoader(false);
       }, function(response) {
         this.errors = response.errors;
       })
@@ -58,7 +60,8 @@ const userList = {
 
     this.showUsers = ({state}) => {
       if(!this.users()) {
-        return m(loader);
+        this.showLoader(true);
+        return m('');
       } else {
         if(_.isEmpty(this.users())) {
            //return m(recordNotFound);
@@ -85,7 +88,8 @@ const userList = {
       ]),
       m('.ui bottom attached pagination menu', [
         paginate(vnode)
-      ])
+      ]),
+      m(loader, {show: this.showLoader()})
     ]
   }
 }

@@ -1,8 +1,10 @@
 import m from 'mithril';
 
 const loader = {
-  view() {
-    return m('.ui active inverted dimmer', [
+  view({attrs}) {
+    return m('.ui inverted dimmer', {
+      className: (attrs.show) ? 'active' : 'disabled'
+    }, [
       m('.ui text loader', 'Loading...')
     ])
   }
