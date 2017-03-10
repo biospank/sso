@@ -1,14 +1,51 @@
 import m from 'mithril';
+import User from '../../../models/user';
 
 const userFilters = {
-  view() {
+  oninit(vnode) {
+    this.errors = {};
+    this.showLoader = vnode.attrs.showLoader;
+
+    this.getAllUsers = (params) => {
+      User.list(undefined);
+      this.showLoader(true);
+      return User.all(params).then(this.unwrapSuccess).then((response) => {
+        User.list(response.users);
+        this.showLoader(false);
+      }, function(response) {
+        this.errors = response.errors;
+      })
+    };
+
+    this.unwrapSuccess = (response) => {
+      if(response) {
+        User.pageInfo = {
+          totalEntries: response.total_entries,
+          totalPages: response.total_pages,
+          pageNumber: response.page_number
+        };
+
+        return response;
+      }
+    };
+
+  },
+  view({state}) {
     return m(".ui form segment mb-40", [
       m(".five fields mb-0", [
         m(".field", [
-          m("input", { type: "text", placeholder: "Filtra per Nome" })
+          m("input", {
+            oninput: m.withAttr("value", User.filters.name),
+            type: "text",
+            placeholder: "Filtra per Nome"
+          })
         ]),
         m(".field", [
-          m("input", { type: "email", placeholder: "Filtra per Email" })
+          m("input", {
+            oninput: m.withAttr("value", User.filters.email),
+            type: "email",
+            placeholder: "Filtra per Email"
+          })
         ]),
         m(".field", [
           m("select", { class: "ui dropdown" }, [
@@ -28,9 +65,16 @@ const userFilters = {
           ])
         ]),
         m(".field", [
-          m("button", { class: "ui submit teal button" }, "Filtra")
+          m("button", {
+            onclick: (event) => {
+              event.preventDefault();
+              this.getAllUsers({filters: User.filters});
+            },
+            class: "ui submit teal button"
+          }, "Filtra")
         ])
-      ])
+      ]),
+      m('p', JSON.stringify(User.filters))
     ]);
   }
 }

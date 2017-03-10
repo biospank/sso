@@ -1,17 +1,23 @@
 import m from 'mithril';
+import stream from 'mithril/stream';
 import mixinLayout from '../../layout/mixin_layout';
 import userList from './list';
 import userFilters from './filters';
+import User from '../../../models/user';
+import loader from '../../../components/loader';
 
-const content = () => {
-  // return m('h3', 'User list');
+const content = ({state}) => {
   return [
-    m(userFilters),
-    m(userList)
+    m(userFilters, {showLoader: state.showLoader}),
+    m(userList, {showLoader: state.showLoader}),
+    m(loader, {show: state.showLoader()})
   ];
 };
 
 const userView = {
+  oninit(vnode) {
+    this.showLoader = stream(false);
+  },
   view: mixinLayout(content)
 }
 

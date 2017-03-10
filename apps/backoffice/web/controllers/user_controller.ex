@@ -14,6 +14,10 @@ defmodule Backoffice.UserController do
   # end
 
   def index(conn, params) do
+    IO.inspect params
+
+    Process.sleep 1_000
+    
     paged_users =
       User
       |> User.filter_by(params["filter"])
