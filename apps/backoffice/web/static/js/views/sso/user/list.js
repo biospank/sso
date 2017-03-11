@@ -33,7 +33,6 @@ const userList = {
     }
 
     this.getAllUsers = (params) => {
-      User.list(undefined);
       this.showLoader(true);
       return User.all(params).then(this.unwrapSuccess).then((response) => {
         User.list(response.users);
@@ -65,7 +64,10 @@ const userList = {
         } else {
           return m('.ui link divided items', [
             User.list().map((user) => {
-              return m(listItem, {user: user});
+              return m(listItem, {
+                key: user.id,
+                user: user
+              });
             })
           ])
         }

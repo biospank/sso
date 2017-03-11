@@ -17,10 +17,10 @@ defmodule Backoffice.UserController do
     IO.inspect params
 
     Process.sleep 1_000
-    
+
     paged_users =
       User
-      |> User.filter_by(params["filter"])
+      |> User.filter_embed_by(:first_name, params["filters"]["name"])
       |> User.order_by(:inserted_at)
       |> Backoffice.Repo.paginate(params)
 

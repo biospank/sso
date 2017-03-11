@@ -102,6 +102,20 @@ defmodule Sso.User do
       #   ilike(u.description, ^"%#{filter || ""}%")
   end
 
+  def filter_embed_by(query, field, term) when is_binary(term) do
+    case String.strip(term) do
+      "" ->
+        query
+      stripped_term ->
+        from u in query,
+          where: fragment("?->>? LIKE ?", u.profile, ^to_string(field), ^"%#{stripped_term}%")
+
+          # fragment("?->'angel_list'->>'name' LIKE '%' || ? || '%'", u.info, ^search_string))
+          # fragment("?->'angel_list'->>'name' LIKE ?", u.info, ^("%" <> search_string <> "%)
+    end
+  end
+  def filter_embed_by(query, _, term) when is_nil(term), do: query
+
   def order_by(query, order) do
     case order do
       ts when ts in [:inserted_at, :updated_at] ->

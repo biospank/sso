@@ -7,7 +7,6 @@ const userFilters = {
     this.showLoader = vnode.attrs.showLoader;
 
     this.getAllUsers = (params) => {
-      User.list(undefined);
       this.showLoader(true);
       return User.all(params).then(this.unwrapSuccess).then((response) => {
         User.list(response.users);

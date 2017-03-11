@@ -35,6 +35,7 @@ const Pagination = () => {
         ).concat(
           _.times(this.pageInfo.totalPages, (idx) => {
             return m(new PaginationLink(), {
+              key: idx,
               action: (event) => {
                 event.preventDefault();
                 this.pageInfo.xhr(this.paramsFor(idx + 1));
