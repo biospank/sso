@@ -5,5 +5,8 @@ defmodule Sso.Repo.Migrations.AddUserProfile do
     alter table(:users) do
       add :profile, :map
     end
+
+    create index(:users, [:profile])
+
   end
 end

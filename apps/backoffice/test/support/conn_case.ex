@@ -27,6 +27,7 @@ defmodule Backoffice.ConnCase do
 
       import Backoffice.Router.Helpers
       import Backoffice.TestHelpers
+      import Sso.TestHelpers
 
       # The default endpoint for testing
       @endpoint Backoffice.Endpoint
