@@ -37,6 +37,7 @@ defmodule Backoffice.Router do
     resources "/user", UserController, only: [:index] do
       put "/activate", UserController, :activate, as: :activate
       put "/deactivate", UserController, :deactivate, as: :deactivate
+      put "/authorize", UserController, :authorize, as: :authorize
     end
   end
   # Other scopes may use custom stacks.
