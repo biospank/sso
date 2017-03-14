@@ -1,31 +1,10 @@
 import m from 'mithril';
 import mixinLayout from '../../layout/mixin_layout';
+import menuStep from '../../sso/credentials/menu_step';
 
 const content = () => {
   return m(".account_component", [
-    m(".ui three top attached steps", [
-      m(".step active", [
-        m("i", { class: "sitemap icon teal" }),
-        m(".content", [
-          m(".title", "Organizzazione"),
-          m(".description", "Scegli o crea una nuova Unità Organizzativa")
-        ])
-      ]),
-      m(".step", [
-        m("i", { class: "users icon teal" }),
-        m(".content", [
-          m(".title", "Agenzia"),
-          m(".description", "Crea una nuova Agenzia")
-        ])
-      ]),
-      m(".step", [
-        m("i", { class: "privacy icon teal" }),
-        m(".content", [
-          m(".title", "Credenziali"),
-          m(".description", "Conferma le credenziali")
-        ])
-      ])
-    ]),
+    m(menuStep, { active: 1 }),
     m(".ui center aligned bottom attached segment p-all-side-50 segment", [
       m("h2", { class: "ui icon header teal mb-20" }, [
         m("i", { class: "circular sitemap icon" }),
