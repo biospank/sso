@@ -33,10 +33,27 @@ const userFilters = {
     return m(".ui form segment mb-40", [
       m(".five fields mb-0", [
         m(".field", [
+          m(".ui selection dropdown", {
+            oncreate: function(vnode) {
+              $('.ui.dropdown').dropdown();
+            }
+          }, [
+            m("input", { type: "hidden", name: "" }),
+            m("i", { class: "dropdown icon" }),
+            m(".default text", "Text"),
+            m(".menu", [
+              m(".item", { "data-value": "1" }, "testo 1"),
+              m(".item", { "data-value": "1" }, "testo 1"),
+              m(".item", { "data-value": "1" }, "testo 1"),
+              m(".item", { "data-value": "1" }, "testo 1")
+            ])
+          ])
+        ]),
+        m(".field", [
           m("input", {
             oninput: m.withAttr("value", User.filters.name),
             type: "text",
-            placeholder: "Filtra per Nome"
+            placeholder: "Termine di ricerca"
           })
         ]),
         m(".field", [
@@ -69,11 +86,11 @@ const userFilters = {
               event.preventDefault();
               this.getAllUsers({filters: User.filters});
             },
-            class: "ui submit teal button"
+            class: "ui submit teal button full"
           }, "Filtra")
         ])
       ]),
-      m('p', JSON.stringify(User.filters))
+      // m('p', JSON.stringify(User.filters))
     ]);
   }
 }
