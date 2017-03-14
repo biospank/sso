@@ -1,8 +1,16 @@
 import m from 'mithril';
+import User from '../../../models/user';
+import loadingButton from '../../../components/loading_button';
 
 const listItem = {
   oninit({attrs}) {
     this.user = attrs.user;
+
+    this.toggleUser = () => {
+      return User.toggle(this.user).then((response) => {
+        this.user = response.user;
+      }, (response) => {})
+    }
   },
   view(vnode) {
     return m('.item', [
@@ -28,33 +36,14 @@ const listItem = {
             m(".visible content", "Non autorizzato"),
             m(".hidden content", "Autorizza")
           ]),
-          m("button", { className: "ui right floated animated teal basic button", tabindex: "0" }, [
-            m(".visible content", "Attivo"),
-            m(".hidden content", "Disattiva")
-          ])
+          m(loadingButton, {
+            action: this.toggleUser,
+            label: (this.user.active ? 'Disattiva' : 'Attiva'),
+            style: 'ui right floated teal basic button'
+          })
         ])
       ])
     ]);
-    // return m('.item ui segment p-all-side-10 user__item', [
-    //   m("a", {
-    //       href: "",
-    //       oncreate: m.route.link,
-    //       class: "user__item-avatar"
-    //     }, [
-    //     m('img.ui avatar mini image', {src: "/images/user.png"}),
-    //     m("span", { class: "user__item-name" }, "Lena")
-    //   ]),
-    //   m(".right floated", [
-    //     m("button", { class: "ui animated teal basic button", tabindex: "0" }, [
-    //       m(".visible content", "Non autorizzato"),
-    //       m(".hidden content", "Autorizza")
-    //     ]),
-    //     m("button", { class: "ui animated teal basic button", tabindex: "0" }, [
-    //       m(".visible content", "Attivo"),
-    //       m(".hidden content", "Disattiva")
-    //     ])
-    //   ])
-    // ]);
   }
 }
 

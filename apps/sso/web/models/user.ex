@@ -95,26 +95,26 @@ defmodule Sso.User do
     nil
   end
 
-  def filter_by(query, filter) do
+  def filter_by_email(query, filter) do
     from u in query,
       where: ilike(u.email, ^"%#{filter || ""}%")
-      # or
-      #   ilike(u.description, ^"%#{filter || ""}%")
   end
 
-  def filter_embed_by(query, field, term) when is_binary(term) do
+  def filter_profile_by(query, field, term) when is_binary(term) do
     case String.strip(term) do
       "" ->
         query
       stripped_term ->
         from u in query,
           where: fragment("?->>? LIKE ?", u.profile, ^to_string(field), ^"%#{stripped_term}%")
+          # where: fragment("?->>'first_name' LIKE ?", u.profile, ^"%#{stripped_term}%") or
+          #   fragment("?->>'last_name' LIKE ?", u.profile, ^"%#{stripped_term}%")
 
           # fragment("?->'angel_list'->>'name' LIKE '%' || ? || '%'", u.info, ^search_string))
           # fragment("?->'angel_list'->>'name' LIKE ?", u.info, ^("%" <> search_string <> "%)
     end
   end
-  def filter_embed_by(query, _, term) when is_nil(term), do: query
+  def filter_profile_by(query, _, term) when is_nil(term), do: query
 
   def order_by(query, order) do
     case order do
