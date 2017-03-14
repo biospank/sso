@@ -4,7 +4,9 @@ import changePassword from './views/password/change_password';
 import dashboard from './views/dashboard/dashboard';
 import userView from './views/sso/user/view';
 import userDetails from './views/sso/user/details';
-import credentials from './views/sso/credentials/index';
+import credentialsStep from './views/sso/credentials/credentials_step';
+import organizationStep from './views/sso/credentials/organization_step';
+import companyStep from './views/sso/credentials/company_step';
 
 export default m.route(document.getElementById('app'), "/", {
   // Login routing
@@ -13,5 +15,7 @@ export default m.route(document.getElementById('app'), "/", {
   "/password/change": changePassword,
   "/sso/users": userView,
   "/sso/user/:code": userDetails,
-  "/credentials": credentials
+  "/account": organizationStep,
+  "/account/company": companyStep,
+  "/account/credentials": credentialsStep
 });

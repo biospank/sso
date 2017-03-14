@@ -33,10 +33,10 @@ const mixinLayout = (content, layout) => {
                 oncreate: m.route.link
               }, "Utenti"),
               m("a", {
-                href: "/credentials",
+                href: "/account",
                 oncreate: m.route.link,
-                class: "item" 
-              }, "Credenziali")
+                class: "item"
+              }, "Account")
             ])
           ]),
           m('.right menu', [

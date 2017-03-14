@@ -1,9 +1,12 @@
 /* This file is for your main application css. */
 
 @import "./mixin/custom-mixin";
-@import "./views/signin/form";
-@import "./views/user/users-list";
+
 @import "./shared/variables";
 @import "./shared/spaces";
 @import "./shared/buttons";
 @import "./shared/tipography";
+
+@import "./views/signin/form";
+@import "./views/user/users-list";
+@import "./views/credentials/account-component";
