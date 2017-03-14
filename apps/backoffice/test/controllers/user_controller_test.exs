@@ -16,7 +16,8 @@ defmodule Backoffice.UserControllerTest do
     test "requires user authentication", %{conn: conn} do
       Enum.each([
           get(conn, user_path(conn, :index)),
-          put(conn, user_activate_path(conn, :activate, 123))
+          put(conn, user_activate_path(conn, :activate, 123)),
+          put(conn, user_authorize_path(conn, :authorize, 123))
         ], fn conn ->
           assert json_response(conn, 498)["errors"] == %{
             "message" => "Authentication required (invalid token)"
