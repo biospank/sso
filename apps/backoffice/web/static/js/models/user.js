@@ -39,6 +39,16 @@ const User = {
         xhr.setRequestHeader("Authorization", `${Backoffice.realm} ${Session.token()}`)
       }
     });
+  },
+  auth(user) {
+    return m.request({
+      method: "PUT",
+      url: `${Backoffice.apiBaseUrl()}${this.url}/${user.id}/authorize`,
+      config: function(xhr) {
+        xhr.setRequestHeader("accept", "application/json");
+        xhr.setRequestHeader("Authorization", `${Backoffice.realm} ${Session.token()}`)
+      }
+    });
   }
 };
 

@@ -1,5 +1,6 @@
 defmodule Backoffice.UserControllerTest do
   use Backoffice.ConnCase
+  use Bamboo.Test, shared: :true
 
   setup %{conn: conn} do
     # to avoid ** (DBConnection.OwnershipError) cannot find ownership process for #PID<0.674.0>.
@@ -22,11 +23,6 @@ defmodule Backoffice.UserControllerTest do
           }
           assert conn.halted
       end)
-      # conn = get(conn, user_path(conn, :index))
-      # assert json_response(conn, 498)["errors"] == %{
-      #   "message" => "Authentication required (invalid token)"
-      # }
-      # assert conn.halted
     end
   end
 
@@ -61,6 +57,48 @@ defmodule Backoffice.UserControllerTest do
 
       conn = put conn, user_deactivate_path(conn, :deactivate, user)
       assert json_response(conn, 200)["user"]["active"] == false
+    end
+
+    test "authorize user", %{conn: conn} do
+      organization = insert_organization()
+      account = insert_account(organization)
+      user = insert_user(account)
+
+      conn = put conn, user_authorize_path(conn, :authorize, user)
+      assert json_response(conn, 200)["user"]["status"] == "verified"
+    end
+
+    test "deliver a courtesy email", %{conn: conn} do
+      organization = insert_organization()
+      account = insert_account(organization)
+      user = insert_user(account)
+
+      conn = put conn, user_authorize_path(conn, :authorize, user)
+      user = Sso.Repo.get(Sso.User, json_response(conn, 200)["user"]["id"])
+      account =
+        Sso.Account
+        |> Ecto.Query.preload(:organization)
+        |> Sso.Repo.get!(user.account_id)
+
+      assert_delivered_email Sso.Email.courtesy_email(user, account)
+    end
+
+    test "welcome email", %{conn: conn} do
+      organization = insert_organization()
+      account = insert_account(organization)
+      user = insert_user(account)
+
+      conn = put conn, user_authorize_path(conn, :authorize, user)
+      user = Sso.Repo.get(Sso.User, json_response(conn, 200)["user"]["id"])
+      account =
+        Sso.Account
+        |> Ecto.Query.preload(:organization)
+        |> Sso.Repo.get!(user.account_id)
+
+      email = Sso.Email.courtesy_email(user, account)
+      assert email.to == user
+      assert email.subject == "Sso - Verifica utente"
+      # assert email.html_body =~ "Codice di attivazione: #{user.activation_code}"
     end
   end
 end

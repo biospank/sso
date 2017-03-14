@@ -120,4 +120,20 @@ defmodule Sso.Email do
         </small>
       """)
   end
+
+  def courtesy_email(user, account) do
+    new_email
+    |> from(account)
+    |> to(user)
+    |> subject("Sso - Verifica utente")
+    |> html_body("""
+        Testo della mail di cortesia inviata da SSO
+        per la verifica dell'utente #{user.profile.first_name} #{user.profile.last_name}
+        <br />
+        <br />
+        <small>
+        Ignora questo messaggio se non hai effettuato tu questa richiesta
+        </small>
+      """)
+  end
 end

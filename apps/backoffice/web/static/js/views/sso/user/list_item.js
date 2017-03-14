@@ -11,6 +11,12 @@ const listItem = {
         this.user = response.user;
       }, (response) => {})
     }
+
+    this.authUser = () => {
+      return User.auth(this.user).then((response) => {
+        this.user = response.user;
+      }, (response) => {})
+    }
   },
   view(vnode) {
     return m('.item', [
@@ -23,8 +29,8 @@ const listItem = {
         m('.description', this.user.profile.specialization),
         m('.extra', [
           m('.ui label', [
-            m('i.slack icon'),
-            this.user.profile.board_member
+            m('i.at icon'),
+            this.user.email
           ]),
           m('.ui label', [
             m('i.call icon'),
@@ -32,10 +38,12 @@ const listItem = {
           ])
         ]),
         m('.extra', [
-          m("button", { className: "ui right floated animated teal basic button", tabindex: "0" }, [
-            m(".visible content", "Non autorizzato"),
-            m(".hidden content", "Autorizza")
-          ]),
+          m(loadingButton, {
+            action: this.authUser,
+            label: (this.user.status === 'verified' ? 'Autorizzato' : 'Autorizza'),
+            style: 'ui right floated teal basic button',
+            disabled: (this.user.status === 'verified' ? true : false)
+          }),
           m(loadingButton, {
             action: this.toggleUser,
             label: (this.user.active ? 'Disattiva' : 'Attiva'),

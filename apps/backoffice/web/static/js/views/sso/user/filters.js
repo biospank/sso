@@ -89,8 +89,7 @@ const userFilters = {
             class: "ui submit teal button full"
           }, "Filtra")
         ])
-      ]),
-      // m('p', JSON.stringify(User.filters))
+      ])
     ]);
   }
 }
