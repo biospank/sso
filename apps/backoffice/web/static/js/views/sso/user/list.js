@@ -58,7 +58,7 @@ const userList = {
         if(_.isEmpty(User.list())) {
            //return m(recordNotFound);
         } else {
-          return m('.ui link divided items', [
+          return m('.ui divided items', [
             User.list().map((user) => {
               return m(listItem, {
                 key: user.id,
