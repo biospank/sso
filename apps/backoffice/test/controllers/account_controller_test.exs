@@ -1,6 +1,15 @@
 defmodule Backoffice.AccountControllerTest do
   use Backoffice.ConnCase
 
+  @valid_attrs %{
+    app_name: "CompanyName",
+    ref_email: "company@example.com"
+  }
+
+  @invalid_attrs %{
+    ref_email: "company@example.com"
+  }
+
   setup %{conn: conn} do
     # to avoid ** (DBConnection.OwnershipError) cannot find ownership process for #PID<0.674.0>.
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Sso.Repo)
@@ -34,9 +43,25 @@ defmodule Backoffice.AccountControllerTest do
       {:ok, conn: conn, user: user}
     end
 
-    test "create account", %{conn: conn} do
-      conn = post conn, account_path(conn, :create)
+    test "create account with an existing organization", %{conn: conn} do
+      org = insert_organization()
+
+      conn = post conn, account_path(conn, :create), account: Map.merge(@valid_attrs, %{org_id: org.id})
       assert json_response(conn, 201)
+    end
+
+    test "create account with a new organization", %{conn: conn} do
+      org = %{name: "OrganizationName", ref_email: "org@example.com"}
+
+      conn = post conn, account_path(conn, :create), account: Map.merge(@valid_attrs, %{org: org})
+      assert json_response(conn, 201)
+    end
+
+    test "doesn't create an invalid account", %{conn: conn} do
+      org = insert_organization()
+
+      conn = post conn, account_path(conn, :create), account: Map.merge(@invalid_attrs, %{org_id: org.id})
+      assert json_response(conn, 422)["errors"] != %{}
     end
   end
 end

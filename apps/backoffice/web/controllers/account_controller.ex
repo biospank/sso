@@ -1,35 +1,47 @@
 defmodule Backoffice.AccountController do
   use Backoffice.Web, :controller
 
-  alias Sso.{Organization, Account, Repo}
+  alias Sso.{Organization, Account, Repo, Crypto}
+
+  plug :set_locale
 
   def create(conn, %{"account" => account_params}) do
     IO.inspect(account_params)
 
-    # if(account_params["org_id"]) do
-    #   organization = Repo.get(Organization, account_params["org_id"])
-    # else
-    #   organization =
-    #     %Organization{}
-    #     |> Organization.registration_changeset(account_params["organization"])
-    #     |> Repo.insert!
-    # end
-    #
-    # organization
-    # |> Ecto.build_assoc(:accounts)
-    # |> Account.registration_changeset(account_params)
-    # |> Repo.insert!
+    organization = if(account_params["org_id"]) do
+      Repo.get(Organization, account_params["org_id"])
+    else
+      %Organization{}
+        |> Organization.registration_changeset(account_params["org"])
+        |> Repo.insert!
+    end
 
-    account = %Sso.Account{
-      id: 200,
-      app_name: "test",
-      access_key: "f0fjh30fjh0i3f03",
-      secret_key: "HFUHFWEHF9EWHVCEHDOVCENOVDNBEOVNOENVOE",
-      active: true
-    }
+    [access_key, secret_key] = gen_keys
+
+    account_changeset =
+      organization
+      |> Ecto.build_assoc(:accounts)
+      |> Account.registration_changeset(Map.merge(account_params, %{"access_key" => access_key, "secret_key" => secret_key}))
+
+    case Repo.insert(account_changeset) do
+      {:ok, account} ->
+        conn
+        |> put_status(:created)
+        |> render(Sso.AccountView, "show_with_credentials.json", account: account, secret_key: secret_key)
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Sso.ChangesetView, "error.json", changeset: changeset)
+    end
+  end
+
+  defp gen_keys do
+    [Crypto.random_string(20), Crypto.random_string(40)]
+  end
+
+  defp set_locale(conn, _) do
+    Gettext.put_locale(Sso.Gettext, "it")
 
     conn
-    |> put_status(:created)
-    |> render(Sso.AccountView, "show_with_credentials.json", account: account)
   end
 end

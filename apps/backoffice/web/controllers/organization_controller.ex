@@ -30,5 +30,4 @@ defmodule Backoffice.OrganizationController do
 
     conn
   end
-
 end
