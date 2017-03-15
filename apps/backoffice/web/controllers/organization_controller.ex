@@ -13,6 +13,17 @@ defmodule Backoffice.OrganizationController do
   def create(conn, %{"organization" => organization_params}) do
     changeset = Sso.Organization.registration_changeset(%Sso.Organization{}, organization_params)
 
+    query = from o in Sso.Organization,
+      where: ilike(o.name, ^organization_params["name"])
+
+    changeset =
+      case Sso.Repo.one(query) do
+        nil ->
+          changeset
+        org ->
+          Ecto.Changeset.add_error(changeset, :name, "has already been taken")
+      end
+
     case changeset.valid? do
       true ->
         conn
