@@ -58,7 +58,7 @@ const userList = {
         if(_.isEmpty(User.list())) {
            //return m(recordNotFound);
         } else {
-          return m('.ui link divided items', [
+          return m('.ui divided items', [
             User.list().map((user) => {
               return m(listItem, {
                 key: user.id,
@@ -75,7 +75,7 @@ const userList = {
   },
   view(vnode) {
     return [
-      m('.ui top attached pagination menu', [
+      m('.ui top attached pagination menu mt-0', [
         paginate(vnode)
       ]),
       m('.ui attached segment', [
