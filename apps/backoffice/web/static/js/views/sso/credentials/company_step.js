@@ -18,36 +18,40 @@ const content = ({state}) => {
       m(".ui form mb-30", [
         m(".ui stackable two column centered grid", [
           m(".column", [
-            m(".field mb-20", {className: state.errors()["app_name"] ? "error" : ""}, [
+            m(".field", {className: state.errors()["app_name"] ? "error" : ""}, [
               m("label", "Nome Agenzia"),
-              m(".ui input fluid", [
-                m("input", {
-                  type: "text",
-                  name: "accountName",
-                  value: AccountWidzard.model.accountName(),
-                  oninput: m.withAttr('value', AccountWidzard.model.accountName),
-                  placeholder: "Inserisci nome Agenzia"
-                })
+              m(".mb-20", [
+                m(".ui input fluid", [
+                  m("input", {
+                    type: "text",
+                    name: "accountName",
+                    value: AccountWidzard.model.accountName(),
+                    oninput: m.withAttr('value', AccountWidzard.model.accountName),
+                    placeholder: "Inserisci nome Agenzia"
+                  })
+                ]),
+                m(".ui basic error pointing prompt label transition ", {
+                  className: (state.errors()["app_name"] ? "visible" : "hidden")
+                }, m('p', state.errors()["app_name"]))
               ])
             ]),
-            m(".ui basic error pointing prompt label transition ", {
-              className: (state.errors()["app_name"] ? "visible" : "hidden")
-            }, m('p', state.errors()["app_name"])),
-            m(".field mb-20", {className: state.errors()["ref_email"] ? "error" : ""}, [
+            m(".field", {className: state.errors()["ref_email"] ? "error" : ""}, [
               m("label", "Email di riferimento"),
-              m(".ui input fluid", [
-                m("input", {
-                  type: "email",
-                  name: "orgEmail",
-                  value: AccountWidzard.model.accountEmail(),
-                  oninput: m.withAttr('value', AccountWidzard.model.accountEmail),
-                  placeholder: "Inserisci email di riferimento"
-                })
+              m(".mb-20", [
+                m(".ui input fluid", [
+                  m("input", {
+                    type: "email",
+                    name: "orgEmail",
+                    value: AccountWidzard.model.accountEmail(),
+                    oninput: m.withAttr('value', AccountWidzard.model.accountEmail),
+                    placeholder: "Inserisci email di riferimento"
+                  })
+                ]),
+                m(".ui basic error pointing prompt label transition ", {
+                  className: (state.errors()["ref_email"] ? "visible" : "hidden")
+                }, m('p', state.errors()["ref_email"]))
               ])
-            ]),
-            m(".ui basic error pointing prompt label transition ", {
-              className: (state.errors()["ref_email"] ? "visible" : "hidden")
-            }, m('p', state.errors()["ref_email"]))
+            ])
           ])
         ])
       ]),
