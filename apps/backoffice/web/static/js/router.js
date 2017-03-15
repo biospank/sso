@@ -7,15 +7,65 @@ import userDetails from './views/sso/user/details';
 import credentialsStep from './views/sso/credentials/credentials_step';
 import organizationStep from './views/sso/credentials/organization_step';
 import companyStep from './views/sso/credentials/company_step';
+import Session from './models/session';
 
 export default m.route(document.getElementById('app'), "/", {
   // Login routing
-  "/": dashboard,
+  "/": {
+    onmatch() {
+      if(Session.isExpired())
+        m.route.set("/signin");
+      else
+        return dashboard;
+    }
+  },
   "/signin": signIn,
-  "/password/change": changePassword,
-  "/sso/users": userView,
-  "/sso/user/:id": userDetails,
-  "/account": organizationStep,
-  "/account/company": companyStep,
-  "/account/credentials": credentialsStep
+  "/password/change": {
+    onmatch() {
+      if(Session.isExpired())
+        m.route.set("/signin");
+      else
+        return changePassword;
+    }
+  },
+  "/sso/users": {
+    onmatch() {
+      if(Session.isExpired())
+        m.route.set("/signin");
+      else
+        return userView;
+    }
+  },
+  "/sso/user/:id": {
+    onmatch() {
+      if(Session.isExpired())
+        m.route.set("/signin");
+      else
+        return userDetails;
+    }
+  },
+  "/account": {
+    onmatch() {
+      if(Session.isExpired())
+        m.route.set("/signin");
+      else
+        return organizationStep;
+    }
+  },
+  "/account/company": {
+    onmatch() {
+      if(Session.isExpired())
+        m.route.set("/signin");
+      else
+        return companyStep;
+    }
+  },
+  "/account/credentials": {
+    onmatch() {
+      if(Session.isExpired())
+        m.route.set("/signin");
+      else
+        return credentialsStep;
+    }
+  }
 });

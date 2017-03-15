@@ -25,7 +25,7 @@ defmodule Backoffice.AccountController do
       {:ok, account} ->
         conn
         |> put_status(:created)
-        |> render(Sso.AccountView, "show_with_credentials.json", account: account, secret_key: secret_key)
+        |> render(Sso.AccountView, "show_with_credentials.json", account: account)
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)

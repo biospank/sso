@@ -28,10 +28,6 @@ const userList = {
     this.errors = {};
     this.showLoader = vnode.attrs.showLoader;//stream(false);
 
-    if(Session.isExpired()) {
-      m.route.set("/signin");
-    }
-
     this.getAllUsers = (params) => {
       this.showLoader(true);
       return User.all(params).then(this.unwrapSuccess).then((response) => {

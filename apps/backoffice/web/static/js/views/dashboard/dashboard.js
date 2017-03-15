@@ -7,10 +7,6 @@ const content = ({state}) => {
 };
 
 const dashboard = {
-  oninit() {
-    if(Session.isExpired())
-      m.route.set("/signin")
-  },
   view: mixinLayout(content)
 };
 
