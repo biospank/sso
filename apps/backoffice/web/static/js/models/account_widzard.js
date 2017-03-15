@@ -11,7 +11,9 @@ const AccountWidzard = {
     orgLabel: stream(defaultOrgLabel),
     orgEmail: stream(""),
     accountName: stream(""),
-    accountEmail: stream("")
+    accountEmail: stream(""),
+    accountAccessKey: stream(""),
+    accountSecretKey: stream("")
   },
   resetModel() {
     this.model.orgId(-1);
@@ -20,6 +22,8 @@ const AccountWidzard = {
     this.model.orgEmail("");
     this.model.accountName("");
     this.model.accountEmail("");
+    this.model.accountAccessKey("");
+    this.model.accountSecretKey("");
   }
 };
 

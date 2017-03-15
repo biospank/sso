@@ -9,7 +9,7 @@ const content = () => {
     m(".ui center aligned bottom attached segment p-all-side-50 segment", [
       m("h2", { class: "ui icon header teal mb-20" }, [
         m("i", { class: "circular privacy icon" }),
-        "Credenziali generate"
+        `Credenziali API per '${AccountWidzard.model.accountName()}'`
       ]),
       // m("h2", { class: "mt-0 mb-20" }, "Credenziali generate"),
       m(".ui form mb-30", [
@@ -18,13 +18,24 @@ const content = () => {
             m(".field mb-20", [
               m("label", { class: "" }, "Access key"),
               m(".ui input fluid", [
-                m("input", { type: "text", name: "agency", value: "sfdas769wbczxg3j3", readonly: "", class: "text-uppercase" })
+                m("input", {
+                  type: "text",
+                  name: "agency",
+                  value: AccountWidzard.model.accountAccessKey(),
+                  readonly: "",
+                  class: "text-uppercase"
+                })
               ])
             ]),
             m(".field mb-20", [
               m("label", { class: "" }, "Secret key"),
               m(".ui input fluid", [
-                m("input", { type: "text", name: "agency", value: "4563294hf87558", readonly: "", class: "text-uppercase" })
+                m("input", {
+                  type: "text",
+                  name: "agency",
+                  value: AccountWidzard.model.accountSecretKey(),
+                  readonly: "",
+                  class: "text-uppercase" })
               ])
             ])
           ])
