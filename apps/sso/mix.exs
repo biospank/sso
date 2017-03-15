@@ -30,8 +30,9 @@ defmodule Sso.Mixfile do
        :gettext,
        :phoenix_ecto,
        :postgrex,
-       :bamboo,
-       :faker]
+       :bamboo]
+      #  ,
+      #  :faker]
      ]
   end
 
