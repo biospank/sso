@@ -14,7 +14,7 @@ export default m.route(document.getElementById('app'), "/", {
   "/signin": signIn,
   "/password/change": changePassword,
   "/sso/users": userView,
-  "/sso/user/:code": userDetails,
+  "/sso/user/:id": userDetails,
   "/account": organizationStep,
   "/account/company": companyStep,
   "/account/credentials": credentialsStep

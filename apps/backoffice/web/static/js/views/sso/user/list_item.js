@@ -19,7 +19,10 @@ const listItem = {
     }
   },
   view(vnode) {
-    return m('.item', [
+    return m('.item', {
+      href: "/sso/user/1",
+      oncreate: m.route.link
+    }, [
       m('.ui image', [
         m('img.ui avatar mini image', {src: "/images/user.png"})
       ]),

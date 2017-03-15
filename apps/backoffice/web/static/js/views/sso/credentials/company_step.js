@@ -52,7 +52,7 @@ const content = ({state}) => {
       m('p', JSON.stringify(AccountWidzard.model)),
       m("div", [
         m("a", {
-          class: "ui left labeled teal icon button mb-10",
+          class: "ui left labeled teal icon basic button mb-10",
           href: "/account",
           oncreate: m.route.link
         }, [
@@ -60,7 +60,7 @@ const content = ({state}) => {
           "Indietro"
         ]),
         m("a", {
-          class: "ui right labeled teal icon button mb-10",
+          class: "ui right labeled teal icon basic button mb-10",
           onclick() {
             state.errors({});
 

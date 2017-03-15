@@ -31,7 +31,7 @@ const content = () => {
       ]),
       m("div", [
         m("a", {
-          class: "ui left labeled teal icon button mb-10",
+          class: "ui left labeled teal icon basic button mb-10",
           href: "/account/company",
           oncreate: m.route.link
         }, [
@@ -39,7 +39,7 @@ const content = () => {
           "Indietro"
         ]),
         m("a", {
-          class: "ui positive button mb-10",
+          class: "ui positive basic button mb-10",
           href: "/account/credentials",
           oncreate: m.route.link
         }, [

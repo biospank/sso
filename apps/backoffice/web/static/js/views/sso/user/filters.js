@@ -86,7 +86,7 @@ const userFilters = {
               event.preventDefault();
               this.getAllUsers({filters: User.filters});
             },
-            class: "ui submit teal button full"
+            class: "ui submit teal basic button full"
           }, "Filtra")
         ])
       ])

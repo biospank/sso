@@ -95,7 +95,7 @@ const content = ({state}) => {
         ])
       ]),
       m("a", {
-        class: "ui right labeled teal icon button",
+        class: "ui right labeled teal icon basic button",
         onclick() {
           state.errors({});
 

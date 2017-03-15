@@ -34,7 +34,7 @@ const content = () => {
             m(feedbackButton, {
               label: 'Modifica',
               feedbackLabel: 'Authenticating...',
-              style: 'ui fluid teal submit button large weight-light mt-30'
+              style: 'ui fluid teal submit basic button large weight-light mt-30'
             })
           ])
         ])
