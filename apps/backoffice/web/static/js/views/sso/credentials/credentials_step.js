@@ -1,6 +1,7 @@
 import m from 'mithril';
 import mixinLayout from '../../layout/mixin_layout';
 import menuStep from '../../sso/credentials/menu_step';
+import AccountWidzard from '../../../models/account_widzard';
 
 const content = () => {
   return m(".account_component", [
@@ -31,20 +32,14 @@ const content = () => {
       ]),
       m("div", [
         m("a", {
-          class: "ui left labeled teal icon basic button mb-10",
-          href: "/account/company",
-          oncreate: m.route.link
+          class: "ui teal basic button",
+          onclick() {
+            AccountWidzard.resetModel()
+            m.route.set('/account')
+          }
         }, [
-          m("i", { class: "left arrow icon" }),
-          "Indietro"
-        ]),
-        m("a", {
-          class: "ui positive basic button mb-10",
-          href: "/account/credentials",
-          oncreate: m.route.link
-        }, [
-          m("i", { class: "checkmark icon" }),
-          "Conferma Credenziali"
+          m("i", { class: "privacy icon" }),
+          "Crea nuovo account"
         ])
       ])
     ])

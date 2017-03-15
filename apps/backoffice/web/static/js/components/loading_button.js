@@ -17,10 +17,11 @@ const loadingButton = {
 
   },
   view(vnode) {
+    vnode.state.type = vnode.attrs.type;
     vnode.state.label = vnode.attrs.label;
     vnode.state.disabled = vnode.attrs.disabled || false;
 
-    return m('button', {
+    return m(vnode.state.type || 'button', {
               disabled: vnode.state.disabled,
               className: vnode.state.style + (vnode.state.disabled ? ' disabled' : ''),
               onclick: vnode.state.actionWithFeedback

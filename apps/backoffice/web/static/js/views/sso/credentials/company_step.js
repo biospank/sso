@@ -3,7 +3,9 @@ import stream from 'mithril/stream';
 import _ from 'lodash';
 import mixinLayout from '../../layout/mixin_layout';
 import menuStep from '../../sso/credentials/menu_step';
+import Account from '../../../models/account';
 import AccountWidzard from '../../../models/account_widzard';
+import loadingButton from '../../../components/loading_button';
 
 const content = ({state}) => {
   return m(".account_component", [
@@ -16,7 +18,7 @@ const content = ({state}) => {
       m(".ui form mb-30", [
         m(".ui stackable two column centered grid", [
           m(".column", [
-            m(".field mb-20", {className: state.errors()["accountName"] ? "error" : ""}, [
+            m(".field mb-20", {className: state.errors()["app_name"] ? "error" : ""}, [
               m("label", "Nome Agenzia"),
               m(".ui input fluid", [
                 m("input", {
@@ -29,9 +31,9 @@ const content = ({state}) => {
               ])
             ]),
             m(".ui basic error pointing prompt label transition ", {
-              className: (state.errors()["accountName"] ? "visible" : "hidden")
-            }, m('p', state.errors()["accountName"])),
-            m(".field mb-20", {className: state.errors()["accountEmail"] ? "error" : ""}, [
+              className: (state.errors()["app_name"] ? "visible" : "hidden")
+            }, m('p', state.errors()["app_name"])),
+            m(".field mb-20", {className: state.errors()["ref_email"] ? "error" : ""}, [
               m("label", "Email di riferimento"),
               m(".ui input fluid", [
                 m("input", {
@@ -44,12 +46,12 @@ const content = ({state}) => {
               ])
             ]),
             m(".ui basic error pointing prompt label transition ", {
-              className: (state.errors()["accountEmail"] ? "visible" : "hidden")
-            }, m('p', state.errors()["accountEmail"]))
+              className: (state.errors()["ref_email"] ? "visible" : "hidden")
+            }, m('p', state.errors()["ref_email"]))
           ])
         ])
       ]),
-      m('p', JSON.stringify(AccountWidzard.model)),
+      // m('p', JSON.stringify(AccountWidzard.model)),
       m("div", [
         m("a", {
           class: "ui left labeled teal icon basic button mb-10",
@@ -59,31 +61,13 @@ const content = ({state}) => {
           m("i", { class: "left arrow icon" }),
           "Indietro"
         ]),
-        m("a", {
-          class: "ui right labeled teal icon basic button mb-10",
-          onclick() {
-            state.errors({});
-
-            if(_.trim(AccountWidzard.model.accountName()) === "") {
-              state.errors({
-                "accountName": "Nome agenzia obbligatorio"
-              })
-            }
-
-            if(_.trim(AccountWidzard.model.orgEmail()) === "" &&
-              _.trim(AccountWidzard.model.accountEmail()) === "") {
-                state.errors(_.assign(state.errors(), {
-                  "accountEmail": "La mail di riferimento è obbligatoria"
-                }))
-            }
-
-            if(_.isEmpty(state.errors()))
-              m.route.set("/account/credentials");
-
-          }
+        m(loadingButton, {
+          type: 'a',
+          action: state.createAccount,
+          style: 'ui positive basic button mb-10'
         }, [
-          m("i", { class: "right arrow icon" }),
-          "Avanti"
+          m("i", { class: "checkmark icon" }),
+          "Conferma"
         ])
       ])
     ])
@@ -93,6 +77,34 @@ const content = ({state}) => {
 const companyStep = {
   oninit(vnode) {
     this.errors = stream({});
+
+    this.createAccount = () => {
+      this.errors({});
+
+      if(AccountWidzard.model.orgId() === -1) {
+        this.account = {
+          org: {
+            name: AccountWidzard.model.orgName(),
+            ref_email: AccountWidzard.model.orgEmail()
+          },
+          app_name: AccountWidzard.model.accountName(),
+          ref_email: AccountWidzard.model.accountEmail()
+        }
+      } else {
+        this.account = {
+          org_id: AccountWidzard.model.orgId(),
+          app_name: AccountWidzard.model.accountName(),
+          ref_email: AccountWidzard.model.accountEmail()
+        }
+      }
+
+      return Account.create(this.account).then((data) => {
+        m.route.set("/account/credentials");
+      }, (e) => {
+        this.errors(JSON.parse(e.message).errors);
+      })
+    };
+
   },
   view: mixinLayout(content)
 }

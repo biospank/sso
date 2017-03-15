@@ -1,5 +1,6 @@
 import m from 'mithril';
 import Session from '../../models/session';
+import AccountWidzard from '../../models/account_widzard';
 
 const mixinLayout = (content, layout) => {
   const layouts = {
@@ -33,8 +34,12 @@ const mixinLayout = (content, layout) => {
                 oncreate: m.route.link
               }, "Utenti"),
               m("a", {
-                href: "/account",
-                oncreate: m.route.link,
+                onclick() {
+                  AccountWidzard.resetModel()
+                  m.route.set('/account')
+                },
+                // href: "/account",
+                // oncreate: m.route.link,
                 class: "item"
               }, "Account")
             ])

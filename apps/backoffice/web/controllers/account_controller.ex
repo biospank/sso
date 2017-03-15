@@ -6,8 +6,6 @@ defmodule Backoffice.AccountController do
   plug :set_locale
 
   def create(conn, %{"account" => account_params}) do
-    IO.inspect(account_params)
-
     organization = if(account_params["org_id"]) do
       Repo.get(Organization, account_params["org_id"])
     else

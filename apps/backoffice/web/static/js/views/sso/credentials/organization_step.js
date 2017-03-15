@@ -57,7 +57,7 @@ const content = ({state}) => {
           }, m('p', state.errors()["orgId"]))
         ])
       ]),
-      m('p', JSON.stringify(AccountWidzard.model)),
+      // m('p', JSON.stringify(AccountWidzard.model)),
       m(".ui horizontal divider mtb-50", "oppure"),
       m("h2", { class: "mt-0 mb-30" }, "Creane una nuova"),
       m(".ui form mb-20", [
@@ -105,28 +105,6 @@ const content = ({state}) => {
       }, [
         m("i", { class: "right arrow icon" })
       ])
-      // m("a", {
-      //   class: "ui right labeled teal icon button",
-      //   onclick() {
-      //     state.errors({});
-      //
-      //     if(AccountWidzard.model.orgId() === -1) {
-      //       return Organization.validate({
-      //         name: AccountWidzard.model.orgName(),
-      //         ref_email: AccountWidzard.model.orgEmail()
-      //       }).then((data) => {
-      //         m.route.set("/account/company");
-      //       }, (e) => {
-      //         state.errors(JSON.parse(e.message).errors);
-      //       })
-      //     } else {
-      //       m.route.set("/account/company");
-      //     }
-      //   }
-      //  }, [
-      //   m("i", { class: "right arrow icon" }),
-      //   "Avanti"
-      // ])
     ])
   ])
 }
@@ -140,7 +118,7 @@ const organizationStep = {
       return Organization.all().then((response) => {
         this.organizations = _.concat([{id: -1, name: 'Nessuna di queste'}], response.organizations);
       }, (response) => {})
-    }
+    };
 
     this.validateOrganization = () => {
       this.errors({});
@@ -155,9 +133,13 @@ const organizationStep = {
           this.errors(JSON.parse(e.message).errors);
         })
       } else {
-        m.route.set("/account/company");
+        return new Promise(function(resolve, reject) {
+          setTimeout(function() {
+            m.route.set("/account/company");
+          }, 500)
+        })
       }
-    }
+    };
 
     this.getAllOrganizations();
   },
