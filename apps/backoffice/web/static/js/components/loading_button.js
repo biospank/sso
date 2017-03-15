@@ -16,15 +16,15 @@ const loadingButton = {
     }
 
   },
-  view({attrs, state}) {
-    state.label = attrs.label;
-    state.disabled = attrs.disabled || false;
+  view(vnode) {
+    vnode.state.label = vnode.attrs.label;
+    vnode.state.disabled = vnode.attrs.disabled || false;
 
     return m('button', {
-              disabled: state.disabled,
-              className: state.style + (state.disabled ? ' disabled' : ''),
-              onclick: state.actionWithFeedback
-            }, state.label);
+              disabled: vnode.state.disabled,
+              className: vnode.state.style + (vnode.state.disabled ? ' disabled' : ''),
+              onclick: vnode.state.actionWithFeedback
+            }, [vnode.state.label, vnode.children]);
   }
 };
 

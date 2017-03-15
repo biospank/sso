@@ -16,6 +16,17 @@ const Organization = {
         xhr.setRequestHeader("Authorization", `${Backoffice.realm} ${Session.token()}`)
       }
     });
+  },
+  validate(obj) {
+    return m.request({
+      method: "POST",
+      data: { organization: obj },
+      url: Backoffice.apiBaseUrl() + this.url,
+      config: function(xhr) {
+        xhr.setRequestHeader("accept", "application/json");
+        xhr.setRequestHeader("Authorization", `${Backoffice.realm} ${Session.token()}`)
+      }
+    });
   }
 };
 

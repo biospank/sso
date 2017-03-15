@@ -40,6 +40,7 @@ defmodule Backoffice.Router do
       put "/authorize", UserController, :authorize, as: :authorize
     end
 
-    resources "/organization", OrganizationController, only: [:index]
+    resources "/organization", OrganizationController, only: [:index, :create]
+    resources "/account", AccountController, only: [:create]
   end
 end

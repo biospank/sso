@@ -5,6 +5,7 @@ import mixinLayout from '../../layout/mixin_layout';
 import menuStep from '../../sso/credentials/menu_step';
 import Organization from '../../../models/organization';
 import AccountWidzard from '../../../models/account_widzard';
+import loadingButton from '../../../components/loading_button';
 
 const content = ({state}) => {
   return m(".account_component", [
@@ -62,7 +63,7 @@ const content = ({state}) => {
       m(".ui form mb-20", [
         m(".ui stackable two column centered grid", [
           m(".column", [
-            m(".field", {className: state.errors()["orgName"] ? "error" : ""}, [
+            m(".field", {className: state.errors()["name"] ? "error" : ""}, [
               m("label", "Nome Organizzazione"),
               m(".ui input fluid mb-20", [
                 m("input", {
@@ -75,10 +76,10 @@ const content = ({state}) => {
                 })
               ]),
               m(".ui basic error pointing prompt label transition ", {
-                className: (state.errors()["orgName"] ? "visible" : "hidden")
-              }, m('p', state.errors()["orgName"]))
+                className: (state.errors()["name"] ? "visible" : "hidden")
+              }, m('p', state.errors()["name"]))
             ]),
-            m(".field", [
+            m(".field", {className: state.errors()["ref_email"] ? "error" : ""}, [
               m("label", "Email di riferimento"),
               m(".ui input fluid mb-30", [
                 m("input", {
@@ -90,28 +91,42 @@ const content = ({state}) => {
                   readonly: (AccountWidzard.model.orgId() !== -1)
                 })
               ])
-            ])
+            ]),
+            m(".ui basic error pointing prompt label transition ", {
+              className: (state.errors()["ref_email"] ? "visible" : "hidden")
+            }, m('p', state.errors()["ref_email"]))
           ])
         ])
       ]),
-      m("a", {
-        class: "ui right labeled teal icon basic button",
-        onclick() {
-          state.errors({});
-
-          if(AccountWidzard.model.orgId() === -1 &&
-            _.trim(AccountWidzard.model.orgName()) === "") {
-              state.errors({
-                "orgName": "Inserisci il nome o seleziona una esistente"
-              })
-          } else {
-            m.route.set("/account/company");
-          }
-        }
-       }, [
-        m("i", { class: "right arrow icon" }),
-        "Avanti"
+      m(loadingButton, {
+        action: state.validateOrganization,
+        label: 'Avanti',
+        style: 'ui right labeled teal icon basic button'
+      }, [
+        m("i", { class: "right arrow icon" })
       ])
+      // m("a", {
+      //   class: "ui right labeled teal icon button",
+      //   onclick() {
+      //     state.errors({});
+      //
+      //     if(AccountWidzard.model.orgId() === -1) {
+      //       return Organization.validate({
+      //         name: AccountWidzard.model.orgName(),
+      //         ref_email: AccountWidzard.model.orgEmail()
+      //       }).then((data) => {
+      //         m.route.set("/account/company");
+      //       }, (e) => {
+      //         state.errors(JSON.parse(e.message).errors);
+      //       })
+      //     } else {
+      //       m.route.set("/account/company");
+      //     }
+      //   }
+      //  }, [
+      //   m("i", { class: "right arrow icon" }),
+      //   "Avanti"
+      // ])
     ])
   ])
 }
@@ -125,6 +140,23 @@ const organizationStep = {
       return Organization.all().then((response) => {
         this.organizations = _.concat([{id: -1, name: 'Nessuna di queste'}], response.organizations);
       }, (response) => {})
+    }
+
+    this.validateOrganization = () => {
+      this.errors({});
+
+      if(AccountWidzard.model.orgId() === -1) {
+        return Organization.validate({
+          name: AccountWidzard.model.orgName(),
+          ref_email: AccountWidzard.model.orgEmail()
+        }).then((data) => {
+          m.route.set("/account/company");
+        }, (e) => {
+          this.errors(JSON.parse(e.message).errors);
+        })
+      } else {
+        m.route.set("/account/company");
+      }
     }
 
     this.getAllOrganizations();

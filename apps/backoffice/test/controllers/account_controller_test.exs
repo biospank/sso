@@ -1,10 +1,5 @@
-defmodule Backoffice.OrganizationControllerTest do
+defmodule Backoffice.AccountControllerTest do
   use Backoffice.ConnCase
-
-  @valid_attrs %{
-    name: "TestOrg",
-    ref_email: "test@example.com"
-  }
 
   setup %{conn: conn} do
     # to avoid ** (DBConnection.OwnershipError) cannot find ownership process for #PID<0.674.0>.
@@ -16,10 +11,10 @@ defmodule Backoffice.OrganizationControllerTest do
     {:ok, conn: conn}
   end
 
-  describe "organization endpoint" do
+  describe "account endpoint" do
     test "requires user authentication", %{conn: conn} do
       Enum.each([
-          get(conn, organization_path(conn, :index)),
+          post(conn, account_path(conn, :create)),
         ], fn conn ->
           assert json_response(conn, 498)["errors"] == %{
             "message" => "Authentication required (invalid token)"
@@ -29,7 +24,7 @@ defmodule Backoffice.OrganizationControllerTest do
     end
   end
 
-  describe "organization controller" do
+  describe "account controller" do
     setup %{conn: conn} do
       user = insert_bo_user()
       {:ok, jwt, _} = Guardian.encode_and_sign(user)
@@ -39,19 +34,9 @@ defmodule Backoffice.OrganizationControllerTest do
       {:ok, conn: conn, user: user}
     end
 
-    test "list all organizations", %{conn: conn} do
-      conn = get conn, organization_path(conn, :index)
-      assert json_response(conn, 200)["organizations"] == []
-    end
-
-    test "valid organization", %{conn: conn} do
-      conn = post conn, organization_path(conn, :create), organization: @valid_attrs
-      assert conn.status == 201
-    end
-
-    test "invalid organization", %{conn: conn} do
-      conn = post conn, organization_path(conn, :create), organization: %{ref_email: "test@example.com"}
-      assert json_response(conn, 422)["errors"] != %{}
+    test "create account", %{conn: conn} do
+      conn = post conn, account_path(conn, :create)
+      assert json_response(conn, 201)
     end
   end
 end
