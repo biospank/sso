@@ -75,7 +75,7 @@ const userList = {
   },
   view(vnode) {
     return [
-      m('.ui top attached pagination menu', [
+      m('.ui top attached pagination menu mt-0', [
         paginate(vnode)
       ]),
       m('.ui attached segment', [

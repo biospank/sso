@@ -30,7 +30,7 @@ const userFilters = {
 
   },
   view({state}) {
-    return m(".ui form segment mb-40", [
+    return m("form", { class: "ui form segment mb-40" }, [
       m(".five fields mb-0", [
         m(".field", [
           m(".ui selection dropdown", {
