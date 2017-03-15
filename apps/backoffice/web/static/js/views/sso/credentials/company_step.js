@@ -102,7 +102,9 @@ const companyStep = {
         }
       }
 
-      return Account.create(this.account).then((data) => {
+      return Account.create(this.account).then((response) => {
+        AccountWidzard.model.accountAccessKey(response.account.access_key);
+        AccountWidzard.model.accountSecretKey(response.account.secret_key);
         m.route.set("/account/credentials");
       }, (e) => {
         this.errors(JSON.parse(e.message).errors);
