@@ -16,7 +16,7 @@ const mixinLayout = (content, layout) => {
       return [
         m("nav", { class: "ui fixed menu" }, [
           m("a", { class: "header item" }, [
-            m("img", { src: '/images/phoenix.png', class: "logo ui", width: "200" })
+            m("img", { src: '/images/logo.png', class: "logo ui", width: "100" })
           ]),
           m('a.item teal', {
             className: (m.route.get() === '/') ? 'active' : '',
@@ -53,7 +53,6 @@ const mixinLayout = (content, layout) => {
               m("i", { class: "dropdown icon" }),
               m(".menu", [
                 // m(".header", "Profilo"),
-                m("a", { class: "item", "data-text": "exit" }, "Profilo"),
                 m("a", {
                   href: "/password/change",
                   oncreate: m.route.link,
