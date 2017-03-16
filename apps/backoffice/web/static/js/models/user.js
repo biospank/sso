@@ -7,9 +7,28 @@ import Session from './session';
 const User = {
   url: '/user',
   filters: {
-    name: stream(""),
-    email: stream("")
+    field: stream(""),
+    fieldLabel: stream(""),
+    term: stream(""),
+    email: stream(""),
+    status: stream(""),
+    statusLabel: stream(""),
+    account: stream(""),
+    accountLabel: stream("Tutte le agenzie")
   },
+  filterFields: [
+    {fieldLabel: 'Nome', fieldValue: 'first_name'},
+    {fieldLabel: 'Cognome', fieldValue: 'last_name'},
+    {fieldLabel: 'Professione', fieldValue: 'profession'},
+    {fieldLabel: 'Specializzazione', fieldValue: 'specialization'},
+    {fieldLabel: 'Iscrizione ordine', fieldValue: 'board_number'},
+    {fieldLabel: 'Attività lavorativa', fieldValue: 'employment'}
+  ],
+  filterStatuses: [
+    {statusLabel: 'Tutti gli utenti', statusValue: ''},
+    {statusLabel: 'Utenti verificati', statusValue: 'verified'},
+    {statusLabel: 'Utenti non verificati', statusValue: 'unverified'}
+  ],
   list: stream(undefined),
   pageInfo: {},
   all(params) {

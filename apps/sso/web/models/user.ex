@@ -100,9 +100,34 @@ defmodule Sso.User do
     nil
   end
 
-  def filter_by_email(query, filter) do
-    from u in query,
-      where: ilike(u.email, ^"%#{filter || ""}%")
+  def filter_by(query, field, term) do
+    case String.strip(term) do
+      "" ->
+        query
+      stripped_term ->
+        from u in query,
+          where: ilike(field(u, ^field), ^"%#{stripped_term}%")
+    end
+  end
+
+  def filter_by_status(query, status) do
+    case String.strip(status) do
+      "" ->
+        query
+      stripped_term ->
+        from u in query,
+          where: u.status == ^(String.to_atom(stripped_term))
+    end
+  end
+
+  def filter_by_account(query, account) do
+    case String.strip(account) do
+      "" ->
+        query
+      stripped_term ->
+        from u in query,
+          where: u.account_id == ^(String.to_integer(stripped_term))
+    end
   end
 
   def filter_profile_by(query, field, term) when is_binary(term) do
@@ -111,12 +136,7 @@ defmodule Sso.User do
         query
       stripped_term ->
         from u in query,
-          where: fragment("?->>? LIKE ?", u.profile, ^to_string(field), ^"%#{stripped_term}%")
-          # where: fragment("?->>'first_name' LIKE ?", u.profile, ^"%#{stripped_term}%") or
-          #   fragment("?->>'last_name' LIKE ?", u.profile, ^"%#{stripped_term}%")
-
-          # fragment("?->'angel_list'->>'name' LIKE '%' || ? || '%'", u.info, ^search_string))
-          # fragment("?->'angel_list'->>'name' LIKE ?", u.info, ^("%" <> search_string <> "%)
+          where: fragment("?->>? LIKE ?", u.profile, ^field, ^"%#{stripped_term}%")
     end
   end
   def filter_profile_by(query, _, term) when is_nil(term), do: query

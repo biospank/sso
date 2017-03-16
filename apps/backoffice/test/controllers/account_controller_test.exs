@@ -23,7 +23,8 @@ defmodule Backoffice.AccountControllerTest do
   describe "account endpoint" do
     test "requires user authentication", %{conn: conn} do
       Enum.each([
-          post(conn, account_path(conn, :create)),
+          get(conn, account_path(conn, :index)),
+          post(conn, account_path(conn, :create))
         ], fn conn ->
           assert json_response(conn, 498)["errors"] == %{
             "message" => "Authentication required (invalid token)"
@@ -41,6 +42,11 @@ defmodule Backoffice.AccountControllerTest do
       conn = put_req_header(conn, "authorization", "Dardy #{jwt}")
 
       {:ok, conn: conn, user: user}
+    end
+
+    test "list all accounts", %{conn: conn} do
+      conn = get conn, account_path(conn, :index)
+      assert json_response(conn, 200)["accounts"] == []
     end
 
     test "create account with an existing organization", %{conn: conn} do

@@ -41,6 +41,6 @@ defmodule Backoffice.Router do
     end
 
     resources "/organization", OrganizationController, only: [:index, :create]
-    resources "/account", AccountController, only: [:create]
+    resources "/account", AccountController, only: [:index, :create]
   end
 end

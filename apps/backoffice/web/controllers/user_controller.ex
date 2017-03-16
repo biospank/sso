@@ -8,9 +8,19 @@ defmodule Backoffice.UserController do
     #
     # Process.sleep 1_000
 
+    query_filter = case params["filters"] do
+      nil ->
+        User
+      %{"field" => field, "term" => term, "email" => email, "status" => status, "account" => account} ->
+        User
+        |> User.filter_profile_by(field, term)
+        |> User.filter_by(:email, email)
+        |> User.filter_by_status(status)
+        |> User.filter_by_account(account)
+    end
+
     paged_users =
-      User
-      |> User.filter_profile_by(:first_name, params["filters"]["name"])
+      query_filter
       |> User.order_by(:inserted_at)
       |> Backoffice.Repo.paginate(params)
 

@@ -20,6 +20,7 @@ defmodule Backoffice.OrganizationControllerTest do
     test "requires user authentication", %{conn: conn} do
       Enum.each([
           get(conn, organization_path(conn, :index)),
+          post(conn, organization_path(conn, :create), organization: %{})
         ], fn conn ->
           assert json_response(conn, 498)["errors"] == %{
             "message" => "Authentication required (invalid token)"

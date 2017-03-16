@@ -5,6 +5,12 @@ defmodule Backoffice.AccountController do
 
   plug :set_locale
 
+  def index(conn, _) do
+    accounts = Sso.Repo.all(Sso.Account)
+
+    render(conn, Sso.AccountView, "index.json", accounts: accounts)
+  end
+
   def create(conn, %{"account" => account_params}) do
     organization = if(account_params["org_id"]) do
       Repo.get(Organization, account_params["org_id"])
