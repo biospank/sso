@@ -259,14 +259,27 @@ curl -i
 
 <h3 id="descrizione">Descrizione</h3>
 
-<p>La registrazione si completa in due fasi:</p>
+<p>Sono possibili due tipi di registrazione:</p>
+
+<ol>
+<li>Registrazione con attivazione</li>
+<li>Registrazione preautorizzata</li>
+</ol>
+
+<p>La registrazione con attivazione si completa in due fasi:</p>
 
 <ul>
 <li>Registazione</li>
 <li>Attivazione</li>
 </ul>
 
-<h2 id="registazione">Registazione</h2>
+<p>La registrazione preautorizzata si completa in una fase:</p>
+
+<ul>
+<li>Registazione</li>
+</ul>
+
+<h2 id="registazione-con-attivazione">Registazione con attivazione</h2>
 
 <p>Crea un utente <code class="prettyprint">non attivo</code> in stato <code class="prettyprint">non verificato</code>. Invia una mail all&#39;indirizzo specificato dall&#39;utente per la procedura di registrazione e una notifica via mail all&#39;indirizzo dell&#39;account.</p>
 
@@ -285,6 +298,10 @@ curl -i
 <li>il codice attivazione viene appeso all&#39;url <code class="prettyprint">callback_url</code></li>
 </ul></li>
 </ol>
+
+<h2 id="registazione-preautorizzata">Registazione preautorizzata</h2>
+
+<p>Crea un utente <code class="prettyprint">attivo</code> in stato <code class="prettyprint">verificato</code>. Invia una mail di cortesia all&#39;indirizzo specificato dall&#39;utente.</p>
 
 <blockquote>
 <p>Esempio</p>
@@ -403,9 +420,13 @@ curl
 
 <p>Per utilizzare questo endpoint è necessario creare una <a href="#sessione">sessione</a>.</p>
 
-<h3 id="richiesta-http">Richiesta HTTP</h3>
+<h3 id="richiesta-http-registrazione-con-attivazione">Richiesta HTTP (registrazione con attivazione)</h3>
 
 <p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user/signup</code></p>
+
+<h3 id="richiesta-http-registrazione-preautorizzata">Richiesta HTTP (registrazione preautorizzata)</h3>
+
+<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user/signup?authorize</code></p>
 
 <h3 id="headers-http">Headers HTTP</h3>
 
@@ -1152,6 +1173,12 @@ curl
 <td>Unprocessable Entity &ndash; Errore di validazione</td>
 </tr>
 </tbody></table>
+
+          <h1 id="i18n">I18n</h1>
+
+<p>Per localizzare i messaggi di errore in italiano specificare nelle richieste http il seguente header:</p>
+
+<p><code class="prettyprint">Accept-Language: it</code></p>
 
           <h1 id="codici-errore-http">Codici Errore HTTP</h1>
 
