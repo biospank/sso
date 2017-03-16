@@ -52,7 +52,7 @@ defmodule Backoffice.UserController do
       |> Ecto.Query.preload(:organization)
       |> Sso.Repo.get!(updated_user.account_id)
 
-    # Sso.Email.courtesy_email(updated_user, account) |> Sso.Mailer.deliver_later
+    Sso.Email.courtesy_email(updated_user, account) |> Sso.Mailer.deliver_later
 
     render(conn, Sso.UserView, "show.json", user: updated_user)
   end

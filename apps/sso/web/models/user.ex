@@ -46,6 +46,11 @@ defmodule Sso.User do
     |> put_activation_code()
   end
 
+  def authorize_changeset(struct) do
+    struct
+    |> Ecto.Changeset.change(active: true, status: :verified)
+  end
+
   def gen_code_reset_changeset(struct) do
     Ecto.Changeset.change(struct, reset_code: Crypto.random_string(32))
   end

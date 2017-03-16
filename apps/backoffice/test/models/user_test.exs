@@ -3,7 +3,10 @@ defmodule Backoffice.UserTest do
 
   alias Backoffice.User
 
-  @valid_attrs %{}
+  @valid_attrs %{
+    username: "username",
+    password: "secret"
+  }
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

@@ -20,7 +20,7 @@ defmodule Backoffice.OrganizationController do
       case Sso.Repo.one(query) do
         nil ->
           changeset
-        org ->
+        _ ->
           Ecto.Changeset.add_error(changeset, :name, "has already been taken")
       end
 

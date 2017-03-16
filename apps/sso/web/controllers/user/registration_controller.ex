@@ -15,6 +15,31 @@ defmodule Sso.User.RegistrationController do
     )
   end
 
+  def create(conn, %{"user" => user_params, "authorize" => _}, account) do
+    changeset =
+      account
+      |> build_assoc(:users, %{organization_id: account.organization_id})
+      |> User.registration_changeset(user_params)
+      |> User.authorize_changeset
+
+    case Repo.insert(changeset) do
+      {:ok, user} ->
+        account =
+          account
+          |> Repo.preload(:organization)
+
+        Email.courtesy_email(user, account) |> Sso.Mailer.deliver_later
+
+        conn
+        |> put_status(:created)
+        |> render(Sso.UserView, "show.json", user: user)
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Sso.ChangesetView, "error.json", changeset: changeset)
+    end
+  end
+
   def create(conn, %{"user" => user_params}, account) do
     changeset =
       account

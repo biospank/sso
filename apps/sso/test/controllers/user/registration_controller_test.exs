@@ -206,5 +206,28 @@ defmodule Sso.User.RegistrationControllerTest do
       assert email.subject == "Sso - Notifica registazione utente"
       assert email.html_body =~ "Registrazione utente #{account.organization.name}"
     end
+
+    test "bypass activation and authorization when 'authorize' param is sent", %{conn: conn} do
+      conn = post conn, user_registration_path(conn, :create), user: @new_user, authorize: true
+      user = Repo.get(User, json_response(conn, 201)["user"]["id"])
+      assert user.active == true
+      assert user.status == :verified
+    end
+
+    test "deliver a courtesy email to the user", %{conn: conn, account: account} do
+      conn = post conn, user_registration_path(conn, :create), user: @new_user, authorize: true
+      user = Repo.get(User, json_response(conn, 201)["user"]["id"])
+      assert_delivered_email Sso.Email.courtesy_email(user, account)
+    end
+
+    test "user courtesy email", %{conn: conn, account: account} do
+      conn = post conn, user_registration_path(conn, :create), user: @new_user, authorize: true
+      user = Repo.get(User, json_response(conn, 201)["user"]["id"])
+      email = Sso.Email.courtesy_email(user, account)
+      assert email.from == account
+      assert email.to == user
+      assert email.subject == "Sso - Verifica utente"
+      assert email.html_body =~ user.profile.first_name
+    end
   end
 end

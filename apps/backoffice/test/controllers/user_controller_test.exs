@@ -99,7 +99,7 @@ defmodule Backoffice.UserControllerTest do
       email = Sso.Email.courtesy_email(user, account)
       assert email.to == user
       assert email.subject == "Sso - Verifica utente"
-      # assert email.html_body =~ "Codice di attivazione: #{user.activation_code}"
+      assert email.html_body =~ user.profile.first_name
     end
   end
 end
