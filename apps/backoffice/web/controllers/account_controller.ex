@@ -3,7 +3,7 @@ defmodule Backoffice.AccountController do
 
   alias Sso.{Organization, Account, Repo, Crypto}
 
-  plug :set_locale
+  plug :set_sso_locale
 
   def index(conn, _) do
     accounts = Sso.Repo.all(Sso.Account)
@@ -43,7 +43,7 @@ defmodule Backoffice.AccountController do
     [Crypto.random_string(20), Crypto.random_string(40)]
   end
 
-  defp set_locale(conn, _) do
+  defp set_sso_locale(conn, _) do
     Gettext.put_locale(Sso.Gettext, "it")
 
     conn

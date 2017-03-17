@@ -11,6 +11,7 @@ defmodule Backoffice.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug Backoffice.Plugs.Locale
   end
 
   pipeline :api_auth do
@@ -42,5 +43,9 @@ defmodule Backoffice.Router do
 
     resources "/organization", OrganizationController, only: [:index, :create]
     resources "/account", AccountController, only: [:index, :create]
+
+    scope "/bouser", BoUser, as: :bouser do
+      put "/password", PasswordController, :change
+    end
   end
 end

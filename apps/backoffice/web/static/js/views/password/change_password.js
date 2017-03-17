@@ -1,9 +1,12 @@
 import m from 'mithril';
+import stream from 'mithril/stream';
 import mixinLayout from '../layout/mixin_layout';
 import textField from '../../components/text_field';
-import feedbackButton from '../../components/feedback_button';
+import loadingButton from '../../components/loading_button';
+import BoUser from '../../models/bo_user';
+import Session from '../../models/session';
 
-const content = () => {
+const content = ({state}) => {
   return [
     m(".ui two column centered grid", [
       m(".column", [
@@ -12,30 +15,36 @@ const content = () => {
           m('form.ui form error', [
             m(textField, {
               type: 'password',
-              name: 'old_psw',
-              id: 'old_psw',
+              name: 'password',
+              id: 'password',
               placeholder: 'Vecchia Password',
-              icon: 'lock'
+              icon: 'lock',
+              oninput: m.withAttr("value", state.model.password),
+              error: state.errors()['password']
             }),
             m(textField, {
               type: 'password',
-              name: 'new_psw',
-              id: 'new_psw',
+              name: 'new_password',
+              id: 'new_password',
               placeholder: 'Nuova Password',
-              icon: 'lock'
+              icon: 'lock',
+              oninput: m.withAttr("value", state.model.new_password),
+              error: state.errors()['new_password']
             }),
             m(textField, {
               type: 'password',
-              name: 'psw_confermation',
-              id: 'psw_confermation',
+              name: 'new_password_confirmation',
+              id: 'new_password_confirmation',
               placeholder: 'Conferma Password',
-              icon: 'lock'
+              icon: 'lock',
+              oninput: m.withAttr("value", state.model.new_password_confirmation),
+              error: state.errors()['new_password_confirmation']
             }),
-            m(feedbackButton, {
+            m(loadingButton, {
+              action: state.changePassword,
               label: 'Modifica',
-              feedbackLabel: 'Authenticating...',
               style: 'ui fluid teal submit basic button large weight-light mt-30'
-            })
+            }),
           ])
         ])
       ])
@@ -44,6 +53,19 @@ const content = () => {
 };
 
 const changePassword = {
+  oninit(vnode) {
+    vnode.state.model = BoUser.model;
+    vnode.state.errors = stream({});
+
+    vnode.state.changePassword = () => {
+      return BoUser.changePassword().then((data) => {
+        Session.reset();
+        m.route.set("/signin");
+      }, (e) => {
+        vnode.state.errors(JSON.parse(e.message).errors);
+      })
+    }
+  },
   view: mixinLayout(content)
 }
 
