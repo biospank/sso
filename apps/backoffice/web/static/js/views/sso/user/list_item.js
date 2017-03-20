@@ -54,7 +54,7 @@ const listItem = {
           }),
           m("a", {
             class: "ui right floated teal basic button",
-            href: "/sso/user/1",
+            href: `/sso/user/${this.user.id}`,
             oncreate: m.route.link
           }, "Dettaglio")
         ])

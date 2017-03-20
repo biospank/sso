@@ -20,7 +20,7 @@ defmodule Backoffice.UserControllerTest do
           put(conn, user_authorize_path(conn, :authorize, 123))
         ], fn conn ->
           assert json_response(conn, 498)["errors"] == %{
-            "message" => "Authentication required (invalid token)"
+            "message" => "Richiesta autorizzazione (token non valido)"
           }
           assert conn.halted
       end)
@@ -40,6 +40,15 @@ defmodule Backoffice.UserControllerTest do
     test "list all users", %{conn: conn} do
       conn = get conn, user_path(conn, :index)
       assert json_response(conn, 200)["users"] == []
+    end
+
+    test "show user", %{conn: conn} do
+      organization = insert_organization()
+      account = insert_account(organization)
+      user = insert_user(account)
+
+      conn = get conn, user_path(conn, :show, user)
+      assert json_response(conn, 200)["user"]["id"] == user.id
     end
 
     test "activate user", %{conn: conn} do

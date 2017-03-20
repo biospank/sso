@@ -73,6 +73,7 @@ const userFilters = {
         m(".field", [
           m("input", {
             oninput: m.withAttr("value", User.filters.term),
+            value: User.filters.term,
             type: "text",
             placeholder: "Termine di ricerca"
           })
@@ -80,6 +81,7 @@ const userFilters = {
         m(".field", [
           m("input", {
             oninput: m.withAttr("value", User.filters.email),
+            value: User.filters.email,
             type: "email",
             placeholder: "Filtra per Email"
           })

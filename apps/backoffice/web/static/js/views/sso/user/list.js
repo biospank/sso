@@ -33,7 +33,7 @@ const userList = {
       return User.all(params).then(this.unwrapSuccess).then((response) => {
         User.list(response.users);
         this.showLoader(false);
-      }, function(response) {
+      }, (response) => {
         this.errors = response.errors;
       })
     };

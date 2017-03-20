@@ -42,6 +42,16 @@ const User = {
       }
     });
   },
+  get(userId) {
+    return m.request({
+      method: "GET",
+      url: `${Backoffice.apiBaseUrl()}${this.url}/${userId}`,
+      config: function(xhr) {
+        xhr.setRequestHeader("accept", "application/json");
+        xhr.setRequestHeader("Authorization", `${Backoffice.realm} ${Session.token()}`)
+      }
+    });
+  },
   toggle(user) {
     let action = '';
 

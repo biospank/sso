@@ -27,6 +27,11 @@ defmodule Backoffice.UserController do
     render(conn, Sso.UserView, "paginated_users.json", page: paged_users)
   end
 
+  def show(conn, %{"id" => user_id}) do
+    user = Sso.Repo.get!(User, String.to_integer(user_id))
+    render(conn, Sso.UserView, "show.json", user: user)
+  end
+
   def activate(conn, %{"user_id" => user_id}) do
     user = Sso.Repo.get!(User, String.to_integer(user_id))
 
