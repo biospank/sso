@@ -16,7 +16,7 @@ const mixinLayout = (content, layout) => {
     standard(content) {
       return [
         m("nav", { class: "ui fixed menu" }, [
-          m("a", { class: "header item" }, [
+          m("a", { class: "header item", href: '/', oncreate: m.route.link }, [
             m("img", { src: '/images/logo.png', class: "logo ui", width: "100" })
           ]),
           m('a.item teal', {
@@ -52,8 +52,7 @@ const mixinLayout = (content, layout) => {
               }
             }, [
               m(".text", [
-                m("img", { src: "/images/user.png", class: "ui medium circular image" }),
-                "Jenny Hess"
+                m("img", { src: "/images/user.png", class: "ui medium circular image" })
               ]),
               m("i", { class: "dropdown icon" }),
               m(".menu", [

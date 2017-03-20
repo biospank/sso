@@ -56,16 +56,29 @@ const userList = {
         return m('');
       } else {
         if(_.isEmpty(User.list())) {
-           //return m(recordNotFound);
+          return m('.ui bottom attached warning message', [
+            m('i', {className: 'warning icon'}),
+            'Nessun record trovato per il filtro impostato'
+          ]);
         } else {
-          return m('.ui divided items', [
-            User.list().map((user) => {
-              return m(listItem, {
-                key: user.id,
-                user: user
-              });
-            })
-          ])
+          return [
+            m('.ui top attached pagination menu mt-0', [
+              paginate(vnode)
+            ]),
+            m('.ui attached segment', [
+              m('.ui divided items', [
+                User.list().map((user) => {
+                  return m(listItem, {
+                    key: user.id,
+                    user: user
+                  });
+                })
+              ])
+            ]),
+            m('.ui bottom attached pagination menu', [
+              paginate(vnode)
+            ])
+          ];
         }
       }
     };
@@ -75,15 +88,7 @@ const userList = {
   },
   view(vnode) {
     return [
-      m('.ui top attached pagination menu mt-0', [
-        paginate(vnode)
-      ]),
-      m('.ui attached segment', [
-        vnode.state.showUsers(vnode)
-      ]),
-      m('.ui bottom attached pagination menu', [
-        paginate(vnode)
-      ])
+      vnode.state.showUsers(vnode)
     ]
   }
 }

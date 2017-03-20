@@ -21,7 +21,7 @@ const menuStep = {
         m("i", { class: "privacy icon teal" }),
         m(".content", [
           m(".title", "Credenziali"),
-          m(".description", "Conferma le credenziali")
+          m(".description", "Usa le credenziali generate")
         ])
       ])
     ])

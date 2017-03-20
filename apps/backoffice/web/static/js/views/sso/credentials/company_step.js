@@ -111,6 +111,10 @@ const companyStep = {
       })
     };
 
+    if((AccountWidzard.model.orgId() === -1) && (_.trim(AccountWidzard.model.orgName()) === '')) {
+      m.route.set("/account");
+    }
+
   },
   view: mixinLayout(content)
 }
