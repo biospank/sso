@@ -13,13 +13,13 @@ const content = ({state}) => {
     m(".ui center aligned bottom attached segment p-all-side-50 segment", [
       m("h2", { class: "ui icon header teal mb-20" }, [
         m("i", { class: "circular users icon" }),
-        "Crea Agenzia"
+        "Crea App"
       ]),
       m(".ui form mb-30", [
         m(".ui stackable two column centered grid", [
           m(".column", [
             m(".field", {className: state.errors()["app_name"] ? "error" : ""}, [
-              m("label", "Nome Agenzia"),
+              m("label", "Nome App"),
               m(".mb-20", [
                 m(".ui input fluid", [
                   m("input", {
@@ -27,7 +27,7 @@ const content = ({state}) => {
                     name: "accountName",
                     value: AccountWidzard.model.accountName(),
                     oninput: m.withAttr('value', AccountWidzard.model.accountName),
-                    placeholder: "Inserisci nome Agenzia"
+                    placeholder: "Inserisci nome App"
                   })
                 ]),
                 m(".ui basic error pointing prompt label transition ", {
