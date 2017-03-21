@@ -11,7 +11,7 @@ const userFilters = {
 
     this.getAllAccounts = () => {
       return Account.all().then((response) => {
-        this.accounts = _.concat([{id: "", app_name: 'Tutte le agenzie'}], response.accounts);
+        this.accounts = _.concat([{id: "", app_name: 'Tutte le app'}], response.accounts);
       }, (response) => {})
     };
 

@@ -13,8 +13,8 @@ const menuStep = {
       m(".step", { class: ( attrs.active === 2 ? "active" : "" ) }, [
         m("i", { class: "users icon teal" }),
         m(".content", [
-          m(".title", "Agenzia"),
-          m(".description", "Crea una nuova Agenzia")
+          m(".title", "App"),
+          m(".description", "Crea una nuova App")
         ])
       ]),
       m(".step", { class: ( attrs.active === 3 ? "active" : "" ) }, [
