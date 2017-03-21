@@ -16,9 +16,6 @@ defmodule Backoffice.BoUser.PasswordController do
   end
 
   def change(conn, %{"user" => user_params}, user) do
-    IO.inspect user
-    IO.inspect user_params
-
     case Comeonin.Bcrypt.checkpw(user_params["password"], user.password_hash) do
       true ->
         changeset = User.password_changeset(user, user_params)

@@ -16,7 +16,15 @@ defmodule Sso.User.ActivationController do
   def confirm(conn, %{"code" => activation_code}, _) do
     user = Repo.get_by(User, activation_code: activation_code)
 
-    cond do
+    case user do
+      nil ->
+        conn
+        |> put_status(404)
+        |> render(Sso.ErrorView, :"404", errors: %{message: gettext("Activation code not found")})
+      %User{active: true} ->
+        conn
+        |> put_status(304)
+        |> render(Sso.ErrorView, :"304", errors: %{message: gettext("Not Modified")})
       user ->
         {:ok, user} =
           user
@@ -25,10 +33,6 @@ defmodule Sso.User.ActivationController do
 
         conn
         |> render(Sso.UserView, "show.json", user: user)
-      true ->
-        conn
-        |> put_status(404)
-        |> render(Sso.ErrorView, :"404", errors: %{message: gettext("Activation code not found")})
     end
   end
 

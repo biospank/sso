@@ -518,7 +518,7 @@ curl
 
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user/activate/&lt;activation-code&gt;</code></p>
+<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/activate/&lt;activation-code&gt;</code></p>
 
 <h3 id="headers-http">Headers HTTP</h3>
 
@@ -559,6 +559,10 @@ curl
 <tr>
 <td>200</td>
 <td>Success &ndash; La richiesta è andata a buon fine</td>
+</tr>
+<tr>
+<td>304</td>
+<td>Not Modified &ndash; Utente già attivato</td>
 </tr>
 <tr>
 <td>404</td>

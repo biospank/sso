@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 
-#: web/controllers/user/activation_controller.ex:31
+#: web/controllers/user/activation_controller.ex:23
 msgid "Activation code not found"
 msgstr ""
 
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Authorization required"
 msgstr ""
 
-#: web/controllers/user/activation_controller.ex:42
+#: web/controllers/user/activation_controller.ex:46
 #: web/controllers/user/password_reset_controller.ex:40
 msgid "Email not found"
 msgstr ""
@@ -58,4 +58,8 @@ msgstr ""
 
 #: web/controllers/user/session_controller.ex:44
 msgid "User not verified"
+msgstr ""
+
+#: web/controllers/user/activation_controller.ex:27
+msgid "Not Modified"
 msgstr ""

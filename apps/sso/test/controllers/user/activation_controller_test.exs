@@ -47,10 +47,20 @@ defmodule Sso.User.ActivationControllerTest do
     end
 
     test "invalid activation code", %{conn: conn} do
-      post_conn = put conn, user_activation_path(conn, :confirm, @invalid_activation_code)
+      put_conn = put conn, user_activation_path(conn, :confirm, @invalid_activation_code)
 
-      assert json_response(post_conn, 404)["errors"] == %{
+      assert json_response(put_conn, 404)["errors"] == %{
         "detail" => "Activation code not found"
+      }
+    end
+
+    test "already activated user", %{conn: conn, user: user} do
+      user |> Ecto.Changeset.change(active: true) |> Repo.update!
+
+      put_conn = put conn, user_activation_path(conn, :confirm,user.activation_code)
+
+      assert json_response(put_conn, 304)["errors"] == %{
+        "detail" => "Not Modified"
       }
     end
 

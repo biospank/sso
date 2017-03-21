@@ -4,10 +4,6 @@ defmodule Backoffice.UserController do
   alias Sso.{User, Account}
 
   def index(conn, params) do
-    # IO.inspect params
-    #
-    # Process.sleep 1_000
-
     query_filter = case params["filters"] do
       nil ->
         User

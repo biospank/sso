@@ -27,7 +27,7 @@ defmodule Backoffice.AccountControllerTest do
           post(conn, account_path(conn, :create))
         ], fn conn ->
           assert json_response(conn, 498)["errors"] == %{
-            "message" => "Authentication required (invalid token)"
+            "message" => "Richiesta autorizzazione (token non valido)"
           }
           assert conn.halted
       end)
