@@ -19,31 +19,43 @@ const mixinLayout = (content, layout) => {
           m("a", { class: "header item", href: '/', oncreate: m.route.link }, [
             m("img", { src: '/images/logo.png', class: "logo ui", width: "100" })
           ]),
-          m('a.item teal', {
+          // m('a.item teal', {
+          //   className: (m.route.get() === '/') ? 'active' : '',
+          //   href: "/",
+          //   oncreate: m.route.link
+          // }, 'Dashboard'),
+          m("a.item teal", {
             className: (m.route.get() === '/') ? 'active' : '',
             href: "/",
             oncreate: m.route.link
-          }, 'Dashboard'),
-          m(".ui simple dropdown link item", [
-            m("span", { class: "text" }, "Single Sign On"),
-            m("i", { class: "dropdown icon" }),
-            m(".menu", [
-              m("a.item teal", {
-                className: (m.route.get() === '/sso/users') ? 'active' : '',
-                href: "/sso/users",
-                oncreate: m.route.link
-              }, "Utenti"),
-              m("a", {
-                onclick() {
-                  AccountWidzard.resetModel()
-                  m.route.set('/account')
-                },
-                // href: "/account",
-                // oncreate: m.route.link,
-                class: "item"
-              }, "Account")
-            ])
-          ]),
+          }, "Utenti"),
+          m("a.item teal", {
+            onclick() {
+              AccountWidzard.resetModel()
+              m.route.set('/account')
+            },
+            className: (m.route.get() === '/account') ? 'active' : ''
+          }, "Account"),
+          // m(".ui simple dropdown link item", [
+          //   m("span", { class: "text" }, "Single Sign On"),
+          //   m("i", { class: "dropdown icon" }),
+          //   m(".menu", [
+          //     m("a.item teal", {
+          //       className: (m.route.get() === '/sso/users') ? 'active' : '',
+          //       href: "/sso/users",
+          //       oncreate: m.route.link
+          //     }, "Utenti"),
+          //     m("a", {
+          //       onclick() {
+          //         AccountWidzard.resetModel()
+          //         m.route.set('/account')
+          //       },
+          //       // href: "/account",
+          //       // oncreate: m.route.link,
+          //       class: "item"
+          //     }, "Account")
+          //   ])
+          // ]),
           m('.right menu', [
             m(".ui simple dropdown link item p-all-side-15", {
               config: function(element, isInit, context) {

@@ -1,9 +1,22 @@
 import m from 'mithril';
 import mixinLayout from '../../layout/mixin_layout';
 import User from '../../../models/user';
+import loadingButton from '../../../components/loading_button';
+
 const content = ({state}) => {
   if(state.user) {
-    return m("form", { class: "ui form segment teal p-all-side-30" }, [
+    return m("div", { class: "ui form segment teal p-all-side-30" }, [
+      m(loadingButton, {
+        action: state.authUser,
+        label: (state.user.status === 'verified' ? 'Autorizzato' : 'Autorizza'),
+        style: 'ui right floated teal basic button',
+        disabled: (state.user.status === 'verified' ? true : false)
+      }),
+      m(loadingButton, {
+        action: state.toggleUser,
+        label: (state.user.active ? 'Disattiva' : 'Attiva'),
+        style: 'ui right floated teal basic button'
+      }),
       m("button", {
         className: "ui right floated teal basic button",
         href: '/sso/users',
@@ -160,6 +173,18 @@ const content = ({state}) => {
 const userDetails = {
   oninit({attrs}) {
     this.user = null;
+
+    this.toggleUser = () => {
+      return User.toggle(this.user).then((response) => {
+        this.user = response.user;
+      }, (response) => {})
+    }
+
+    this.authUser = () => {
+      return User.auth(this.user).then((response) => {
+        this.user = response.user;
+      }, (response) => {})
+    }
 
     this.getUser = (id) => {
       return User.get(id).then((response) => {

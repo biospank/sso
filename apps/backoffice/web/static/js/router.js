@@ -16,7 +16,7 @@ export default m.route(document.getElementById('app'), "/", {
       if(Session.isExpired())
         m.route.set("/signin");
       else
-        return dashboard;
+        return userView;
     }
   },
   "/signin": signIn,
