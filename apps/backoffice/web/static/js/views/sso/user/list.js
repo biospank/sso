@@ -66,7 +66,11 @@ const userList = {
               paginate(vnode)
             ]),
             m('.ui attached segment', [
-              m('.ui divided items', [
+              m(".ui teal right ribbon label mt-15 p-all-side-15", [
+                m("i", { class: "users icon" }),
+                User.pageInfo.totalEntries
+              ]),
+              m('.ui divided items mt-0', [
                 User.list().map((user) => {
                   return m(listItem, {
                     key: user.id,
