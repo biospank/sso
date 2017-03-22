@@ -6,7 +6,7 @@ defmodule Sso.ErrorViewTest do
 
   test "renders 404.json" do
     assert render(Sso.ErrorView, "404.json", []) ==
-           %{errors: %{detail: "Page not found"}}
+           %{errors: %{detail: "Service not found"}}
   end
 
   test "render 500.json" do
