@@ -52,7 +52,7 @@ defmodule Sso.Profile do
         :board_member,
         :board_number,
         :province_board,
-        :employment,
+        # :employment,
         :province_enployment
       ])
   end
