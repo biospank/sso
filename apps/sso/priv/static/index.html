@@ -1178,6 +1178,110 @@ curl
 </tr>
 </tbody></table>
 
+          <h1 id="dettaglio-utente">Dettaglio Utente</h1>
+
+<blockquote>
+<p>Esempio</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X GET
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;"</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>Ritorna un JSON strutturato come segue:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">37</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"verified"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="err">...</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Ritorna il dettaglio dell&#39;utente.</p>
+
+<p><strong>Nota</strong></p>
+
+<p>Per utilizzare questo endpoint è necessario creare una <a href="#sessione">sessione</a>.</p>
+
+<h3 id="richiesta-http">Richiesta HTTP</h3>
+
+<p><code class="prettyprint">GET https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;</code></p>
+
+<h3 id="parametri">Parametri</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>&lt;id&gt;</td>
+<td>Id dell&#39;utente</td>
+</tr>
+</tbody></table>
+
+<h3 id="headers-http">Headers HTTP</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Sostituire <code>&lt;jwt&gt;</code> con il token presente nell'header della risposta alla chiamata di sessione.
+</aside>
+
+<h3 id="codici-risposta-http">Codici risposta HTTP</h3>
+
+<table><thead>
+<tr>
+<th>Codice</th>
+<th>Descrizione</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td>OK &ndash; La richiesta è andata a buon fine</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; Utente non trovato</td>
+</tr>
+</tbody></table>
+
           <h1 id="i18n">I18n</h1>
 
 <p>Per localizzare i messaggi di errore in italiano specificare nelle richieste http il seguente header:</p>
