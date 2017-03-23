@@ -21,6 +21,7 @@ defmodule Sso.Router do
     scope "/user", User, as: :user do
       pipe_through :api_auth
 
+      get "/:id", DetailController, :show
       resources "/signup", RegistrationController, only: [:create]
       resources "/signin", SessionController, only: [:create]
       resources "/signout", SessionController, only: [:delete]
