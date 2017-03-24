@@ -32,13 +32,17 @@ config :sso, Sso.Repo,
 
 # Configure Bamboo dev
 config :sso, Sso.Mailer,
-  adapter: Bamboo.SMTPAdapter,
-  server: System.get_env("BAMBOO_MAILER_SERVER"),
-  port: 587, # tls / 465 ssl
-  username: System.get_env("BAMBOO_MAILER_USERNAME"),
-  password: System.get_env("BAMBOO_MAILER_PASSWORD"),
-  tls: :if_available, # can be `:always` or `:never`
-  ssl: false, # can be `true`
-  retries: 1
+  adapter: Bamboo.SendinBlueAdapter,
+  api_key: System.get_env("SENDINBLUE_API_KEY")
+
+# config :sso, Sso.Mailer,
+#   adapter: Bamboo.SMTPAdapter,
+#   server: System.get_env("BAMBOO_MAILER_SERVER"),
+#   port: 587, # tls / 465 ssl
+#   username: System.get_env("BAMBOO_MAILER_USERNAME"),
+#   password: System.get_env("BAMBOO_MAILER_PASSWORD"),
+#   tls: :if_available, # can be `:always` or `:never`
+#   ssl: false, # can be `true`
+#   retries: 1
 
 config :sso, :recipient_email_notification, "dirosa.ilaria@gmail.com"

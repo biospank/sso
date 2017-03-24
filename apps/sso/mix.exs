@@ -52,7 +52,7 @@ defmodule Sso.Mixfile do
      {:cowboy, "~> 1.0"},
      {:guardian, "~> 0.14.2"},
      {:comeonin, "~> 3.0"},
-     {:bamboo_smtp, "~> 1.3.0"},
+     {:bamboo_sendinblue, "~> 0.1.0"},
      {:ecto_enum, "~> 1.0"},
     #  {:faker, "~> 0.7", only: [:dev, :test]},
      {:credo, "~> 0.5.3", only: [:dev, :test]}]
