@@ -121,5 +121,32 @@ defmodule Sso.User.ActivationControllerTest do
         "detail" => "Email not found"
       }
     end
+
+    # Il reinvio del codice di attivazione può essere effettuato
+    # verso un utente appartenente alla stessa organizzazione dell'account
+    # che è stato autenticato.
+    # Nel test seguente l'account autenticato è nel setup mentre
+    # l'utente a cui viene reinviato il codice di attivazione appartiene
+    # ad un altro account (non autenticato) di un organizzazione diversa.
+    test "activation code can be resent by one of the same organization's authorized account", %{conn: conn} do
+      new_organization = insert_organization(%{
+        name: "new name",
+        ref_email: "neworg@example.com"
+      })
+      new_account = insert_account(new_organization, %{
+        app_name: "new app name"
+      })
+      new_user = insert_user(new_account, %{
+        email: "newuser@example.com"
+      })
+
+      post_conn = post conn, user_resend_activation_code_path(conn, :resend), user: %{
+        "email" => new_user.email
+      }
+
+      assert json_response(post_conn, 404)["errors"] == %{
+        "detail" => "Email not found"
+      }
+    end
   end
 end

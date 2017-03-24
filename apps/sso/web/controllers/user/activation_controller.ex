@@ -37,7 +37,7 @@ defmodule Sso.User.ActivationController do
   end
 
   def resend(conn, %{"user" => user_params}, account) do
-    user = Repo.get_by(User, email: user_params["email"])
+    user = Repo.get_by(User, email: user_params["email"], organization_id: account.organization_id)
 
     case user do
       nil ->

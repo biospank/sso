@@ -5,10 +5,18 @@ defmodule Sso.User.ProfileController do
 
   plug :scrub_params, "profile"
 
-  def update(conn, %{"id" => user_id, "profile" => profile_params}) do
-    user =
-      User
-      |> Repo.get(user_id)
+  def action(conn, _) do
+    apply(__MODULE__, action_name(conn),
+      [
+        conn,
+        conn.params,
+        Guardian.Plug.current_resource(conn)
+      ]
+    )
+  end
+
+  def update(conn, %{"id" => user_id, "profile" => profile_params}, account) do
+    user = Repo.get_by(User, id: user_id, organization_id: account.organization_id)
 
     cond do
       user ->

@@ -16,7 +16,7 @@ defmodule Sso.User.PasswordResetController do
   end
 
   def create(conn, %{"user" => user_params}, account) do
-    user = Repo.get_by(User, email: user_params["email"])
+    user = Repo.get_by(User, email: user_params["email"], organization_id: account.organization_id)
 
     cond do
       user ->
