@@ -25,7 +25,7 @@ defmodule Sso.Account do
     end
 
     def format_email_address(account, %{type: :to}) do
-      account.ref_email || account.organization.ref_email
+      {"", account.ref_email || account.organization.ref_email}
     end
   end
 

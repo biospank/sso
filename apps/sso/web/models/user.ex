@@ -23,7 +23,7 @@ defmodule Sso.User do
   defimpl Bamboo.Formatter, for: Sso.User do
     # Used by `to`, `bcc`, `cc` and `from`
     def format_email_address(user, _opts) do
-      user.email
+      {"", user.email}
     end
   end
 
