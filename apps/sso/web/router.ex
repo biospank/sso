@@ -29,6 +29,7 @@ defmodule Sso.Router do
       post "/activation/resend", ActivationController, :resend, as: :resend_activation_code
       resources "/password/reset", PasswordResetController, only: [:create, :update]
       put "/:id/profile", ProfileController, :update
+      put "/:id/password/change", PasswordChangeController, :change
     end
   end
 

@@ -7,6 +7,7 @@ defmodule Sso.User do
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true
+    field :new_password, :string, virtual: true
     field :password_hash, :string
     field :activation_code, :string
     field :reset_code, :string
@@ -68,10 +69,30 @@ defmodule Sso.User do
     Ecto.Changeset.change(struct, active: true)
   end
 
+  def password_change_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:password, :new_password])
+    |> validate_required([:password, :new_password])
+    |> validate_length(:new_password, min: 6)
+    |> validate_confirmation(:new_password, required: true, message: "non corrisponde")
+    |> put_new_password_hash()
+  end
+
+  # used for password reset
   defp put_password_hash(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
         put_change(changeset, :password_hash, Comeonin.Bcrypt.hashpwsalt(pass))
+      _ ->
+        changeset
+    end
+  end
+
+  # used for password change
+  defp put_new_password_hash(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true, changes: %{new_password: new_pass}} ->
+        put_change(changeset, :password_hash, Comeonin.Bcrypt.hashpwsalt(new_pass))
       _ ->
         changeset
     end

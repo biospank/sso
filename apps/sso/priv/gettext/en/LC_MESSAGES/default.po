@@ -31,7 +31,9 @@ msgstr ""
 msgid "Reset code not found"
 msgstr ""
 
-#: web/controllers/user/profile_controller.ex:35
+#: web/controllers/user/detail_controller.ex:13
+#: web/controllers/user/password_change_controller.ex:25
+#: web/controllers/user/profile_controller.ex:43
 #: web/controllers/user/session_controller.ex:32
 msgid "User not found"
 msgstr ""
@@ -60,7 +62,10 @@ msgstr ""
 msgid "User not verified"
 msgstr ""
 
-#, fuzzy
 #: web/controllers/user/activation_controller.ex:27
 msgid "Not Modified"
+msgstr ""
+
+#: web/controllers/user/password_change_controller.ex:42
+msgid "Password not valid"
 msgstr ""
