@@ -67,5 +67,5 @@ msgid "Not Modified"
 msgstr "Non modificato"
 
 #: web/controllers/user/password_change_controller.ex:42
-msgid "Password not valid"
-msgstr "Password non valida"
+msgid "not valid"
+msgstr "non valida"

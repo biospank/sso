@@ -29,9 +29,13 @@ defmodule Backoffice.BoUser.PasswordController do
             |> render(Backoffice.ChangesetView, "error.json", changeset: changeset)
         end
       false ->
+        changeset =
+          Ecto.Changeset.change(%User{}, %{password: ""})
+          |> Ecto.Changeset.add_error(:password, gettext("not valid"))
+
         conn
-        |> put_status(401)
-        |> render(Backoffice.ErrorView, :"401", errors: %{password: gettext("Password not valid")})
+        |> put_status(:unprocessable_entity)
+        |> render(Backoffice.ChangesetView, "error.json", changeset: changeset)
     end
   end
 end

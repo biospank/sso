@@ -68,7 +68,7 @@ defmodule Sso.User.PasswordChangeControllerTest do
 
     test "invalid current password", %{conn: conn, user: user} do
       conn = put(conn, user_password_change_path(conn, :change, user), user: %{password: "invalid"})
-      assert json_response(conn, 401)["errors"] == %{"detail" => "Password not valid"}
+      assert json_response(conn, 422)["errors"] == %{"password" => ["not valid"]}
     end
 
     # La richiesta del cambio della password può essere effettuato

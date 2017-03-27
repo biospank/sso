@@ -37,9 +37,13 @@ defmodule Sso.User.PasswordChangeController do
                 |> render(Sso.ChangesetView, "error.json", changeset: changeset)
             end
           false ->
+            changeset =
+              Ecto.Changeset.change(%User{}, %{password: ""})
+              |> Ecto.Changeset.add_error(:password, gettext("not valid"))
+
             conn
-            |> put_status(401)
-            |> render(Sso.ErrorView, :"401", errors: %{message: gettext("Password not valid")})
+            |> put_status(:unprocessable_entity)
+            |> render(Sso.ChangesetView, "error.json", changeset: changeset)
         end
     end
   end
