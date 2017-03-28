@@ -10,19 +10,18 @@ msgid ""
 msgstr ""
 "Language: en\n"
 
-#: web/lib/token.ex:10 web/lib/token.ex:10
+#: web/lib/token.ex:10
 msgid "Authentication required (invalid token)"
 msgstr ""
 
-#: web/lib/token.ex:16 web/lib/token.ex:16
+#: web/lib/token.ex:16
 msgid "Authorization required"
 msgstr ""
 
-#: web/controllers/bouser/password_controller.ex:37
-#: web/controllers/bouser/password_controller.ex:37
-msgid "Password not valid"
+#: web/templates/page/index.html.eex:2
+msgid "Welcome to %{name}"
 msgstr ""
 
-#: web/templates/page/index.html.eex:2 web/templates/page/index.html.eex:2
-msgid "Welcome to %{name}"
+#: web/controllers/bouser/password_controller.ex:34
+msgid "not valid"
 msgstr ""

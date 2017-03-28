@@ -24,6 +24,12 @@ defmodule Sso.UserTest do
     }
   }
 
+  @password_change_valid_attrs %{
+    password: "secret",
+    new_password: "secret123",
+    new_password_confirmation: "secret123"
+  }
+
   test "changeset with valid attributes" do
     changeset = User.changeset(%User{}, @valid_attrs)
     assert changeset.valid?
@@ -93,5 +99,25 @@ defmodule Sso.UserTest do
     changeset = User.registration_changeset(%User{}, Map.delete(@valid_attrs, :profile))
     refute changeset.valid?
     assert changeset.errors[:profile] == {"can't be blank", [validation: :required]}
+  end
+
+  test "password change changeset with valid attributes" do
+    changeset = User.password_change_changeset(%User{}, @password_change_valid_attrs)
+    assert changeset.valid?
+  end
+
+  test "password change changeset without new password" do
+    changeset = User.password_change_changeset(%User{}, Map.delete(@password_change_valid_attrs, :new_password))
+    refute changeset.valid?
+  end
+
+  test "password change changeset with invalid new password" do
+    changeset = User.password_change_changeset(%User{}, Map.merge(@password_change_valid_attrs, %{new_password: "pwd"}))
+    refute changeset.valid?
+  end
+
+  test "password change changeset with unmatched new password confimation" do
+    changeset = User.password_change_changeset(%User{}, Map.merge(@password_change_valid_attrs, %{new_password_confirmation: "invalid"}))
+    refute changeset.valid?
   end
 end

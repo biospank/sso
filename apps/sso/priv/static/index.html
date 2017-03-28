@@ -819,18 +819,18 @@ curl
 </tr>
 </tbody></table>
 
-          <h1 id="cambio-password-utente">Cambio Password Utente</h1>
+          <h1 id="reset-password-utente">Reset Password Utente</h1>
 
 <h3 id="descrizione">Descrizione</h3>
 
-<p>Il cambio password si completa in due fasi:</p>
+<p>Il reset della password si completa in due fasi:</p>
 
 <ul>
-<li>Richiesta cambio password</li>
-<li>Cambio password</li>
+<li>Richiesta reset password</li>
+<li>Reset password</li>
 </ul>
 
-<h2 id="richiesta-cambio-password">Richiesta cambio password</h2>
+<h2 id="richiesta-reset-password">Richiesta reset password</h2>
 
 <blockquote>
 <p>Esempio</p>
@@ -848,12 +848,12 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/password/reset
+  https://dardy-sso-test.herokuapp.com/sso/user/password/reset
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
-<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/password/reset'</span><span class="p">,</span>
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/password/reset'</span><span class="p">,</span>
   <span class="ss">body: </span><span class="s1">'{"user": {
             "email": "test@example.com",
             "callback_url": "https//mio.sito.com/change/password (opzionale)"
@@ -869,7 +869,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/password/reset"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/password/reset"</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
     <span class="s1">'"user": {'</span> <span class="o">+</span>
       <span class="s1">'"email": "test@example.com",'</span> <span class="o">+</span>
@@ -883,21 +883,21 @@ curl
   <span class="p">}</span>
 <span class="p">});</span>
 </code></pre>
-<p>Invia una mail all&#39;indirizzo dell&#39;utente che ha richiesto il cambio password.</p>
+<p>Invia una mail all&#39;indirizzo dell&#39;utente che ha richiesto il reset della password.</p>
 
-<p>Esistono due template per la mail di richiesta cambio password:</p>
+<p>Esistono due template per la mail di richiesta reset password:</p>
 
 <ol>
-<li>Con codice cambio password (mobile)
+<li>Con codice reset password (mobile)
 
 <ul>
 <li>Escludendo <code class="prettyprint">callback_url</code> dal corpo del messaggio HTTP</li>
 </ul></li>
-<li>Con link alla pagina di cambio password (web)
+<li>Con link alla pagina di reset password (web)
 
 <ul>
 <li>Includendo <code class="prettyprint">callback_url</code> nel corpo del messaggio HTTP</li>
-<li>il codice cambio password viene appeso all&#39;url <code class="prettyprint">callback_url</code></li>
+<li>il codice reset password viene appeso all&#39;url <code class="prettyprint">callback_url</code></li>
 </ul></li>
 </ol>
 
@@ -907,7 +907,7 @@ curl
 
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/password/reset</code></p>
+<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user/password/reset</code></p>
 
 <h3 id="headers-http">Headers HTTP</h3>
 
@@ -941,7 +941,7 @@ curl
 </tr>
 </tbody></table>
 
-<h2 id="cambio-password">Cambio password</h2>
+<h2 id="reset-password">Reset password</h2>
 
 <blockquote>
 <p>Esempio</p>
@@ -959,13 +959,13 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/password/reset/&lt;reset-code&gt;
+  https://dardy-sso-test.herokuapp.com/sso/user/password/reset/&lt;reset-code&gt;
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
 <span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span>
-  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/password/reset/&lt;reset-code&gt;'</span><span class="p">,</span>
+  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/password/reset/&lt;reset-code&gt;'</span><span class="p">,</span>
   <span class="ss">body: </span><span class="s1">'{"user": {
             "password": "new_secret123",
             "password_confirmation": "new_secret123"
@@ -981,7 +981,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"PUT"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/password/reset"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/password/reset/&lt;reset-code&gt;"</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
     <span class="s1">'"user": {'</span> <span class="o">+</span>
       <span class="s1">'"password": "new_secret123",'</span> <span class="o">+</span>
@@ -995,7 +995,7 @@ curl
   <span class="p">}</span>
 <span class="p">});</span>
 </code></pre>
-<p>Effetua il cambio password utilizzando le nuove credenziali.</p>
+<p>Effetua il reset della password utilizzando le nuove credenziali.</p>
 
 <p><strong>Nota</strong></p>
 
@@ -1003,7 +1003,7 @@ curl
 
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/password/reset/&lt;reset-code&gt;</code></p>
+<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/password/reset/&lt;reset-code&gt;</code></p>
 
 <h3 id="parametri">Parametri</h3>
 
@@ -1044,6 +1044,123 @@ curl
 <tr>
 <td>404</td>
 <td>Not Found &ndash; Codice non trovato</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity &ndash; Errore di validazione</td>
+</tr>
+</tbody></table>
+
+          <h1 id="cambio-password-utente">Cambio Password Utente</h1>
+
+<h3 id="descrizione">Descrizione</h3>
+
+<p>Il cambio password viene utilizzato per tutti gli utenti che hanno effettuato l&#39;accesso al sistema.</p>
+
+<blockquote>
+<p>Esempio</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X PUT
+  -d <span class="s1">'{"user": {
+        "password": "new_secret123",
+        "new_password": "new_secret123",
+        "new_password_confirmation": "new_secret123"
+      }
+    }'</span>
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/password/change
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span>
+  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/password/change'</span><span class="p">,</span>
+  <span class="ss">body: </span><span class="s1">'{"user": {
+            "password": "new_secret123",
+            "new_password": "new_secret123",
+            "new_password_confirmation": "new_secret123"
+           }
+         }'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"PUT"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/password/change"</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
+    <span class="s1">'"user": {'</span> <span class="o">+</span>
+      <span class="s1">'"password": "new_secret123",'</span> <span class="o">+</span>
+      <span class="s1">'"new_password": "new_secret123",'</span> <span class="o">+</span>
+      <span class="s1">'"new_password_confirmation": "new_secret123"'</span> <span class="o">+</span>
+    <span class="s1">'}'</span> <span class="o">+</span>
+  <span class="s1">'}'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<p>Effetua il cambio password utilizzando le nuove credenziali.</p>
+
+<p><strong>Nota</strong></p>
+
+<p>Per utilizzare questo endpoint è necessario creare una <a href="#sessione">sessione</a>.</p>
+
+<h3 id="richiesta-http">Richiesta HTTP</h3>
+
+<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/password/change</code></p>
+
+<h3 id="parametri">Parametri</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>&lt;id&gt;</td>
+<td>Id dell&#39;utente che ha effettuato l&#39;accesso al sistema</td>
+</tr>
+</tbody></table>
+
+<h3 id="headers-http">Headers HTTP</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Sostituire <code>&lt;jwt&gt;</code> con il token presente nell'header della risposta alla chiamata di sessione.
+</aside>
+
+<h3 id="codici-risposta-http">Codici risposta HTTP</h3>
+
+<table><thead>
+<tr>
+<th>Codice</th>
+<th>Descrizione</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td>OK &ndash; La richiesta è andata a buon fine</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; Utente non trovato</td>
 </tr>
 <tr>
 <td>422</td>
