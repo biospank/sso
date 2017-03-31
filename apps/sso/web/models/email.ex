@@ -5,21 +5,38 @@ defmodule Sso.Email do
     new_email
     |> from(account)
     |> to(user)
-    |> subject("Sso - Registazione utente")
+    |> subject("#{account.app_name} - Richiesta registrazione")
     |> html_body("""
-        Registrazione utente #{account.organization.name}
+        Gentile Utente #{user.profile.first_name} #{user.profile.last_name}
+        E' stata richiesta la registrazione al sito #{account.app_name}.
         <br />
         <br />
-        E' stata richiesta la registrazione utente tramite #{account.app_name}
-        Usa il seguente link per attivare il tuo account.
+        Per completare l'iscrizione e attivare il suo account segua questo link:
         <br />
         <br />
         #{link}
         <br />
         <br />
+        Le ricordiamo che la mail è temporanea ed entro 48 ore riceverà unaa mail
+        di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
+        potrà accedere a tutti i servizi realizzati da Takeda Italia Spa che supportano
+        questo servizio, utilizzando sempre le stesse credenziali.
+        <br />
+        <br />
+        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
+        customercare customercare@itakacloud.com
+        <br />
+        <br />
         <small>
-        Ignora questo messaggio se non hai effettuato tu questa richiesta
+        Ignori questo messaggio se non ha effettuato questa richiesta
         </small>
+        <br />
+        <br />
+        Cordiali saluti
+        Takeda Italia Spa
+        <br />
+        <br />
+        #{disclaimer}
       """)
   end
 
@@ -27,21 +44,38 @@ defmodule Sso.Email do
     new_email
     |> from(account)
     |> to(user)
-    |> subject("Sso - Registazione utente")
+    |> subject("#{account.app_name} - Richiesta registrazione")
     |> html_body("""
-        Registrazione utente #{account.organization.name}
+        Gentile Utente #{user.profile.first_name} #{user.profile.last_name}
+        E' stata richiesta la registrazione al #{account.app_name}.
         <br />
         <br />
-        E' stata richiesta la registrazione utente tramite #{account.app_name}
-        Usa il seguente codice su #{account.app_name} per attivare il tuo account.
+        Per completare l'iscrizione inserisca il seguente codice di attivazione nell'app #{account.app_name}
         <br />
         <br />
-        Codice di attivazione: #{user.activation_code}
+        #{user.activation_code}
+        <br />
+        <br />
+        Le ricordiamo che la mail è temporanea ed entro 48 ore riceverà unaa mail
+        di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
+        potrà accedere a tutti i servizi realizzati da Takeda Italia Spa che supportano
+        questo servizio, utilizzando sempre le stesse credenziali.
+        <br />
+        <br />
+        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
+        customercare customercare@itakacloud.com
         <br />
         <br />
         <small>
-        Ignora questo messaggio se non hai effettuato tu questa richiesta
+        Ignori questo messaggio se non ha effettuato questa richiesta
         </small>
+        <br />
+        <br />
+        Cordiali saluti
+        Takeda Italia Spa
+        <br />
+        <br />
+        #{disclaimer}
       """)
   end
 
@@ -49,15 +83,14 @@ defmodule Sso.Email do
     new_email
     |> from(account)
     |> to(Application.fetch_env!(:sso, :recipient_email_notification))
-    |> subject("Sso - Notifica registazione utente")
+    |> subject("#{account.app_name} - Notifica registazione utente")
     |> html_body("""
-        Registrazione utente #{account.organization.name}
         <br />
         <br />
-        E' stata richiesta una registrazione utente tramite #{account.app_name} con il seguente indirizzo email:
-        <br />
-        <br />
-        #{user.email}
+        Nome agenzia - #{account.organization.name}
+        Nome utente - #{user.profile.first_name} #{user.profile.last_name}
+        Nome app - #{account.app_name}
+        Email - #{user.email}
         <br />
         <br />
       """)
@@ -67,15 +100,17 @@ defmodule Sso.Email do
     new_email
     |> from(Application.fetch_env!(:sso, :recipient_email_notification))
     |> to(account)
-    |> subject("Sso - Notifica registazione utente")
+    |> subject("#{account.app_name} - Notifica registazione utente")
     |> html_body("""
-        Registrazione utente #{account.organization.name}
+        Spettabile #{account.organization.name}
         <br />
         <br />
-        E' stata richiesta una registrazione utente tramite #{account.app_name} con il seguente indirizzo email:
+        Si è registrato un nuovo utente:
         <br />
         <br />
-        #{user.email}
+        Nome utente - #{user.profile.first_name} #{user.profile.last_name}
+        Nome app - #{account.app_name}
+        Email - #{user.email}
         <br />
         <br />
       """)
@@ -85,19 +120,29 @@ defmodule Sso.Email do
     new_email
     |> from(account)
     |> to(user)
-    |> subject("Sso - Recupera password")
+    |> subject("#{account.app_name} - Recupera password")
     |> html_body("""
-        E' stata effettuata una richiesta di recupera password da questo account.
-        <br />
-        Usa il seguente link per procedere con la creazione di una nuova password.
+        E' stata effettuata una richiesta di recupero password per il suo account.
+        Per procedere alla creazione di una nuova password segua questo link:
         <br />
         <br />
         #{link}
         <br />
         <br />
+        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
+        customercare customercare@itakacloud.com
+        <br />
+        <br />
         <small>
-        Ignora questo messaggio se non hai effettuato tu questa richiesta
+        Ignori questo messaggio se non ha effettuato questa richiesta
         </small>
+        <br />
+        <br />
+        Cordiali saluti
+        Takeda Italia Spa
+        <br />
+        <br />
+        #{disclaimer}
       """)
   end
 
@@ -105,19 +150,30 @@ defmodule Sso.Email do
     new_email
     |> from(account)
     |> to(user)
-    |> subject("Sso - Recupera password")
+    |> subject("#{account.app_name} - Recupera password")
     |> html_body("""
-        E' stata effettuata una richiesta di recupera password da questo account.
+        E' stata effettuata una richiesta di recupero password per il suo account.
+        Per procedere alla creazione di una nuova password inserisca il seguente
+        codice di attivazione nell'app #{account.app_name}:
         <br />
-        Usa il seguente codice per procedere con la creazione di una nuova password.
+        <br />
+        #{user.reset_code}
         <br />
         <br />
-        Codice cambio password: #{user.reset_code}
+        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
+        customercare customercare@itakacloud.com
         <br />
         <br />
         <small>
-        Ignora questo messaggio se non hai effettuato tu questa richiesta
+        Ignori questo messaggio se non ha effettuato questa richiesta
         </small>
+        <br />
+        <br />
+        Cordiali saluti
+        Takeda Italia Spa
+        <br />
+        <br />
+        #{disclaimer}
       """)
   end
 
@@ -125,15 +181,63 @@ defmodule Sso.Email do
     new_email
     |> from(account)
     |> to(user)
-    |> subject("Sso - Verifica utente")
+    |> subject("Sso - Conferma registrazione")
     |> html_body("""
-        Testo della mail di cortesia inviata da SSO
-        per la verifica dell'utente #{user.profile.first_name} #{user.profile.last_name}
+        Gentile Utente #{user.profile.first_name} #{user.profile.last_name}
+        La sua registrazione a #{account.app_name} è confermata.
+        <br />
+        <br />
+        Le ricordiamo che adesso potrà accedere a tutti i servizi realizzati da
+        Takeda Italia Spa che supportano questo servizio, utilizzando sempre le
+        stesse credenziali.
+        <br />
+        <br />
+        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
+        customercare customercare@itakacloud.com
         <br />
         <br />
         <small>
-        Ignora questo messaggio se non hai effettuato tu questa richiesta
+        Ignori questo messaggio se non ha effettuato questa richiesta
         </small>
+        <br />
+        <br />
+        Cordiali saluti
+        Takeda Italia Spa
+        <br />
+        <br />
+        #{disclaimer}
       """)
+  end
+
+  defp disclaimer do
+    """
+      <small>
+        <strong>SSO Takeda</strong>
+      </small>
+      <br />
+      <br />
+      <small>
+        SSO Takeda è un sistema di autenticazione centralizzato per web e mobile
+        realizzato in esclusiva per Takeda Italia Spa.
+      </small>
+      <br />
+      <br />
+      <small>
+        Il sistema ha lo scopo di autorizzare e autenticare medici e operatori sanitari.
+      </small>
+      <br />
+      <br />
+      <small>
+        La gestione del riconoscimento dell'operatore della salute e la trasmissione
+        e archiviazione delle relative chiavi di accesso e dei dati personali del professionista
+        della salute avviene mediante la piattaforma SSO Takeda nel rispetto dei requisiti
+        richiesti da:
+        - Il Ministero della Salute (Circolare Min. San. - Dipartimento Valutazione Farmaci
+        e Farmacovigilanza n° 800.I/15/1267 del 22 marzo 2000)
+        - Codice della Privacy (D.Lgs 30/06/2003 n. 196) sulla tutela dei dati personali
+      </small>
+      <br />
+      <br />
+    """
   end
 end
