@@ -181,7 +181,7 @@ defmodule Sso.Email do
     new_email
     |> from(account)
     |> to(user)
-    |> subject("Sso - Conferma registrazione")
+    |> subject("#{account.app_name} - Conferma registrazione")
     |> html_body("""
         Gentile Utente #{user.profile.first_name} #{user.profile.last_name}
         La sua registrazione a #{account.app_name} è confermata.

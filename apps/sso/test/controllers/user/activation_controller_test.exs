@@ -86,8 +86,8 @@ defmodule Sso.User.ActivationControllerTest do
       email = Sso.Email.welcome_email(user, account, nil)
       assert email.from == account
       assert email.to == user
-      assert email.subject == "Sso - Registazione utente"
-      assert email.html_body =~ "Codice di attivazione: #{user.activation_code}"
+      assert email.subject == "app name - Richiesta registrazione"
+      assert email.html_body =~ "#{user.activation_code}"
     end
 
     test "resend activation code with callback, deliver a welcome email with callback", %{conn: conn, account: account, user: user} do
@@ -108,7 +108,7 @@ defmodule Sso.User.ActivationControllerTest do
       email = Sso.Email.welcome_email(user, account, location)
       assert email.from == account
       assert email.to == user
-      assert email.subject == "Sso - Registazione utente"
+      assert email.subject == "app name - Richiesta registrazione"
       assert email.html_body =~ location
     end
 

@@ -95,8 +95,8 @@ defmodule Sso.User.PasswordResetControllerTest do
       email = Sso.Email.password_reset_email(user, account, nil)
       assert email.from == account
       assert email.to == user
-      assert email.subject == "Sso - Recupera password"
-      assert email.html_body =~ "Codice cambio password: #{user.reset_code}"
+      assert email.subject == "app name - Recupera password"
+      assert email.html_body =~ "#{user.reset_code}"
     end
 
     test "deliver a password reset email with callback", %{conn: conn, account: account, user: user} do
@@ -133,7 +133,7 @@ defmodule Sso.User.PasswordResetControllerTest do
       email = Sso.Email.password_reset_email(user, account, location)
       assert email.from == account
       assert email.to == user
-      assert email.subject == "Sso - Recupera password"
+      assert email.subject == "app name - Recupera password"
       assert email.html_body =~ location
     end
   end

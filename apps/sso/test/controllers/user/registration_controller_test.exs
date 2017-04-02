@@ -143,8 +143,8 @@ defmodule Sso.User.RegistrationControllerTest do
       email = Sso.Email.welcome_email(user, account, nil)
       assert email.from == account
       assert email.to == user
-      assert email.subject == "Sso - Registazione utente"
-      assert email.html_body =~ "Codice di attivazione: #{user.activation_code}"
+      assert email.subject == "app name - Richiesta registrazione"
+      assert email.html_body =~ "Gentile Utente first name last name"
     end
 
     test "deliver a welcome email with callback", %{conn: conn, account: account} do
@@ -171,7 +171,7 @@ defmodule Sso.User.RegistrationControllerTest do
       email = Sso.Email.welcome_email(user, account, location)
       assert email.from == account
       assert email.to == user
-      assert email.subject == "Sso - Registazione utente"
+      assert email.subject == "app name - Richiesta registrazione"
       assert email.html_body =~ location
     end
 
@@ -187,8 +187,8 @@ defmodule Sso.User.RegistrationControllerTest do
       email = Sso.Email.dardy_new_registration_email(user, account)
       assert email.from == account
       assert email.to == Application.fetch_env!(:sso, :recipient_email_notification)
-      assert email.subject == "Sso - Notifica registazione utente"
-      assert email.html_body =~ "Registrazione utente #{account.organization.name}"
+      assert email.subject == "app name - Notifica registazione utente"
+      assert email.html_body =~ "Nome utente - first name last name"
     end
 
     test "deliver a notification email to the account", %{conn: conn, account: account} do
@@ -203,8 +203,8 @@ defmodule Sso.User.RegistrationControllerTest do
       email = Sso.Email.account_new_registration_email(user, account)
       assert email.from == Application.fetch_env!(:sso, :recipient_email_notification)
       assert email.to == account
-      assert email.subject == "Sso - Notifica registazione utente"
-      assert email.html_body =~ "Registrazione utente #{account.organization.name}"
+      assert email.subject == "app name - Notifica registazione utente"
+      assert email.html_body =~ "Spettabile name"
     end
 
     test "bypass activation and authorization when 'authorize' param is sent", %{conn: conn} do
@@ -226,7 +226,7 @@ defmodule Sso.User.RegistrationControllerTest do
       email = Sso.Email.courtesy_email(user, account)
       assert email.from == account
       assert email.to == user
-      assert email.subject == "Sso - Verifica utente"
+      assert email.subject == "app name - Conferma registrazione"
       assert email.html_body =~ user.profile.first_name
     end
   end

@@ -45,7 +45,7 @@ defmodule Backoffice.BoUser.PasswordControllerTest do
 
     test "invalid current password", %{conn: conn} do
       conn = put(conn, bouser_password_path(conn, :change), user: %{password: "invalid"})
-      assert json_response(conn, 422)["errors"] == %{"password" => ["not valid"]}
+      assert json_response(conn, 422)["errors"] == %{"password" => ["non valida"]}
     end
   end
 end
