@@ -7,8 +7,9 @@ defmodule Sso.Email do
     |> to(user)
     |> subject("#{account.app_name} - Richiesta registrazione")
     |> html_body("""
-        Gentile Utente #{user.profile.first_name} #{user.profile.last_name}
-        E' stata richiesta la registrazione al sito #{account.app_name}.
+        Gentile #{user.profile.first_name} #{user.profile.last_name}
+        <br />
+        è stata richiesta la registrazione al sito #{account.app_name}.
         <br />
         <br />
         Per completare l'iscrizione e attivare il suo account segua questo link:
@@ -17,14 +18,13 @@ defmodule Sso.Email do
         #{link}
         <br />
         <br />
-        Le ricordiamo che la mail è temporanea ed entro 48 ore riceverà unaa mail
+        Le ricordiamo che l'iscrizione è temporanea ed entro 48 ore riceverà unaa mail
         di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
-        potrà accedere a tutti i servizi realizzati da Takeda Italia Spa che supportano
+        potrà accedere a tutti i servizi realizzati da Takeda Italia S.p.A. che supportano
         questo servizio, utilizzando sempre le stesse credenziali.
         <br />
         <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
-        customercare customercare@itakacloud.com
+        Per eventuali informazioni o chiarimenti contatti il nostro servizio di <a href="customercare@itakacloud.com">customercare</a>
         <br />
         <br />
         <small>
@@ -33,10 +33,11 @@ defmodule Sso.Email do
         <br />
         <br />
         Cordiali saluti
-        Takeda Italia Spa
+        <br />
+        Takeda Italia S.p.A.
         <br />
         <br />
-        #{disclaimer}
+        #{disclaimer(account)}
       """)
   end
 
@@ -46,7 +47,8 @@ defmodule Sso.Email do
     |> to(user)
     |> subject("#{account.app_name} - Richiesta registrazione")
     |> html_body("""
-        Gentile Utente #{user.profile.first_name} #{user.profile.last_name}
+        Gentile #{user.profile.first_name} #{user.profile.last_name}
+        <br />
         E' stata richiesta la registrazione al #{account.app_name}.
         <br />
         <br />
@@ -56,14 +58,13 @@ defmodule Sso.Email do
         #{user.activation_code}
         <br />
         <br />
-        Le ricordiamo che la mail è temporanea ed entro 48 ore riceverà unaa mail
+        Le ricordiamo che l'iscrizione è temporanea ed entro 48 ore riceverà unaa mail
         di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
-        potrà accedere a tutti i servizi realizzati da Takeda Italia Spa che supportano
+        potrà accedere a tutti i servizi realizzati da Takeda Italia S.p.A. che supportano
         questo servizio, utilizzando sempre le stesse credenziali.
         <br />
         <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
-        customercare customercare@itakacloud.com
+        Per eventuali informazioni o chiarimenti contatti il nostro servizio di <a href="customercare@itakacloud.com">customercare</a>
         <br />
         <br />
         <small>
@@ -72,10 +73,11 @@ defmodule Sso.Email do
         <br />
         <br />
         Cordiali saluti
-        Takeda Italia Spa
+        <br />
+        Takeda Italia S.p.A.
         <br />
         <br />
-        #{disclaimer}
+        #{disclaimer(account)}
       """)
   end
 
@@ -142,7 +144,7 @@ defmodule Sso.Email do
         Takeda Italia Spa
         <br />
         <br />
-        #{disclaimer}
+        #{disclaimer(account)}
       """)
   end
 
@@ -173,7 +175,7 @@ defmodule Sso.Email do
         Takeda Italia Spa
         <br />
         <br />
-        #{disclaimer}
+        #{disclaimer(account)}
       """)
   end
 
@@ -183,17 +185,18 @@ defmodule Sso.Email do
     |> to(user)
     |> subject("#{account.app_name} - Conferma registrazione")
     |> html_body("""
-        Gentile Utente #{user.profile.first_name} #{user.profile.last_name}
+        Gentile #{user.profile.first_name} #{user.profile.last_name}
+        <br />
         La sua registrazione a #{account.app_name} è confermata.
         <br />
         <br />
         Le ricordiamo che adesso potrà accedere a tutti i servizi realizzati da
-        Takeda Italia Spa che supportano questo servizio, utilizzando sempre le
+        Takeda Italia S.p.A. che supportano questo servizio, utilizzando sempre le
         stesse credenziali.
         <br />
         <br />
         Per eventuali informazioni o chiarimenti contatti il nostro servizio di
-        customercare customercare@itakacloud.com
+        <a href="customercare@itakacloud.com">customercare</a>
         <br />
         <br />
         <small>
@@ -202,14 +205,15 @@ defmodule Sso.Email do
         <br />
         <br />
         Cordiali saluti
-        Takeda Italia Spa
+        <br />
+        Takeda Italia S.p.A.
         <br />
         <br />
-        #{disclaimer}
+        #{disclaimer(account)}
       """)
   end
 
-  defp disclaimer do
+  defp disclaimer(account) do
     """
       <small>
         <strong>SSO Takeda</strong>
@@ -218,12 +222,14 @@ defmodule Sso.Email do
       <br />
       <small>
         SSO Takeda è un sistema di autenticazione centralizzato per web e mobile
-        realizzato in esclusiva per Takeda Italia Spa.
+        realizzato in esclusiva per Takeda Italia S.p.A.
       </small>
       <br />
       <br />
       <small>
-        Il sistema ha lo scopo di autorizzare e autenticare medici e operatori sanitari.
+        Il sistema ha lo scopo di consentire la registrazione dei medici e operatori
+        sanitari ai progetti digital promossi da Takeda (#{account.app_name}) e consentire
+        la loro autenticazione come operatori professionali.
       </small>
       <br />
       <br />

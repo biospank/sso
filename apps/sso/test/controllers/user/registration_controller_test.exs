@@ -144,7 +144,7 @@ defmodule Sso.User.RegistrationControllerTest do
       assert email.from == account
       assert email.to == user
       assert email.subject == "app name - Richiesta registrazione"
-      assert email.html_body =~ "Gentile Utente first name last name"
+      assert email.html_body =~ "Gentile first name last name"
     end
 
     test "deliver a welcome email with callback", %{conn: conn, account: account} do
