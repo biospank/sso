@@ -228,7 +228,7 @@ defmodule Sso.Email do
       <br />
       <small>
         Il sistema ha lo scopo di consentire la registrazione dei medici e operatori
-        sanitari ai progetti digital promossi da Takeda (#{account.app_name}) e consentire
+        sanitari ai progetti digital promossi da Takeda (app/siti) e consentire
         la loro autenticazione come operatori professionali.
       </small>
       <br />
