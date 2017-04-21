@@ -20,6 +20,8 @@ defmodule Sso.Profile do
     field :board_number
     field :province_board
     field :employment
+    field :privacy_consent, :boolean
+    field :sso_privacy_consent, :boolean
     field :province_enployment
   end
 
@@ -38,6 +40,8 @@ defmodule Sso.Profile do
         :board_number,
         :province_board,
         :employment,
+        :privacy_consent,
+        :sso_privacy_consent,
         :province_enployment
       ])
     |> validate_required([
@@ -53,6 +57,8 @@ defmodule Sso.Profile do
         :board_number,
         :province_board,
         # :employment,
+        :privacy_consent,
+        :sso_privacy_consent,
         :province_enployment
       ])
   end

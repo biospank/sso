@@ -48,6 +48,8 @@ defmodule Sso.TestHelpers do
       board_number: "3773662882",
       province_board: "Roma",
       employment: "Medico generico",
+      sso_privacy_consent: true,
+      privacy_consent: false,
       province_enployment: "Roma"
     }, attrs["profile"] || %{})
 
