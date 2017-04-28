@@ -1,6 +1,29 @@
 defmodule Sso.User.ProfileControllerTest do
   use Sso.ConnCase
 
+  @valid_attrs %{
+    email: "some@content",
+    password: "secret",
+    password_confirmation: "secret",
+    profile: %{
+      first_name: "first name",
+      last_name: "last name",
+      fiscal_code: "ggrsta21s50h501z",
+      date_of_birth: "1997-02-12",
+      place_of_birth: "Roma",
+      phone_number: "227726622",
+      profession: "Medico generico",
+      specialization: "Pediatria",
+      board_member: "Medici",
+      board_number: "3773662882",
+      province_board: "Roma",
+      employment: "Medico generico",
+      sso_privacy_consent: true,
+      privacy_consent: false,
+      province_enployment: "Roma"
+    }
+  }
+
   setup %{conn: conn} do
     organization = insert_organization()
     account = insert_account(organization)
@@ -34,7 +57,11 @@ defmodule Sso.User.ProfileControllerTest do
       {:ok, conn: conn, user: user, account: account}
     end
 
-    test "update profile", %{conn: conn, user: user} do
+    test "update profile", %{conn: conn} do
+      post_conn = post conn, user_registration_path(conn, :create), user: @valid_attrs
+
+      user = Repo.get(Sso.User, json_response(post_conn, 201)["user"]["id"])
+
       conn = put(
         conn,
         user_profile_path(conn, :update, user),
@@ -46,8 +73,12 @@ defmodule Sso.User.ProfileControllerTest do
       assert json_response(conn, 200)["user"]["profile"]["phone_number"] == "882726109998"
     end
 
-    test "does not update profile with invalid data", %{conn: conn, user: user} do
-      conn = put(
+    test "does not update profile with invalid data", %{conn: conn} do
+      post_conn = post conn, user_registration_path(conn, :create), user: @valid_attrs
+
+      user = Repo.get(Sso.User, json_response(post_conn, 201)["user"]["id"])
+
+      put_conn = put(
         conn,
         user_profile_path(conn, :update, user),
         profile: %{
@@ -55,7 +86,7 @@ defmodule Sso.User.ProfileControllerTest do
         }
       )
 
-      assert json_response(conn, 422)["errors"] == %{"profile" => %{"phone_number" => ["can't be blank"]}}
+      assert json_response(put_conn, 422)["errors"] == %{"profile" => %{"phone_number" => ["can't be blank"]}}
     end
 
     # L'aggiornamento del profilo utente può essere effettuato

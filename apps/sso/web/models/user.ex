@@ -38,7 +38,7 @@ defmodule Sso.User do
   def registration_changeset(struct, params \\ %{}) do
     struct
     |> changeset(params)
-    |> cast_embed(:profile, required: true)
+    |> cast_embed(:profile, required: true, with: &Sso.Profile.registration_changeset/2)
     |> update_change(:email, &String.downcase/1)
     |> unique_constraint(:email, name: :users_email_organization_id_index)
     |> validate_length(:password, min: 6)

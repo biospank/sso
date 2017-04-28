@@ -22,7 +22,7 @@ defmodule Sso.User.ProfileController do
       user ->
         profile_changeset =
           user.profile
-          |> Profile.changeset(profile_params)
+          |> Profile.update_changeset(profile_params)
 
         changeset =
           user

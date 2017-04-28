@@ -111,6 +111,32 @@ defmodule Sso.User.RegistrationControllerTest do
       assert json_response(conn, 422)["errors"] ["errors"] != %{}
     end
 
+    test "expects app privacy consents not to be empty", %{conn: conn} do
+      conn =
+        conn
+        |> post(
+            user_registration_path(conn, :create),
+            user: @valid_attrs
+          )
+
+      refute Enum.empty?(json_response(conn, 201)["user"]["profile"]["app_privacy_consents"])
+    end
+
+    test "expects account app privacy consent to be present", %{conn: conn, account: account} do
+      conn =
+        conn
+        |> post(
+            user_registration_path(conn, :create),
+            user: @valid_attrs
+          )
+
+      [first_consent | []] = json_response(conn, 201)["user"]["profile"]["app_privacy_consents"]
+
+      assert (first_consent |> Map.get("app_id")) ==  account.id
+      assert (first_consent |> Map.get("app_name")) ==  account.app_name
+      assert (first_consent |> Map.get("privacy")) ==  get_in(@valid_attrs, [:profile, :privacy_consent])
+    end
+
     test "associate a newly created user by the authenticated account", %{conn: conn, account: account} do
       post conn, user_registration_path(conn, :create), user: @new_user
 

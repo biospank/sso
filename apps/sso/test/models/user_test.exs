@@ -22,6 +22,13 @@ defmodule Sso.UserTest do
       employment: "Medico generico",
       sso_privacy_consent: true,
       privacy_consent: false,
+      app_privacy_consents: [
+        %{
+          app_id: 1,
+          app_name: "app name",
+          privacy: true
+        }
+      ],
       province_enployment: "Roma"
     }
   }
@@ -67,6 +74,21 @@ defmodule Sso.UserTest do
     assert changeset.errors[:password_confirmation] == {
       "does not match password",
       [validation: :confirmation]
+    }
+  end
+
+  test "registration changeset with empty app privacy consents" do
+    empty_app_privacy_consents = %{@valid_attrs | profile: %{@valid_attrs.profile | app_privacy_consents: []}}
+
+    {:error, changeset} =
+      User.registration_changeset(%User{}, empty_app_privacy_consents)
+      |> Repo.insert # needed to validate embedded schema
+
+    refute changeset.valid?
+
+    assert changeset.changes.profile.errors[:app_privacy_consents] == {
+      "can't be blank",
+      [validation: :required]
     }
   end
 
