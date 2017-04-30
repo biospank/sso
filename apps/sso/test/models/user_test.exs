@@ -22,7 +22,7 @@ defmodule Sso.UserTest do
       employment: "Medico generico",
       sso_privacy_consent: true,
       privacy_consent: false,
-      app_privacy_consents: [
+      app_consents: [
         %{
           app_id: 1,
           app_name: "app name",
@@ -77,20 +77,20 @@ defmodule Sso.UserTest do
     }
   end
 
-  test "registration changeset with empty app privacy consents" do
-    empty_app_privacy_consents = %{@valid_attrs | profile: %{@valid_attrs.profile | app_privacy_consents: []}}
-
-    {:error, changeset} =
-      User.registration_changeset(%User{}, empty_app_privacy_consents)
-      |> Repo.insert # needed to validate embedded schema
-
-    refute changeset.valid?
-
-    assert changeset.changes.profile.errors[:app_privacy_consents] == {
-      "can't be blank",
-      [validation: :required]
-    }
-  end
+  # test "registration changeset with empty app privacy consents" do
+  #   empty_app_consents = %{@valid_attrs | profile: %{@valid_attrs.profile | app_consents: []}}
+  #
+  #   {:error, changeset} =
+  #     User.registration_changeset(%User{}, empty_app_consents)
+  #     |> Repo.insert # needed to validate embedded schema
+  #
+  #   refute changeset.valid?
+  #
+  #   assert changeset.changes.profile.errors[:app_consents] == {
+  #     "can't be blank",
+  #     [validation: :required]
+  #   }
+  # end
 
   test "changeset with duplicate email within the same organization scope is not valid" do
     org = insert_organization()

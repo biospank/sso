@@ -2,7 +2,7 @@ defmodule Sso.Profile do
   @moduledoc false
   use Sso.Web, :model
 
-  alias Sso.PrivacyConsent
+  alias Sso.Consent
 
   # embedded_schema is short for:
   #
@@ -23,7 +23,7 @@ defmodule Sso.Profile do
     field :province_board
     field :employment
     field :privacy_consent, :boolean, virtual: true
-    embeds_many :app_privacy_consents, PrivacyConsent
+    embeds_many :app_consents, Consent
     field :sso_privacy_consent, :boolean
     field :province_enployment
   end
@@ -62,19 +62,21 @@ defmodule Sso.Profile do
     struct
     |> changeset(params)
     |> validate_required(@required_registration_fields)
-    |> cast_embed(:app_privacy_consents, required: true)
+    |> cast_embed(:app_consents)
+    # |> cast_embed(:app_consents, required: true)
   end
 
   def update_changeset(struct, params \\ %{}) do
     struct
     |> changeset(params)
     |> validate_required(@required_update_fields)
-    |> cast_embed(:app_privacy_consents, required: true)
+    |> cast_embed(:app_consents)
+    # |> cast_embed(:app_consents, required: true)
   end
 
-  def add_app_privacy_consent(user_params, account) do
+  def add_app_consents(user_params, account) do
     if Map.has_key?(user_params, "profile") do
-      put_in(user_params, ["profile", "app_privacy_consents"], [
+      put_in(user_params, ["profile", "app_consents"], [
           %{
             app_id: account.id,
             app_name: account.app_name,

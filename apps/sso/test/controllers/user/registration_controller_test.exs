@@ -119,7 +119,7 @@ defmodule Sso.User.RegistrationControllerTest do
             user: @valid_attrs
           )
 
-      refute Enum.empty?(json_response(conn, 201)["user"]["profile"]["app_privacy_consents"])
+      refute Enum.empty?(json_response(conn, 201)["user"]["profile"]["app_consents"])
     end
 
     test "expects account app privacy consent to be present", %{conn: conn, account: account} do
@@ -130,7 +130,7 @@ defmodule Sso.User.RegistrationControllerTest do
             user: @valid_attrs
           )
 
-      [first_consent | []] = json_response(conn, 201)["user"]["profile"]["app_privacy_consents"]
+      [first_consent | []] = json_response(conn, 201)["user"]["profile"]["app_consents"]
 
       assert (first_consent |> Map.get("app_id")) ==  account.id
       assert (first_consent |> Map.get("app_name")) ==  account.app_name

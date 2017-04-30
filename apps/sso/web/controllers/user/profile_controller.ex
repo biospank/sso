@@ -1,7 +1,7 @@
 defmodule Sso.User.ProfileController do
   use Sso.Web, :controller
 
-  alias Sso.{User, Profile}
+  alias Sso.{User, Profile, Consent}
 
   plug :scrub_params, "profile"
 
@@ -20,9 +20,14 @@ defmodule Sso.User.ProfileController do
 
     cond do
       user ->
+        app_consents_changeset =
+          user.profile.app_consents
+          |> Consent.update_app_consents_changeset(account, profile_params)
+
         profile_changeset =
           user.profile
           |> Profile.update_changeset(profile_params)
+          |> Ecto.Changeset.put_embed(:app_consents, app_consents_changeset)
 
         changeset =
           user

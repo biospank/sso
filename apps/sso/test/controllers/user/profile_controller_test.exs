@@ -31,7 +31,7 @@ defmodule Sso.User.ProfileControllerTest do
 
     conn = put_req_header(conn, "accept", "application/vnd.dardy.sso.v1+json")
 
-    {:ok, conn: conn, account: account, user: user}
+    {:ok, conn: conn, organization: organization, account: account, user: user}
   end
 
   describe "user profile endpoint" do
@@ -45,7 +45,7 @@ defmodule Sso.User.ProfileControllerTest do
   end
 
   describe "user profile controller" do
-    setup %{conn: conn, account: account, user: user} do
+    setup %{conn: conn, organization: organization, account: account, user: user} do
       {:ok, jwt, _} = Guardian.encode_and_sign(account)
 
       conn = put_req_header(conn, "authorization", "Dardy #{jwt}")
@@ -54,7 +54,7 @@ defmodule Sso.User.ProfileControllerTest do
         account
         |> Repo.preload(:organization)
 
-      {:ok, conn: conn, user: user, account: account}
+      {:ok, conn: conn, user: user, account: account, organization: organization}
     end
 
     test "update profile", %{conn: conn} do
@@ -71,6 +71,49 @@ defmodule Sso.User.ProfileControllerTest do
       )
 
       assert json_response(conn, 200)["user"]["profile"]["phone_number"] == "882726109998"
+    end
+
+    test "update profile with privacy consent", %{conn: conn} do
+      post_conn = post conn, user_registration_path(conn, :create), user: @valid_attrs
+
+      user = Repo.get(Sso.User, json_response(post_conn, 201)["user"]["id"])
+
+      conn = put(
+        conn,
+        user_profile_path(conn, :update, user),
+        profile: %{
+          privacy_consent: true
+        }
+      )
+
+      app_consents = json_response(conn, 200)["user"]["profile"]["app_consents"]
+      assert length(app_consents) == 1
+      [consent | _] = app_consents
+      assert consent["privacy"] == true
+    end
+
+    test "update profile with privacy consent on new account", %{conn: conn, organization: organization} do
+      post_conn = post conn, user_registration_path(conn, :create), user: @valid_attrs
+
+      user = Repo.get(Sso.User, json_response(post_conn, 201)["user"]["id"])
+
+      new_account = insert_account(organization, %{
+        app_name: "new account"
+      })
+
+      {:ok, jwt, _} = Guardian.encode_and_sign(new_account)
+
+      conn = put_req_header(conn, "authorization", "Dardy #{jwt}")
+
+      conn = put(
+        conn,
+        user_profile_path(conn, :update, user),
+        profile: %{
+          privacy_consent: true
+        }
+      )
+
+      assert length(json_response(conn, 200)["user"]["profile"]["app_consents"]) == 2
     end
 
     test "does not update profile with invalid data", %{conn: conn} do

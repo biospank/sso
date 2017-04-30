@@ -20,7 +20,7 @@ defmodule Sso.User.RegistrationController do
       account
       |> build_assoc(:users, %{organization_id: account.organization_id})
       |> User.registration_changeset(
-          Profile.add_app_privacy_consent(user_params, account)
+          Profile.add_app_consents(user_params, account)
         )
       |> User.authorize_changeset
 
@@ -47,7 +47,7 @@ defmodule Sso.User.RegistrationController do
       account
       |> build_assoc(:users, %{organization_id: account.organization_id})
       |> User.registration_changeset(
-          Profile.add_app_privacy_consent(user_params, account)
+          Profile.add_app_consents(user_params, account)
         )
 
     case Repo.insert(changeset) do
