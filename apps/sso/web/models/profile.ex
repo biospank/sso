@@ -74,18 +74,34 @@ defmodule Sso.Profile do
     # |> cast_embed(:app_consents, required: true)
   end
 
-  def add_app_consents(user_params, account) do
-    if Map.has_key?(user_params, "profile") do
-      put_in(user_params, ["profile", "app_consents"], [
-          %{
-            app_id: account.id,
-            app_name: account.app_name,
-            privacy: get_in(user_params, ["profile", "privacy_consent"])
-          }
-        ]
-      )
-    else
-      user_params
-    end
+  # def add_app_consents(user_params, account) do
+  #   if Map.has_key?(user_params, "profile") do
+  #     put_in(user_params, ["profile", "app_consents"], [
+  #         %{
+  #           app_id: account.id,
+  #           app_name: account.app_name,
+  #           privacy: get_in(user_params, ["profile", "privacy_consent"])
+  #         }
+  #       ]
+  #     )
+  #   else
+  #     user_params
+  #   end
+  # end
+
+  def add_app_consents(user_changeset, %{"profile" => _}=user_params, account) do
+    app_consents_changeset =
+      user_changeset.changes.profile.data.app_consents # []
+      |> Consent.update_app_consents_changeset(account, user_params["profile"])
+
+    profile_changeset =
+      user_changeset.changes.profile # Ecto.Changeset
+      |> Ecto.Changeset.put_embed(:app_consents, app_consents_changeset)
+
+    user_changeset
+    |> Ecto.Changeset.put_embed(:profile, profile_changeset)
+  end
+  def add_app_consents(user_changeset, _, _) do
+    user_changeset
   end
 end

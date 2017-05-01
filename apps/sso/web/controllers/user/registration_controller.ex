@@ -19,9 +19,8 @@ defmodule Sso.User.RegistrationController do
     changeset =
       account
       |> build_assoc(:users, %{organization_id: account.organization_id})
-      |> User.registration_changeset(
-          Profile.add_app_consents(user_params, account)
-        )
+      |> User.registration_changeset(user_params)
+      |> Profile.add_app_consents(user_params, account)
       |> User.authorize_changeset
 
     case Repo.insert(changeset) do
@@ -46,9 +45,8 @@ defmodule Sso.User.RegistrationController do
     changeset =
       account
       |> build_assoc(:users, %{organization_id: account.organization_id})
-      |> User.registration_changeset(
-          Profile.add_app_consents(user_params, account)
-        )
+      |> User.registration_changeset(user_params)
+      |> Profile.add_app_consents(user_params, account)
 
     case Repo.insert(changeset) do
       {:ok, user} ->
