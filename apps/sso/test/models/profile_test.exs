@@ -51,7 +51,7 @@ defmodule Sso.ProfileTest do
   end
 
   test "update changeset with missing privacy consent" do
-    changeset = Profile.update_changeset(%Profile{}, Map.delete(@valid_attrs, :privacy_consent))
+    changeset = Profile.update_changeset(Map.merge(%Profile{}, @valid_attrs) , Map.delete(@valid_attrs, :privacy_consent))
     assert changeset.valid?
   end
 

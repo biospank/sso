@@ -28,7 +28,7 @@ defmodule Sso.Profile do
     field :province_enployment
   end
 
-  @required_update_fields [
+  @cast_fields [
     :first_name,
     :last_name,
     :fiscal_code,
@@ -40,22 +40,37 @@ defmodule Sso.Profile do
     :board_member,
     :board_number,
     :province_board,
-    # :employment,
-    :sso_privacy_consent,
-    :province_enployment
+    :employment,
+    :province_enployment,
+    :privacy_consent,
+    :sso_privacy_consent
   ]
 
-  @required_registration_fields @required_update_fields ++ [
-    :privacy_consent
+  @cast_update_fields @cast_fields -- [
+    :sso_privacy_consent
   ]
 
-  @cast_fields @required_registration_fields ++ [
+  @optional_registration_fields [
     :employment
   ]
+
+  @optional_update_fields [
+    :employment,
+    :privacy_consent # virtual field (always return nil)
+  ]
+
+  @required_registration_fields @cast_fields -- @optional_registration_fields
+
+  @required_update_fields @cast_update_fields -- @optional_update_fields
 
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @cast_fields)
+  end
+
+  def cast_update_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, @cast_update_fields)
   end
 
   def registration_changeset(struct, params \\ %{}) do
@@ -65,15 +80,13 @@ defmodule Sso.Profile do
     |> validate_acceptance(:privacy_consent)
     |> validate_acceptance(:sso_privacy_consent)
     |> cast_embed(:app_consents)
-    # |> cast_embed(:app_consents, required: true)
   end
 
   def update_changeset(struct, params \\ %{}) do
     struct
-    |> changeset(params)
+    |> cast_update_changeset(params)
     |> validate_required(@required_update_fields)
     |> cast_embed(:app_consents)
-    # |> cast_embed(:app_consents, required: true)
   end
 
   # def add_app_consents(user_params, account) do
