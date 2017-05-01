@@ -26,14 +26,37 @@ defmodule Sso.ProfileTest do
     assert changeset.valid?
   end
 
-  test "registration changeset with invalid privacy consent" do
+  test "registration changeset with missing privacy consent" do
     changeset = Profile.registration_changeset(%Profile{}, Map.delete(@valid_attrs, :privacy_consent))
     refute changeset.valid?
-    assert changeset.errors[:privacy_consent] == {"can't be blank", [validation: :required]}
+    assert changeset.errors[:privacy_consent] == {"must be accepted", [validation: :acceptance]}
   end
 
-  test "update changeset with invalid privacy consent" do
+  test "registration changeset with invalid privacy consent" do
+    changeset = Profile.registration_changeset(%Profile{}, Map.put(@valid_attrs, :privacy_consent, false))
+    refute changeset.valid?
+    assert changeset.errors[:privacy_consent] == {"must be accepted", [validation: :acceptance]}
+  end
+
+  test "registration changeset with missing sso privacy consent" do
+    changeset = Profile.registration_changeset(%Profile{}, Map.delete(@valid_attrs, :sso_privacy_consent))
+    refute changeset.valid?
+    assert changeset.errors[:sso_privacy_consent] == {"must be accepted", [validation: :acceptance]}
+  end
+
+  test "registration changeset with invalid sso privacy consent" do
+    changeset = Profile.registration_changeset(%Profile{}, Map.put(@valid_attrs, :sso_privacy_consent, false))
+    refute changeset.valid?
+    assert changeset.errors[:sso_privacy_consent] == {"must be accepted", [validation: :acceptance]}
+  end
+
+  test "update changeset with missing privacy consent" do
     changeset = Profile.update_changeset(%Profile{}, Map.delete(@valid_attrs, :privacy_consent))
+    assert changeset.valid?
+  end
+
+  test "update changeset with invalid sso privacy consent" do
+    changeset = Profile.update_changeset(%Profile{}, Map.put(@valid_attrs, :sso_privacy_consent, false))
     assert changeset.valid?
   end
 
@@ -41,7 +64,7 @@ defmodule Sso.ProfileTest do
     Enum.each([
       :first_name, :last_name, :fiscal_code, :date_of_birth, :place_of_birth,
       :phone_number, :profession, :specialization, :board_member, :board_number,
-      :province_board, :sso_privacy_consent, :province_enployment #, :employment,
+      :province_board, :province_enployment #, :employment,
     ], fn field ->
       changeset = Profile.registration_changeset(%Profile{}, Map.delete(@valid_attrs, field))
       refute changeset.valid?
@@ -53,7 +76,7 @@ defmodule Sso.ProfileTest do
     Enum.each([
       :first_name, :last_name, :fiscal_code, :date_of_birth, :place_of_birth,
       :phone_number, :profession, :specialization, :board_member, :board_number,
-      :province_board, :sso_privacy_consent, :province_enployment #, :employment,
+      :province_board, :province_enployment #, :employment,
     ], fn field ->
       changeset = Profile.update_changeset(%Profile{}, Map.delete(@valid_attrs, field))
       refute changeset.valid?

@@ -28,7 +28,7 @@ defmodule Sso.User.RegistrationControllerTest do
       province_board: "Roma",
       employment: "Medico generico",
       sso_privacy_consent: true,
-      privacy_consent: false,
+      privacy_consent: true,
       province_enployment: "Roma"
     }
   }
@@ -52,7 +52,7 @@ defmodule Sso.User.RegistrationControllerTest do
       province_board: "Roma",
       employment: "Medico generico",
       sso_privacy_consent: true,
-      privacy_consent: false,
+      privacy_consent: true,
       province_enployment: "Roma"
     }
   }

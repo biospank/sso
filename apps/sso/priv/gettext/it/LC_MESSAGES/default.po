@@ -33,7 +33,7 @@ msgstr "Codice reset password non trovato"
 
 #: web/controllers/user/detail_controller.ex:13
 #: web/controllers/user/password_change_controller.ex:25
-#: web/controllers/user/profile_controller.ex:43
+#: web/controllers/user/profile_controller.ex:48
 #: web/controllers/user/session_controller.ex:32
 msgid "User not found"
 msgstr "Utente non trovato"

@@ -35,6 +35,10 @@ msgstr ""
 msgid "does not match confirmation"
 msgstr ""
 
+## From Ecto.Changeset.validate_acceptance/2
+msgid "must be accepted"
+msgstr ""
+
 ## From Ecto.Changeset.no_assoc_constraint/3
 msgid "is still associated to this entry"
 msgstr ""

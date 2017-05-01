@@ -21,7 +21,7 @@ defmodule Sso.UserTest do
       province_board: "Roma",
       employment: "Medico generico",
       sso_privacy_consent: true,
-      privacy_consent: false,
+      privacy_consent: true,
       app_consents: [
         %{
           app_id: 1,

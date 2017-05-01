@@ -62,6 +62,8 @@ defmodule Sso.Profile do
     struct
     |> changeset(params)
     |> validate_required(@required_registration_fields)
+    |> validate_acceptance(:privacy_consent)
+    |> validate_acceptance(:sso_privacy_consent)
     |> cast_embed(:app_consents)
     # |> cast_embed(:app_consents, required: true)
   end
