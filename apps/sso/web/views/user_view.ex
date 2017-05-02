@@ -15,7 +15,7 @@ defmodule Sso.UserView do
       email: user.email,
       active: user.active,
       status: user.status,
-      profile: user.profile
+      profile: render(Sso.ProfileView, "profile.json", profile: user.profile)
     }
   end
 
