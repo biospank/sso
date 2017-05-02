@@ -18,6 +18,8 @@ defmodule Sso.ProfileTest do
     employment: "Medico generico",
     privacy_consent: true,
     sso_privacy_consent: true,
+    news_consent: true,
+    data_transfer_consent: true,
     province_enployment: "Roma"
   }
 
@@ -48,6 +50,22 @@ defmodule Sso.ProfileTest do
     changeset = Profile.registration_changeset(%Profile{}, Map.put(@valid_attrs, :sso_privacy_consent, false))
     refute changeset.valid?
     assert changeset.errors[:sso_privacy_consent] == {"must be accepted", [validation: :acceptance]}
+  end
+
+  test "registration changeset with missing news consent" do
+    changeset = Profile.registration_changeset(%Profile{}, Map.delete(@valid_attrs, :news_consent))
+
+    assert changeset.valid?
+    profile = Ecto.Changeset.apply_changes(changeset)
+    assert profile.news_consent == false
+  end
+
+  test "registration changeset with missing data transfer consent" do
+    changeset = Profile.registration_changeset(%Profile{}, Map.delete(@valid_attrs, :data_transfer_consent))
+
+    assert changeset.valid?
+    profile = Ecto.Changeset.apply_changes(changeset)
+    assert profile.data_transfer_consent == false
   end
 
   test "update changeset with missing privacy consent" do

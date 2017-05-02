@@ -22,10 +22,12 @@ defmodule Sso.Profile do
     field :board_number
     field :province_board
     field :employment
+    field :province_enployment
     field :privacy_consent, :boolean, virtual: true
     embeds_many :app_consents, Consent
     field :sso_privacy_consent, :boolean
-    field :province_enployment
+    field :news_consent, :boolean, default: false
+    field :data_transfer_consent, :boolean, default: false
   end
 
   @cast_fields [
@@ -43,20 +45,27 @@ defmodule Sso.Profile do
     :employment,
     :province_enployment,
     :privacy_consent,
-    :sso_privacy_consent
+    :sso_privacy_consent,
+    :news_consent,
+    :data_transfer_consent
   ]
 
   @cast_update_fields @cast_fields -- [
+    :privacy_consent,
     :sso_privacy_consent
   ]
 
   @optional_registration_fields [
-    :employment
+    :employment,
+    :news_consent,
+    :data_transfer_consent
   ]
 
   @optional_update_fields [
     :employment,
-    :privacy_consent # virtual field (always return nil)
+    :privacy_consent, # virtual field (always return nil)
+    :news_consent,
+    :data_transfer_consent
   ]
 
   @required_registration_fields @cast_fields -- @optional_registration_fields
