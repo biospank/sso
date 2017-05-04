@@ -18,7 +18,7 @@ defmodule Sso.Consent do
   # consent_changeset = %Sso.Consent{} |> Sso.Consent.changeset(%{app_id: 20, app_name: "franco", privacy: true})
   # changeset = user.profile |> Sso.Profile.update_changeset |> Ecto.Changeset.put_embed(:app_consents, [consent_changeset])
 
-  def update_app_consents_changeset(struct, account, %{"privacy_consent" => true}) do
+  def update_app_consents_changeset(struct, account, %{"privacy_consent" => privacy_consent}) when privacy_consent in [true, "true", "1"] do
     case Enum.find_index(struct, fn(item) -> item.app_id == account.id end) do
       nil ->
         Enum.concat(struct, [create_new_consent(account, true)])
