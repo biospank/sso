@@ -88,14 +88,14 @@ defmodule Sso.Profile do
     |> validate_required(@required_registration_fields)
     |> validate_acceptance(:privacy_consent)
     |> validate_acceptance(:sso_privacy_consent)
-    |> cast_embed(:app_consents)
+    # |> cast_embed(:app_consents) we don't create app consents using params
   end
 
   def update_changeset(struct, params \\ %{}) do
     struct
     |> cast_update_changeset(params)
     |> validate_required(@required_update_fields)
-    |> cast_embed(:app_consents)
+    # |> cast_embed(:app_consents) we don't update app consents using params
   end
 
   # def add_app_consents(user_params, account) do
