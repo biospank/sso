@@ -63,7 +63,7 @@ const content = ({state}) => {
       m(".ui form mb-20", [
         m(".ui stackable two column centered grid", [
           m(".column", [
-            m(".field", {className: state.errors()["name"] ? "error" : ""}, [
+            m(".required field", {className: state.errors()["name"] ? "error" : ""}, [
               m("label", "Nome Organizzazione"),
               m(".mb-20", [
                 m(".ui input fluid", [
@@ -81,7 +81,7 @@ const content = ({state}) => {
                 }, m('p', state.errors()["name"]))
               ])
             ]),
-            m(".field", {className: state.errors()["ref_email"] ? "error" : ""}, [
+            m(".required field", {className: state.errors()["ref_email"] ? "error" : ""}, [
               m("label", "Email di riferimento"),
               m(".mb-30", [
                 m(".ui input fluid ", [

@@ -18,14 +18,20 @@ defmodule Backoffice.UserController do
     paged_users =
       query_filter
       |> User.order_by(:inserted_at)
+      |> Ecto.Query.preload(:organization)
+      |> Ecto.Query.preload(:account)
       |> Backoffice.Repo.paginate(params)
 
     render(conn, Sso.UserView, "paginated_users.json", page: paged_users)
   end
 
   def show(conn, %{"id" => user_id}) do
-    user = Sso.Repo.get!(User, String.to_integer(user_id))
-    render(conn, Sso.UserView, "show.json", user: user)
+    user = User
+    |> Ecto.Query.preload(:organization)
+    |> Ecto.Query.preload(:account)
+    |> Sso.Repo.get!(String.to_integer(user_id))
+
+    render(conn, Sso.UserView, "show_with_org_and_account.json", user: user)
   end
 
   def activate(conn, %{"user_id" => user_id}) do

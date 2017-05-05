@@ -18,8 +18,8 @@ const content = ({state}) => {
       m(".ui form mb-30", [
         m(".ui stackable two column centered grid", [
           m(".column", [
-            m(".field", {className: state.errors()["app_name"] ? "error" : ""}, [
-              m("label", "Nome App"),
+            m(".required field", {className: state.errors()["app_name"] ? "error" : ""}, [
+              m("label", "Nome App/Sito"),
               m(".mb-20", [
                 m(".ui input fluid", [
                   m("input", {

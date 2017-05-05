@@ -1,4 +1,6 @@
 import m from 'mithril';
+import _ from 'lodash';
+import format from 'date-fns/format';
 import mixinLayout from '../../layout/mixin_layout';
 import User from '../../../models/user';
 import loadingButton from '../../../components/loading_button';
@@ -72,7 +74,7 @@ const content = ({state}) => {
               type: "text",
               readonly:"",
               name: "date_of_birth",
-              value: state.user.profile.date_of_birth
+              value: format(state.user.profile.date_of_birth, 'DD-MM-YYYY')
             })
           ]),
           m(".field", [
@@ -85,14 +87,34 @@ const content = ({state}) => {
             })
           ])
         ]),
-        m(".field", [
-          m("label", "Numero di telefono"),
-          m("input", {
-            type: "text",
-            readonly:"",
-            name: "phone_number",
-            value: state.user.profile.phone_number
-          })
+        m(".three fields", [
+          m(".field", [
+            m("label", "Numero di telefono"),
+            m("input", {
+              type: "text",
+              readonly:"",
+              name: "phone_number",
+              value: state.user.profile.phone_number
+            })
+          ]),
+          m(".field", [
+            m("label", "Organizzazione"),
+            m("input", {
+              type: "text",
+              readonly:"",
+              name: "phone_number",
+              value: state.user.organization.name
+            })
+          ]),
+          m(".field", [
+            m("label", "App/Sito"),
+            m("input", {
+              type: "text",
+              readonly:"",
+              name: "phone_number",
+              value: state.user.account.app_name
+            })
+          ])
         ]),
         m(".two fields", [
           m(".field", [
@@ -161,6 +183,26 @@ const content = ({state}) => {
               name: "province_enployment",
               value: state.user.profile.province_enployment
             })
+          ])
+        ]),
+        m("h4.ui dividing teal header", "Consensi"),
+        m(".inline fields", [
+          m(".field", [
+            m("label", "Privacy:"),
+            state.user.profile.app_consents.map((consent) => {
+              return m("label", { class: "ui label" }, [
+                m('i.checkmark box green icon'),
+                consent.app_name
+              ]);
+            })
+          ]),
+          m(".field", [
+            m("label", "Comunicazioni:"),
+            (_.includes([true, "true", "1"], state.user.profile.news_consent) ? m('i.checkmark box green icon') : m('i.remove circle outline red icon')),
+          ]),
+          m(".field", [
+            m("label", "Trattamento dati:"),
+            (_.includes([true, "true", "1"], state.user.profile.data_transfer_consent) ? m('i.checkmark box green icon') : m('i.remove circle outline red icon')),
           ])
         ])
       ])

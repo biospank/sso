@@ -1,4 +1,5 @@
 import m from 'mithril';
+import _ from 'lodash';
 import User from '../../../models/user';
 import loadingButton from '../../../components/loading_button';
 
@@ -17,6 +18,29 @@ const listItem = {
         this.user = response.user;
       }, (response) => {})
     }
+
+    this.orgTagView = (user) => {
+      return m("label", { class: "ui label" }, [
+        m('i.sitemap icon'),
+        user.organization.name
+      ])
+    }
+
+    this.accountTagView = (user) => {
+      return m("label", { class: "ui label" }, [
+        m('i.home icon'),
+        user.account.app_name
+      ]);
+    }
+
+    this.consentsTagView = (user) => {
+      return user.profile.app_consents.map((consent) => {
+        return m("label", { class: "ui label" }, [
+          m('i.checkmark box green icon'),
+          consent.app_name
+        ]);
+      })
+    }
   },
   view(vnode) {
     return m(".item", {
@@ -30,6 +54,11 @@ const listItem = {
         m("h3", { class: "header mtb-10 text-teal weight-bold" }, `${this.user.profile.first_name} ${this.user.profile.last_name}`),
         m("p", { class: "meta" }, this.user.profile.profession),
         m("p", { class: "description" }, this.user.profile.specialization),
+        m('.extra', _.concat(
+          this.orgTagView(this.user),
+          this.accountTagView(this.user),
+          this.consentsTagView(this.user)
+        )),
         m('.extra', [
           m("label", { class: "ui label" }, [
             m('i.at icon'),
@@ -38,9 +67,7 @@ const listItem = {
           m("label", { class: "ui label" }, [
             m('i.call icon'),
             this.user.profile.phone_number
-          ])
-        ]),
-        m('.extra', [
+          ]),
           m(loadingButton, {
             action: this.authUser,
             label: (this.user.status === 'verified' ? 'Autorizzato' : 'Autorizza'),
