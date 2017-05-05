@@ -74,7 +74,7 @@ const content = ({state}) => {
               type: "text",
               readonly:"",
               name: "date_of_birth",
-              value: format(state.user.profile.date_of_birth, 'DD-MM-YYYY')
+              value: state.user.profile.date_of_birth //format(state.user.profile.date_of_birth, 'DD-MM-YYYY')
             })
           ]),
           m(".field", [
