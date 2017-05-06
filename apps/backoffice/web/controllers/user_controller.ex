@@ -41,8 +41,10 @@ defmodule Backoffice.UserController do
       user
       |> Ecto.Changeset.change(active: true)
       |> Sso.Repo.update!
+      |> Sso.Repo.preload(:organization)
+      |> Sso.Repo.preload(:account)
 
-    render(conn, Sso.UserView, "show.json", user: updated_user)
+    render(conn, Sso.UserView, "show_with_org_and_account.json", user: updated_user)
   end
 
   def deactivate(conn, %{"user_id" => user_id}) do
@@ -52,8 +54,10 @@ defmodule Backoffice.UserController do
       user
       |> Ecto.Changeset.change(active: false)
       |> Sso.Repo.update!
+      |> Sso.Repo.preload(:organization)
+      |> Sso.Repo.preload(:account)
 
-    render(conn, Sso.UserView, "show.json", user: updated_user)
+    render(conn, Sso.UserView, "show_with_org_and_account.json", user: updated_user)
   end
 
   def authorize(conn, %{"user_id" => user_id}) do
@@ -63,6 +67,8 @@ defmodule Backoffice.UserController do
       user
       |> Ecto.Changeset.change(status: :verified)
       |> Sso.Repo.update!
+      |> Sso.Repo.preload(:organization)
+      |> Sso.Repo.preload(:account)
 
     account =
       Account
@@ -71,6 +77,6 @@ defmodule Backoffice.UserController do
 
     Sso.Email.courtesy_email(updated_user, account) |> Sso.Mailer.deliver_later
 
-    render(conn, Sso.UserView, "show.json", user: updated_user)
+    render(conn, Sso.UserView, "show_with_org_and_account.json", user: updated_user)
   end
 end
