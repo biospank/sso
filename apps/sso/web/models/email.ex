@@ -18,13 +18,13 @@ defmodule Sso.Email do
         #{link}
         <br />
         <br />
-        Le ricordiamo che l'iscrizione è temporanea ed entro 48 ore riceverà unaa mail
+        Le ricordiamo che l'iscrizione è temporanea ed entro 48 ore riceverà una mail
         di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
         potrà accedere a tutti i servizi realizzati da Takeda Italia S.p.A. che supportano
         questo servizio, utilizzando sempre le stesse credenziali.
         <br />
         <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di <a href="customercare@itakacloud.com">customercare</a>
+        Per eventuali informazioni o chiarimenti contatti il nostro servizio di <a href="mailto:customercare@itakacloud.com">customercare</a>
         <br />
         <br />
         <small>
@@ -58,13 +58,13 @@ defmodule Sso.Email do
         #{user.activation_code}
         <br />
         <br />
-        Le ricordiamo che l'iscrizione è temporanea ed entro 48 ore riceverà unaa mail
+        Le ricordiamo che l'iscrizione è temporanea ed entro 48 ore riceverà una mail
         di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
         potrà accedere a tutti i servizi realizzati da Takeda Italia S.p.A. che supportano
         questo servizio, utilizzando sempre le stesse credenziali.
         <br />
         <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di <a href="customercare@itakacloud.com">customercare</a>
+        Per eventuali informazioni o chiarimenti contatti il nostro servizio di <a href="mailto:customercare@itakacloud.com">customercare</a>
         <br />
         <br />
         <small>
@@ -132,7 +132,7 @@ defmodule Sso.Email do
         <br />
         <br />
         Per eventuali informazioni o chiarimenti contatti il nostro servizio di
-        customercare customercare@itakacloud.com
+        <a href="mailto:customercare@itakacloud.com">customercare</a>
         <br />
         <br />
         <small>
@@ -163,7 +163,7 @@ defmodule Sso.Email do
         <br />
         <br />
         Per eventuali informazioni o chiarimenti contatti il nostro servizio di
-        customercare customercare@itakacloud.com
+        <a href="mailto:customercare@itakacloud.com">customercare</a>
         <br />
         <br />
         <small>
@@ -196,7 +196,7 @@ defmodule Sso.Email do
         <br />
         <br />
         Per eventuali informazioni o chiarimenti contatti il nostro servizio di
-        <a href="customercare@itakacloud.com">customercare</a>
+        <a href="mailto:customercare@itakacloud.com">customercare</a>
         <br />
         <br />
         <small>

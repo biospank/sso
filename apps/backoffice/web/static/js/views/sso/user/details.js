@@ -201,7 +201,7 @@ const content = ({state}) => {
             (_.includes([true, "true", "1"], state.user.profile.news_consent) ? m('i.checkmark box green icon') : m('i.remove circle outline red icon')),
           ]),
           m(".field", [
-            m("label", "Trattamento dati:"),
+            m("label", "Raccolta dati per profilazione:"),
             (_.includes([true, "true", "1"], state.user.profile.data_transfer_consent) ? m('i.checkmark box green icon') : m('i.remove circle outline red icon')),
           ])
         ])
