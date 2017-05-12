@@ -18,7 +18,7 @@ defmodule Sso.Email do
         #{link}
         <br />
         <br />
-        Le ricordiamo che l'iscrizione è temporanea ed entro <strong>24</strong> ore riceverà una mail
+        Le ricordiamo che l'iscrizione è temporanea ed entro 24 ore riceverà una mail
         di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
         potrà accedere a tutti i servizi realizzati da Takeda Italia S.p.A. che supportano
         questo servizio, utilizzando sempre le stesse credenziali.
@@ -58,7 +58,7 @@ defmodule Sso.Email do
         #{user.activation_code}
         <br />
         <br />
-        Le ricordiamo che l'iscrizione è temporanea ed entro <strong>24</strong> ore riceverà una mail
+        Le ricordiamo che l'iscrizione è temporanea ed entro 24 ore riceverà una mail
         di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
         potrà accedere a tutti i servizi realizzati da Takeda Italia S.p.A. che supportano
         questo servizio, utilizzando sempre le stesse credenziali.
