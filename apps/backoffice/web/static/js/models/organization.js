@@ -6,6 +6,10 @@ import Session from './session';
 
 const Organization = {
   url: '/organization',
+  choice: {
+    id: stream(""),
+    label: stream("")
+  },
   all() {
     return m.request({
       // background: true,

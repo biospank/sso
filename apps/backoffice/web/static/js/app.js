@@ -19,5 +19,4 @@
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
-console.log("loading router...")
 import router from "./router"
