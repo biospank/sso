@@ -13,6 +13,11 @@ defmodule Sso.Router do
     plug Guardian.Plug.LoadResource
   end
 
+  # enable to preview emails in dev mode
+  # if Mix.env == :dev do
+  #   forward "/sent_emails", Bamboo.EmailPreviewPlug
+  # end
+
   scope "/sso", Sso do
     pipe_through :api
 

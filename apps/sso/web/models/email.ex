@@ -9,17 +9,16 @@ defmodule Sso.Email do
     |> html_body("""
         Gentile #{user.profile.first_name} #{user.profile.last_name}
         <br />
-        è stata richiesta la registrazione al sito #{account.app_name}.
+        è stata richiesta la registrazione al sito #{account.app_name} attraverso il servizio SSO Takeda.
         <br />
         <br />
-        Per completare l'iscrizione e attivare il suo account segua questo link:
+        Per confermare la sua identità e attivare l'account segua questo link:
         <br />
         <br />
         #{link}
         <br />
         <br />
-        Le ricordiamo che l'iscrizione è temporanea ed entro 24 ore riceverà una mail
-        di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
+        Entro 24 ore riceverà una mail di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
         potrà accedere a tutti i servizi realizzati da Takeda Italia S.p.A. che supportano
         questo servizio, utilizzando sempre le stesse credenziali.
         <br />
@@ -27,9 +26,7 @@ defmodule Sso.Email do
         Per eventuali informazioni o chiarimenti contatti il nostro servizio di <a href="mailto:customercare@itakacloud.com">customercare</a>
         <br />
         <br />
-        <small>
         Ignori questo messaggio se non ha effettuato questa richiesta
-        </small>
         <br />
         <br />
         Cordiali saluti
@@ -49,17 +46,16 @@ defmodule Sso.Email do
     |> html_body("""
         Gentile #{user.profile.first_name} #{user.profile.last_name}
         <br />
-        E' stata richiesta la registrazione al #{account.app_name}.
+        è stata richiesta la registrazione al sito #{account.app_name} attraverso il servizio SSO Takeda.
         <br />
         <br />
-        Per completare l'iscrizione inserisca il seguente codice di attivazione nell'app #{account.app_name}
+        Per confermare la sua identità e attivare l'account inserisca il seguente codice di attivazione nell'app #{account.app_name}
         <br />
         <br />
         #{user.activation_code}
         <br />
         <br />
-        Le ricordiamo che l'iscrizione è temporanea ed entro 24 ore riceverà una mail
-        di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
+        Entro 24 ore riceverà una mail di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
         potrà accedere a tutti i servizi realizzati da Takeda Italia S.p.A. che supportano
         questo servizio, utilizzando sempre le stesse credenziali.
         <br />
@@ -67,9 +63,7 @@ defmodule Sso.Email do
         Per eventuali informazioni o chiarimenti contatti il nostro servizio di <a href="mailto:customercare@itakacloud.com">customercare</a>
         <br />
         <br />
-        <small>
         Ignori questo messaggio se non ha effettuato questa richiesta
-        </small>
         <br />
         <br />
         Cordiali saluti
@@ -124,7 +118,7 @@ defmodule Sso.Email do
     |> to(user)
     |> subject("#{account.app_name} - Recupera password")
     |> html_body("""
-        E' stata effettuata una richiesta di recupero password per il suo account.
+        È stata effettuata da #{account.app_name} una richiesta di recupero password per il suo account SSO Takeda.
         Per procedere alla creazione di una nuova password segua questo link:
         <br />
         <br />
@@ -135,12 +129,11 @@ defmodule Sso.Email do
         <a href="mailto:customercare@itakacloud.com">customercare</a>
         <br />
         <br />
-        <small>
         Ignori questo messaggio se non ha effettuato questa richiesta
-        </small>
         <br />
         <br />
         Cordiali saluti
+        <br />
         Takeda Italia Spa
         <br />
         <br />
@@ -154,7 +147,7 @@ defmodule Sso.Email do
     |> to(user)
     |> subject("#{account.app_name} - Recupera password")
     |> html_body("""
-        E' stata effettuata una richiesta di recupero password per il suo account.
+        È stata effettuata da #{account.app_name} una richiesta di recupero password per il suo account SSO Takeda.
         Per procedere alla creazione di una nuova password inserisca il seguente
         codice di attivazione nell'app #{account.app_name}:
         <br />
@@ -166,12 +159,11 @@ defmodule Sso.Email do
         <a href="mailto:customercare@itakacloud.com">customercare</a>
         <br />
         <br />
-        <small>
         Ignori questo messaggio se non ha effettuato questa richiesta
-        </small>
         <br />
         <br />
         Cordiali saluti
+        <br />
         Takeda Italia Spa
         <br />
         <br />
@@ -187,21 +179,19 @@ defmodule Sso.Email do
     |> html_body("""
         Gentile #{user.profile.first_name} #{user.profile.last_name}
         <br />
-        La sua registrazione a #{account.app_name} è confermata.
+        la sua registrazione a #{account.app_name} è confermata.
         <br />
         <br />
-        Le ricordiamo che adesso potrà accedere a tutti i servizi realizzati da
+        Le ricordiamo che adesso potrà accedere a tutti i siti/app realizzati da
         Takeda Italia S.p.A. che supportano questo servizio, utilizzando sempre le
-        stesse credenziali.
+        stesse credenziali indicate in fase di registrazione.
         <br />
         <br />
         Per eventuali informazioni o chiarimenti contatti il nostro servizio di
         <a href="mailto:customercare@itakacloud.com">customercare</a>
         <br />
         <br />
-        <small>
         Ignori questo messaggio se non ha effettuato questa richiesta
-        </small>
         <br />
         <br />
         Cordiali saluti
@@ -215,35 +205,59 @@ defmodule Sso.Email do
 
   defp disclaimer(account) do
     """
-      <small>
-        <strong>SSO Takeda</strong>
-      </small>
-      <br />
-      <br />
-      <small>
-        SSO Takeda è un sistema di autenticazione centralizzato per web e mobile
-        realizzato in esclusiva per Takeda Italia S.p.A.
-      </small>
-      <br />
-      <br />
-      <small>
-        Il sistema ha lo scopo di consentire la registrazione dei medici e operatori
-        sanitari ai progetti digital promossi da Takeda (app/siti) e consentire
-        la loro autenticazione come operatori professionali.
-      </small>
-      <br />
-      <br />
-      <small>
-        La gestione del riconoscimento dell'operatore della salute e la trasmissione
-        e archiviazione delle relative chiavi di accesso e dei dati personali del professionista
-        della salute avviene mediante la piattaforma SSO Takeda nel rispetto dei requisiti
-        richiesti da:
-        - Il Ministero della Salute (Circolare Min. San. - Dipartimento Valutazione Farmaci
-        e Farmacovigilanza n° 800.I/15/1267 del 22 marzo 2000)
-        - Codice della Privacy (D.Lgs 30/06/2003 n. 196) sulla tutela dei dati personali
-      </small>
-      <br />
-      <br />
+      <table cellpadding="0" cellspacing="0" border="0" style="border: 1px solid #ccc; padding 30px;">
+        <tr>
+          <td height="10"></td>
+        </tr>
+        <tr>
+          <td>
+            <table cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td width="10"></td>
+                <td>
+                  <table cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td>
+                        <small>
+                          <strong>SSO Takeda</strong>
+                        </small>
+                        <br />
+                        <br />
+                        <small>
+                          SSO Takeda è un sistema di autenticazione centralizzato per web e mobile
+                          realizzato in esclusiva per Takeda Italia S.p.A.
+                        </small>
+                        <br />
+                        <br />
+                        <small>
+                          Il sistema ha lo scopo di consentire la registrazione dei medici e operatori
+                          sanitari ai progetti digital promossi da Takeda (app/siti) e consentire
+                          la loro autenticazione come operatori professionali.
+                        </small>
+                        <br />
+                        <br />
+                        <small>
+                          La gestione del riconoscimento dell'operatore della salute e la trasmissione
+                          e archiviazione delle relative chiavi di accesso e dei dati personali del professionista
+                          della salute avviene mediante la piattaforma SSO Takeda nel rispetto dei requisiti
+                          richiesti da:
+                          - Il Ministero della Salute (Circolare Min. San. - Dipartimento Valutazione Farmaci
+                          e Farmacovigilanza n° 800.I/15/1267 del 22 marzo 2000)
+                          - Codice della Privacy (D.Lgs 30/06/2003 n. 196) sulla tutela dei dati personali
+                        </small>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+                <td width="10"></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td height="10"></td>
+        </tr>
+      </table>
     """
   end
 end

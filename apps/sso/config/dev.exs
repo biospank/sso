@@ -32,7 +32,7 @@ config :sso, Sso.Repo,
 
 # Configure Bamboo dev
 config :sso, Sso.Mailer,
-  adapter: Bamboo.SendinBlueAdapter,
+  adapter: Bamboo.SendinBlueAdapter, # Bamboo.LocalAdapter to preview emails
   api_key: System.get_env("SENDINBLUE_API_KEY")
 
 # config :sso, Sso.Mailer,
