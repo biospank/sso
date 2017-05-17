@@ -3,7 +3,7 @@ import stream from 'mithril/stream';
 import mixinLayout from '../../layout/mixin_layout';
 import loader from '../../../components/loader';
 import organizationChoiceView from './organization_choice';
-import deviceContextView from './device_context';
+import deviceTabView from './device_tab';
 
 const content = ({state}) => {
   return [
@@ -11,7 +11,7 @@ const content = ({state}) => {
       m(organizationChoiceView)
     ]),
     m('.ui attached segment', [
-      m(deviceContextView, {showLoader: state.showLoader})
+      m(deviceTabView, {showLoader: state.showLoader})
     ])
   ];
 };
