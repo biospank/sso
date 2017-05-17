@@ -1,4 +1,5 @@
 import m from 'mithril';
+import aceEditor from '../../../components/ace_editor';
 
 const deviceContextView = {
   view(vnode) {
@@ -30,11 +31,23 @@ const deviceContextView = {
               ]),
               m(".field", [
                 m("label", "Body (formato html)"),
-                m("textarea", {name: "web-registration-body-html", placeholder: "Body in formato html"})
+                m(aceEditor, {
+                  className: "html-editor",
+                  fontSize: "16px",
+                  theme: "ace/theme/twilight",
+                  mode: "ace/mode/html_elixir",
+                  initialValue: "<html><body><h2>Hello Ace!</h2></body></html>"
+                })
               ]),
               m(".field", [
                 m("label", "Body (formato testo)"),
-                m("textarea", {name: "web-registration-body-text", placeholder: "Body in formato testo"})
+                m(aceEditor, {
+                  className: "html-editor",
+                  fontSize: "16px",
+                  theme: "ace/theme/twilight",
+                  mode: "ace/mode/text",
+                  initialValue: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi non quis exercitationem culpa nesciunt nihil aut nostrum explicabo reprehenderit optio amet ab temporibus asperiores quasi cupiditate. Voluptatum ducimus voluptates voluptas?"
+                })
               ]),
               m(".inline field", [
                 m(".ui checkbox", [
