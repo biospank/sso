@@ -9,12 +9,42 @@ const webTabView = {
           $('div[data-tab="web"] .template.menu .item').tab();
         }
       }, [
-        m("a.item active", {"data-tab": "web-registration"}, "Registrazione"),
-        m("a.item", {"data-tab": "web-confirm-registration"}, "Conferma Registrazione"),
-        m("a.item", {"data-tab": "web-password-reset"}, "Reset Password"),
+        m("a.item active", {"data-tab": "web-registration"}, [
+          "Registrazione",
+          m("i.help circle outline icon", {
+            "data-content": "Mail inviata all'utente all'atto della registrazione.",
+            oncreate({dom}) {
+              $(dom).popup();
+            }
+          })
+        ]),
+        m("a.item", {"data-tab": "web-confirm-registration"}, [
+          "Verifica Utente",
+          m("i.help circle outline icon", {
+            "data-content": "Mail inviata all'utente alla verifica dei suoi dati.",
+            oncreate({dom}) {
+              $(dom).popup();
+            }
+          })
+        ]),
+        m("a.item", {"data-tab": "web-password-reset"}, [
+          "Reset Password",
+          m("i.help circle outline icon", {
+            "data-content": "Mail inviata all'utente alla richiesta di reset della password.",
+            oncreate({dom}) {
+              $(dom).popup();
+            }
+          })
+        ]),
         m("a.item", {"data-tab": "web-disclaimer"}, "Disclaimer")
       ]),
       m(".ui tab segment active", {"data-tab": "web-registration"}, [
+        m("form.ui form", [
+          m(".field", [
+            m("label", "Oggetto"),
+            m("input", {type: "text", placeholder: "Oggetto della mail"})
+          ])
+        ]),
         m(".ui pointing secondary registration-format menu", {
           oncreate(_) {
             $('div[data-tab="web"] .registration-format.menu .item').tab();
@@ -25,10 +55,6 @@ const webTabView = {
         ]),
         m(".ui tab segment active", {"data-tab": "web-html-registration"}, [
           m("form.ui form", [
-            m(".field", [
-              m("label", "Oggetto"),
-              m("input", {type: "text", placeholder: "Oggetto della mail"})
-            ]),
             m(".field", [
               m("label", "Body (formato html)"),
               m(aceEditor, {
@@ -53,10 +79,6 @@ const webTabView = {
         m(".ui tab segment", {"data-tab": "web-text-registration"}, [
           m("form.ui form", [
             m(".field", [
-              m("label", "Oggetto"),
-              m("input", {type: "text", placeholder: "Oggetto della mail"})
-            ]),
-            m(".field", [
               m("label", "Body (formato testo)"),
               m(aceEditor, {
                 className: "text-editor",
@@ -79,6 +101,12 @@ const webTabView = {
         ])
       ]),
       m(".ui tab segment", {"data-tab": "web-confirm-registration"}, [
+        m("form.ui form", [
+          m(".field", [
+            m("label", "Oggetto"),
+            m("input", {type: "text", placeholder: "Oggetto della mail"})
+          ])
+        ]),
         m(".ui pointing secondary confirm-registration-format menu", {
           oncreate(_) {
             $('div[data-tab="web"] .confirm-registration-format.menu .item').tab();
@@ -89,10 +117,6 @@ const webTabView = {
         ]),
         m(".ui tab segment active", {"data-tab": "web-html-confirm-registration"}, [
           m("form.ui form", [
-            m(".field", [
-              m("label", "Oggetto"),
-              m("input", {type: "text", placeholder: "Oggetto della mail"})
-            ]),
             m(".field", [
               m("label", "Body (formato html)"),
               m(aceEditor, {
@@ -117,10 +141,6 @@ const webTabView = {
         m(".ui tab segment", {"data-tab": "web-text-confirm-registration"}, [
           m("form.ui form", [
             m(".field", [
-              m("label", "Oggetto"),
-              m("input", {type: "text", placeholder: "Oggetto della mail"})
-            ]),
-            m(".field", [
               m("label", "Body (formato testo)"),
               m(aceEditor, {
                 className: "text-editor",
@@ -143,6 +163,12 @@ const webTabView = {
         ])
       ]),
       m(".ui tab segment", {"data-tab": "web-password-reset"}, [
+        m("form.ui form", [
+          m(".field", [
+            m("label", "Oggetto"),
+            m("input", {type: "text", placeholder: "Oggetto della mail"})
+          ])
+        ]),
         m(".ui pointing secondary password-reset-format menu", {
           oncreate(_) {
             $('div[data-tab="web"] .password-reset-format.menu .item').tab();
@@ -153,10 +179,6 @@ const webTabView = {
         ]),
         m(".ui tab segment active", {"data-tab": "web-html-password-reset"}, [
           m("form.ui form", [
-            m(".field", [
-              m("label", "Oggetto"),
-              m("input", {type: "text", placeholder: "Oggetto della mail"})
-            ]),
             m(".field", [
               m("label", "Body (formato html)"),
               m(aceEditor, {
@@ -180,10 +202,6 @@ const webTabView = {
         ]),
         m(".ui tab segment", {"data-tab": "web-text-password-reset"}, [
           m("form.ui form", [
-            m(".field", [
-              m("label", "Oggetto"),
-              m("input", {type: "text", placeholder: "Oggetto della mail"})
-            ]),
             m(".field", [
               m("label", "Body (formato testo)"),
               m(aceEditor, {
