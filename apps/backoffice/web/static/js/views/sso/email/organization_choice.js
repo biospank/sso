@@ -36,7 +36,14 @@ const organizationChoiceView = {
               "data-value": organization.id,
               className: (organization.id === Organization.choice.id() ? "active selected" : ""),
               onclick: (event) => {
-                Organization.choice.label(event.target.outerText);
+                Organization.choice.label(event.target.innerHTML);
+
+                let currentOrg = _.find(state.organizations, (org) => {
+                  return org.id == event.target.dataset.value;
+                })
+
+                Organization.current(currentOrg);
+                Organization.settings = currentOrg.settings;
               }
             }, organization.name);
           })

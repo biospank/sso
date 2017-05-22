@@ -6,6 +6,7 @@ import Session from './session';
 
 const Organization = {
   url: '/organization',
+  current: stream({}),
   choice: {
     id: stream(""),
     label: stream("")
@@ -26,6 +27,17 @@ const Organization = {
       method: "POST",
       data: { organization: obj },
       url: Backoffice.apiBaseUrl() + this.url,
+      config: function(xhr) {
+        xhr.setRequestHeader("accept", "application/json");
+        xhr.setRequestHeader("Authorization", `${Backoffice.realm} ${Session.token()}`)
+      }
+    });
+  },
+  update() {
+    return m.request({
+      method: "PUT",
+      data: { organization: this.current() },
+      url: `${Backoffice.apiBaseUrl()}${this.url}/${this.current().id}`,
       config: function(xhr) {
         xhr.setRequestHeader("accept", "application/json");
         xhr.setRequestHeader("Authorization", `${Backoffice.realm} ${Session.token()}`)

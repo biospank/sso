@@ -1,9 +1,12 @@
 import m from 'mithril';
+import _ from 'lodash';
 import aceEditor from '../../../components/ace_editor';
+import Organization from '../../../models/organization';
 
 const mobileTabView = {
   view(vnode) {
     return [
+      // m('p', JSON.stringify(Organization.current())),
       m(".ui pointing secondary template menu", {
         oncreate(_) {
           $('div[data-tab="mobile"] .template.menu .item').tab();
@@ -18,7 +21,7 @@ const mobileTabView = {
             }
           })
         ]),
-        m("a.item", {"data-tab": "mobile-confirm-registration"}, [
+        m("a.item", {"data-tab": "mobile-verification"}, [
           "Verifica Utente",
           m("i.help circle outline icon", {
             "data-content": "Mail inviata all'utente alla verifica dei suoi dati.",
@@ -42,7 +45,18 @@ const mobileTabView = {
         m("form.ui form", [
           m(".field", [
             m("label", "Oggetto"),
-            m("input", {type: "text", placeholder: "Oggetto della mail"})
+            m("input", {
+              type: "text",
+              placeholder: "Oggetto della mail",
+              oninput(event) {
+                Organization.current().settings.email_template.mobile.registration.subject = event.target.value
+              },
+              value: _.get(
+                Organization.current(),
+                'settings.email_template.mobile.registration.subject',
+                ''
+              )
+            })
           ])
         ]),
         m(".ui pointing secondary registration-format menu", {
@@ -59,20 +73,13 @@ const mobileTabView = {
               m("label", "Body (formato html)"),
               m(aceEditor, {
                 className: "html-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/html_elixir",
-                initialValue: "<html><body><h2>Mobile registrazione html</h2></body></html>"
+                model: Organization.current(),
+                value: 'settings.email_template.mobile.registration.html_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.mobile.registration.html_body = value
+                }
               })
-            ]),
-            m(".inline field", [
-              m(".ui checkbox", [
-                m("input", {
-                  type: "checkbox",
-                  id: "mobile-html-registration-mobile-include-disclaimer",
-                }),
-                m("label", {for: "mobile-html-registration-mobile-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-              ])
             ])
           ])
         ]),
@@ -82,83 +89,128 @@ const mobileTabView = {
               m("label", "Body (formato testo)"),
               m(aceEditor, {
                 className: "text-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/text",
-                initialValue: "Mobile registrazione testo"
+                model: Organization.current(),
+                value: 'settings.email_template.mobile.registration.text_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.mobile.registration.text_body = value
+                }
               })
-            ]),
-            m(".inline field", [
-              m(".ui checkbox", [
-                m("input", {
-                  type: "checkbox",
-                  id: "mobile-text-registration-mobile-include-disclaimer",
-                }),
-                m("label", {for: "mobile-text-registration-mobile-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-              ])
             ])
+          ])
+        ]),
+        m(".inline field", [
+          m(".ui checkbox", [
+            m("input", {
+              type: "checkbox",
+              id: "mobile-registration-include-disclaimer",
+              onclick(event) {
+                Organization.current().settings.email_template.mobile.registration.include_disclaimer = event.target.checked
+              },
+              checked: _.get(
+                Organization.current(),
+                'settings.email_template.mobile.registration.include_disclaimer',
+                true
+              )
+            }),
+            m("label", {for: "mobile-registration-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
           ])
         ])
       ]),
-      m(".ui tab segment", {"data-tab": "mobile-confirm-registration"}, [
+      m(".ui tab segment", {"data-tab": "mobile-verification"}, [
+        m('.ui menu', [
+          m(".right menu", [
+            m(".ui item", [
+              m(".ui toggle checkbox", [
+                m("input", {
+                  type: "checkbox",
+                  id: "mobile-verification-send",
+                  onclick(event) {
+                    Organization.current().settings.email_template.mobile.verification.send = event.target.checked
+                  },
+                  checked: _.get(
+                    Organization.current(),
+                    'settings.email_template.mobile.verification.send',
+                    true
+                  )
+                }),
+                m("label", {for: "mobile-verification-send", style: "cursor: pointer;"}, "Attivo")
+              ])
+            ])
+          ])
+        ]),
         m("form.ui form", [
           m(".field", [
             m("label", "Oggetto"),
-            m("input", {type: "text", placeholder: "Oggetto della mail"})
+            m("input", {
+              type: "text",
+              placeholder: "Oggetto della mail",
+              oninput(event) {
+                Organization.current().settings.email_template.mobile.verification.subject = event.target.value
+              },
+              value: _.get(
+                Organization.current(),
+                'settings.email_template.mobile.verification.subject',
+                ''
+              )
+            })
           ])
         ]),
-        m(".ui pointing secondary confirm-registration-format menu", {
+        m(".ui pointing secondary verification-format menu", {
           oncreate(_) {
-            $('div[data-tab="mobile"] .confirm-registration-format.menu .item').tab();
+            $('div[data-tab="mobile"] .verification-format.menu .item').tab();
           }
         }, [
-          m("a.item active", {"data-tab": "mobile-html-confirm-registration"}, "HTML"),
-          m("a.item", {"data-tab": "mobile-text-confirm-registration"}, "TESTO")
+          m("a.item active", {"data-tab": "mobile-html-verification"}, "HTML"),
+          m("a.item", {"data-tab": "mobile-text-verification"}, "TESTO")
         ]),
-        m(".ui tab segment active", {"data-tab": "mobile-html-confirm-registration"}, [
+        m(".ui tab segment active", {"data-tab": "mobile-html-verification"}, [
           m("form.ui form", [
             m(".field", [
               m("label", "Body (formato html)"),
               m(aceEditor, {
                 className: "html-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/html_elixir",
-                initialValue: "<html><body><h2>Mobile conferma registrazione html</h2></body></html>"
+                model: Organization.current(),
+                value: 'settings.email_template.mobile.verification.html_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.mobile.verification.html_body = value
+                }
               })
-            ]),
-            m(".inline field", [
-              m(".ui checkbox", [
-                m("input", {
-                  type: "checkbox",
-                  id: "mobile-html-confirm-registration-include-disclaimer",
-                }),
-                m("label", {for: "mobile-html-confirm-registration-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-              ])
             ])
           ])
         ]),
-        m(".ui tab segment", {"data-tab": "mobile-text-confirm-registration"}, [
+        m(".ui tab segment", {"data-tab": "mobile-text-verification"}, [
           m("form.ui form", [
             m(".field", [
               m("label", "Body (formato testo)"),
               m(aceEditor, {
                 className: "text-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/text",
-                initialValue: "Mobile conferma registrazione testo"
+                model: Organization.current(),
+                value: 'settings.email_template.mobile.verification.text_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.mobile.verification.text_body = value
+                }
               })
-            ]),
-            m(".inline field", [
-              m(".ui checkbox", [
-                m("input", {
-                  type: "checkbox",
-                  id: "mobile-html-confirm-registration-include-disclaimer",
-                }),
-                m("label", {for: "mobile-html-confirm-registration-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-              ])
             ])
+          ])
+        ]),
+        m(".inline field", [
+          m(".ui checkbox", [
+            m("input", {
+              type: "checkbox",
+              id: "mobile-verification-include-disclaimer",
+              onclick(event) {
+                Organization.current().settings.email_template.mobile.verification.include_disclaimer = event.target.checked
+              },
+              checked: _.get(
+                Organization.current(),
+                'settings.email_template.mobile.verification.include_disclaimer',
+                true
+              )
+            }),
+            m("label", {for: "mobile-verification-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
           ])
         ])
       ]),
@@ -166,7 +218,18 @@ const mobileTabView = {
         m("form.ui form", [
           m(".field", [
             m("label", "Oggetto"),
-            m("input", {type: "text", placeholder: "Oggetto della mail"})
+            m("input", {
+              type: "text",
+              placeholder: "Oggetto della mail",
+              oninput(event) {
+                Organization.current().settings.email_template.mobile.password_reset.subject = event.target.value
+              },
+              value: _.get(
+                Organization.current(),
+                'settings.email_template.mobile.password_reset.subject',
+                ''
+              )
+            })
           ])
         ]),
         m(".ui pointing secondary password-reset-format menu", {
@@ -183,20 +246,13 @@ const mobileTabView = {
               m("label", "Body (formato html)"),
               m(aceEditor, {
                 className: "html-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/html_elixir",
-                initialValue: "<html><body><h2>Mobile password reset html</h2></body></html>"
+                model: Organization.current(),
+                value: 'settings.email_template.mobile.password_reset.html_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.mobile.password_reset.html_body = value
+                }
               })
-            ]),
-            m(".inline field", [
-              m(".ui checkbox", [
-                m("input", {
-                  type: "checkbox",
-                  id: "mobile-html-password-reset-include-disclaimer",
-                }),
-                m("label", {for: "mobile-html-password-reset-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-              ])
             ])
           ])
         ]),
@@ -206,21 +262,31 @@ const mobileTabView = {
               m("label", "Body (formato testo)"),
               m(aceEditor, {
                 className: "text-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/text",
-                initialValue: "Mobile password reset testo"
+                model: Organization.current(),
+                value: 'settings.email_template.mobile.password_reset.text_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.mobile.password_reset.text_body = value
+                }
               })
-            ]),
-            m(".inline field", [
-              m(".ui checkbox", [
-                m("input", {
-                  type: "checkbox",
-                  id: "mobile-text-password-reset-include-disclaimer",
-                }),
-                m("label", {for: "mobile-text-password-reset-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-              ])
             ])
+          ])
+        ]),
+        m(".inline field", [
+          m(".ui checkbox", [
+            m("input", {
+              type: "checkbox",
+              id: "mobile-password-reset-include-disclaimer",
+              onclick(event) {
+                Organization.current().settings.email_template.mobile.password_reset.include_disclaimer = event.target.checked
+              },
+              checked: _.get(
+                Organization.current(),
+                'settings.email_template.mobile.password_reset.include_disclaimer',
+                true
+              )
+            }),
+            m("label", {for: "mobile-password-reset-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
           ])
         ])
       ]),
@@ -239,10 +305,12 @@ const mobileTabView = {
               m("label", "Body (formato html)"),
               m(aceEditor, {
                 className: "html-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/html_elixir",
-                initialValue: "<html><body><h2>Mobile disclaimer html</h2></body></html>"
+                model: Organization.current(),
+                value: 'settings.email_template.mobile.disclaimer.html_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.mobile.disclaimer.html_body = value
+                }
               })
             ]),
           ])
@@ -253,10 +321,12 @@ const mobileTabView = {
               m("label", "Body (formato testo)"),
               m(aceEditor, {
                 className: "text-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/text",
-                initialValue: "Mobile disclaimer testo"
+                model: Organization.current(),
+                value: 'settings.email_template.mobile.disclaimer.text_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.mobile.disclaimer.text_body = value
+                }
               })
             ])
           ])

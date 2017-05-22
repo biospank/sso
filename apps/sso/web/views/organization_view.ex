@@ -13,7 +13,8 @@ defmodule Sso.OrganizationView do
     %{
       id: organization.id,
       name: organization.name,
-      ref_email: organization.ref_email
+      ref_email: organization.ref_email,
+      settings: organization.settings
     }
   end
 end

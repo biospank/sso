@@ -1,9 +1,12 @@
 import m from 'mithril';
+import _ from 'lodash';
 import aceEditor from '../../../components/ace_editor';
+import Organization from '../../../models/organization';
 
 const webTabView = {
   view(vnode) {
     return [
+      // m('p', JSON.stringify(Organization.current())),
       m(".ui pointing secondary template menu", {
         oncreate(_) {
           $('div[data-tab="web"] .template.menu .item').tab();
@@ -18,7 +21,7 @@ const webTabView = {
             }
           })
         ]),
-        m("a.item", {"data-tab": "web-confirm-registration"}, [
+        m("a.item", {"data-tab": "web-verification"}, [
           "Verifica Utente",
           m("i.help circle outline icon", {
             "data-content": "Mail inviata all'utente alla verifica dei suoi dati.",
@@ -42,7 +45,18 @@ const webTabView = {
         m("form.ui form", [
           m(".field", [
             m("label", "Oggetto"),
-            m("input", {type: "text", placeholder: "Oggetto della mail"})
+            m("input", {
+              type: "text",
+              placeholder: "Oggetto della mail",
+              oninput(event) {
+                Organization.current().settings.email_template.web.registration.subject = event.target.value
+              },
+              value: _.get(
+                Organization.current(),
+                'settings.email_template.web.registration.subject',
+                ''
+              )
+            })
           ])
         ]),
         m(".ui pointing secondary registration-format menu", {
@@ -59,20 +73,13 @@ const webTabView = {
               m("label", "Body (formato html)"),
               m(aceEditor, {
                 className: "html-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/html_elixir",
-                initialValue: "<html><body><h2>Web registrazione html</h2></body></html>"
+                model: Organization.current(),
+                value: 'settings.email_template.web.registration.html_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.web.registration.html_body = value
+                }
               })
-            ]),
-            m(".inline field", [
-              m(".ui checkbox", [
-                m("input", {
-                  type: "checkbox",
-                  id: "web-html-registration-include-disclaimer",
-                }),
-                m("label", {for: "web-html-registration-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-              ])
             ])
           ])
         ]),
@@ -82,83 +89,128 @@ const webTabView = {
               m("label", "Body (formato testo)"),
               m(aceEditor, {
                 className: "text-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/text",
-                initialValue: "Web registazione testo"
+                model: Organization.current(),
+                value: 'settings.email_template.web.registration.text_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.web.registration.text_body = value
+                }
               })
-            ]),
-            m(".inline field", [
-              m(".ui checkbox", [
-                m("input", {
-                  type: "checkbox",
-                  id: "web-text-registration-include-disclaimer",
-                }),
-                m("label", {for: "web-text-registration-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-              ])
             ])
+          ])
+        ]),
+        m(".inline field", [
+          m(".ui checkbox", [
+            m("input", {
+              type: "checkbox",
+              id: "web-registration-include-disclaimer",
+              onclick(event) {
+                Organization.current().settings.email_template.web.registration.include_disclaimer = event.target.checked
+              },
+              checked: _.get(
+                Organization.current(),
+                'settings.email_template.web.registration.include_disclaimer',
+                true
+              )
+            }),
+            m("label", {for: "web-registration-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
           ])
         ])
       ]),
-      m(".ui tab segment", {"data-tab": "web-confirm-registration"}, [
+      m(".ui tab segment", {"data-tab": "web-verification"}, [
+        m('.ui menu', [
+          m(".right menu", [
+            m(".ui item", [
+              m(".ui toggle checkbox", [
+                m("input", {
+                  type: "checkbox",
+                  id: "web-verification-send",
+                  onclick(event) {
+                    Organization.current().settings.email_template.web.verification.send = event.target.checked
+                  },
+                  checked: _.get(
+                    Organization.current(),
+                    'settings.email_template.web.verification.send',
+                    true
+                  )
+                }),
+                m("label", {for: "web-verification-send", style: "cursor: pointer;"}, "Attivo")
+              ])
+            ])
+          ])
+        ]),
         m("form.ui form", [
           m(".field", [
             m("label", "Oggetto"),
-            m("input", {type: "text", placeholder: "Oggetto della mail"})
+            m("input", {
+              type: "text",
+              placeholder: "Oggetto della mail",
+              oninput(event) {
+                Organization.current().settings.email_template.web.verification.subject = event.target.value
+              },
+              value: _.get(
+                Organization.current(),
+                'settings.email_template.web.verification.subject',
+                ''
+              )
+            })
           ])
         ]),
-        m(".ui pointing secondary confirm-registration-format menu", {
+        m(".ui pointing secondary verification-format menu", {
           oncreate(_) {
-            $('div[data-tab="web"] .confirm-registration-format.menu .item').tab();
+            $('div[data-tab="web"] .verification-format.menu .item').tab();
           }
         }, [
-          m("a.item active", {"data-tab": "web-html-confirm-registration"}, "HTML"),
-          m("a.item", {"data-tab": "web-text-confirm-registration"}, "TESTO")
+          m("a.item active", {"data-tab": "web-html-verification"}, "HTML"),
+          m("a.item", {"data-tab": "web-text-verification"}, "TESTO")
         ]),
-        m(".ui tab segment active", {"data-tab": "web-html-confirm-registration"}, [
+        m(".ui tab segment active", {"data-tab": "web-html-verification"}, [
           m("form.ui form", [
             m(".field", [
               m("label", "Body (formato html)"),
               m(aceEditor, {
                 className: "html-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/html_elixir",
-                initialValue: "<html><body><h2>Web conferma registrazione html</h2></body></html>"
+                model: Organization.current(),
+                value: 'settings.email_template.web.verification.html_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.web.verification.html_body = value
+                }
               })
-            ]),
-            m(".inline field", [
-              m(".ui checkbox", [
-                m("input", {
-                  type: "checkbox",
-                  id: "web-html-confirm-registration-include-disclaimer",
-                }),
-                m("label", {for: "web-html-confirm-registration-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-              ])
             ])
           ])
         ]),
-        m(".ui tab segment", {"data-tab": "web-text-confirm-registration"}, [
+        m(".ui tab segment", {"data-tab": "web-text-verification"}, [
           m("form.ui form", [
             m(".field", [
               m("label", "Body (formato testo)"),
               m(aceEditor, {
                 className: "text-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/text",
-                initialValue: "Web conferma registrazione testo"
+                model: Organization.current(),
+                value: 'settings.email_template.web.verification.text_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.web.verification.text_body = value
+                }
               })
-            ]),
-            m(".inline field", [
-              m(".ui checkbox", [
-                m("input", {
-                  type: "checkbox",
-                  id: "web-text-confirm-registration-include-disclaimer",
-                }),
-                m("label", {for: "web-text-confirm-registration-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-              ])
             ])
+          ])
+        ]),
+        m(".inline field", [
+          m(".ui checkbox", [
+            m("input", {
+              type: "checkbox",
+              id: "web-verification-include-disclaimer",
+              onclick(event) {
+                Organization.current().settings.email_template.web.verification.include_disclaimer = event.target.checked
+              },
+              checked: _.get(
+                Organization.current(),
+                'settings.email_template.web.verification.include_disclaimer',
+                true
+              )
+            }),
+            m("label", {for: "web-verification-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
           ])
         ])
       ]),
@@ -166,7 +218,18 @@ const webTabView = {
         m("form.ui form", [
           m(".field", [
             m("label", "Oggetto"),
-            m("input", {type: "text", placeholder: "Oggetto della mail"})
+            m("input", {
+              type: "text",
+              placeholder: "Oggetto della mail",
+              oninput(event) {
+                Organization.current().settings.email_template.web.password_reset.subject = event.target.value
+              },
+              value: _.get(
+                Organization.current(),
+                'settings.email_template.web.password_reset.subject',
+                ''
+              )
+            })
           ])
         ]),
         m(".ui pointing secondary password-reset-format menu", {
@@ -183,20 +246,13 @@ const webTabView = {
               m("label", "Body (formato html)"),
               m(aceEditor, {
                 className: "html-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/html_elixir",
-                initialValue: "<html><body><h2>Web password reset html</h2></body></html>"
+                model: Organization.current(),
+                value: 'settings.email_template.web.password_reset.html_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.web.password_reset.html_body = value
+                }
               })
-            ]),
-            m(".inline field", [
-              m(".ui checkbox", [
-                m("input", {
-                  type: "checkbox",
-                  id: "web-html-password-reset-include-disclaimer",
-                }),
-                m("label", {for: "web-html-password-reset-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-              ])
             ])
           ])
         ]),
@@ -206,21 +262,31 @@ const webTabView = {
               m("label", "Body (formato testo)"),
               m(aceEditor, {
                 className: "text-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/text",
-                initialValue: "Web password reset testo"
+                model: Organization.current(),
+                value: 'settings.email_template.web.password_reset.text_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.web.password_reset.text_body = value
+                }
               })
-            ]),
-            m(".inline field", [
-              m(".ui checkbox", [
-                m("input", {
-                  type: "checkbox",
-                  id: "web-text-password-reset-include-disclaimer",
-                }),
-                m("label", {for: "web-text-password-reset-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-              ])
             ])
+          ])
+        ]),
+        m(".inline field", [
+          m(".ui checkbox", [
+            m("input", {
+              type: "checkbox",
+              id: "web-password-reset-include-disclaimer",
+              onclick(event) {
+                Organization.current().settings.email_template.web.password_reset.include_disclaimer = event.target.checked
+              },
+              checked: _.get(
+                Organization.current(),
+                'settings.email_template.web.password_reset.include_disclaimer',
+                true
+              )
+            }),
+            m("label", {for: "web-password-reset-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
           ])
         ])
       ]),
@@ -239,10 +305,12 @@ const webTabView = {
               m("label", "Body (formato html)"),
               m(aceEditor, {
                 className: "html-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/html_elixir",
-                initialValue: "<html><body><h2>Web disclaimer html</h2></body></html>"
+                model: Organization.current(),
+                value: 'settings.email_template.web.disclaimer.html_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.web.disclaimer.html_body = value
+                }
               })
             ]),
           ])
@@ -253,10 +321,12 @@ const webTabView = {
               m("label", "Body (formato testo)"),
               m(aceEditor, {
                 className: "text-editor",
-                fontSize: "16px",
-                theme: "ace/theme/twilight",
                 mode: "ace/mode/text",
-                initialValue: "Web disclaimer testo"
+                model: Organization.current(),
+                value: 'settings.email_template.web.disclaimer.text_body',
+                inputHandler: (value) => {
+                  Organization.current().settings.email_template.web.disclaimer.text_body = value
+                }
               })
             ])
           ])
