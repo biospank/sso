@@ -191,6 +191,9 @@ defmodule Sso.Email do
         <a href="mailto:customercare@itakacloud.com">customercare</a>
         <br />
         <br />
+        Vai su <a href="http://itakacloud.com/">Itakacloud.com</a>
+        <br />
+        <br />
         Ignori questo messaggio se non ha effettuato questa richiesta
         <br />
         <br />
