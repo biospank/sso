@@ -15,6 +15,17 @@ const Account = {
       }
     });
   },
+  allBy(organization) {
+    return m.request({
+      // background: true,
+      method: "GET",
+      url: Backoffice.apiBaseUrl() + this.url + "?org_id=" + organization,
+      config: function(xhr) {
+        xhr.setRequestHeader("accept", "application/json");
+        xhr.setRequestHeader("Authorization", `${Backoffice.realm} ${Session.token()}`)
+      }
+    });
+  },
   create(obj) {
     return m.request({
       method: "POST",

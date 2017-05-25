@@ -16,8 +16,7 @@ const aceEditor = {
         editor.session.setOptions({
           useWorker: false,
           tabSize: 2,
-          useSoftTabs: true,
-          highlightActiveLine: true
+          useSoftTabs: true
         });
         editor.setOption("autoScrollEditorIntoView", true);
         editor.$blockScrolling = Infinity;

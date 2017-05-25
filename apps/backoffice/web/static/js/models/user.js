@@ -14,7 +14,9 @@ const User = {
     status: stream(""),
     statusLabel: stream(""),
     account: stream(""),
-    accountLabel: stream("Tutte le app")
+    accountLabel: stream("Tutte le app"),
+    organization: stream(""),
+    organizationLabel: stream("Tutte le organizzazioni")
   },
   filterFields: [
     {fieldLabel: 'Nome', fieldValue: 'first_name'},
