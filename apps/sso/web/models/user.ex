@@ -151,6 +151,16 @@ defmodule Sso.User do
     end
   end
 
+  def filter_by_organization(query, organization) do
+    case String.strip(organization) do
+      "" ->
+        query
+      stripped_term ->
+        from u in query,
+          where: u.organization_id == ^(String.to_integer(stripped_term))
+    end
+  end
+
   def filter_profile_by(query, field, term) when is_binary(term) do
     case String.strip(term) do
       "" ->

@@ -9,12 +9,21 @@ import loadingButton from '../../../components/loading_button';
 import Organization from '../../../models/organization';
 import message from '../../../components/message';
 
+const templateContent = () => {
+  if(_.isEmpty(Organization.current()))
+    return m('.ui attached segment')
+  else
+    return m('.ui attached segment', [
+      m(deviceTabView)
+    ]);
+};
+
 const content = ({state}) => {
   return [
     m('.ui top attached menu', [
       m(".left menu", [
         m(".ui left aligned item", [
-          m(organizationChoiceView),
+          m(organizationChoiceView, {showLoader: state.showLoader}),
         ])
       ]),
       m(message, {
@@ -44,12 +53,8 @@ const content = ({state}) => {
         ])
       ])
     ]),
-    _.isEmpty(Organization.current()) ?
-    m('.ui attached segment')
-    :
-    m('.ui attached segment', [
-      m(deviceTabView)
-    ])
+    templateContent(),
+    m(loader, {show: state.showLoader()})
   ];
 };
 
@@ -60,7 +65,9 @@ const templateView = {
     this.showErrorMessage = stream(false);
 
     this.saveTemplates = () => {
+      this.showLoader(true);
       return Organization.update().then((response) => {
+        this.showLoader(false);
         vnode.state.showSuccessMessage(true);
       }, (response) => {
         vnode.state.showErrorMessage(true);

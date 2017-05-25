@@ -7,12 +7,13 @@ defmodule Backoffice.UserController do
     query_filter = case params["filters"] do
       nil ->
         User
-      %{"field" => field, "term" => term, "email" => email, "status" => status, "account" => account} ->
+      %{"field" => field, "term" => term, "email" => email, "status" => status, "account" => account, "organization" => organization} ->
         User
         |> User.filter_profile_by(field, term)
         |> User.filter_by(:email, email)
         |> User.filter_by_status(status)
         |> User.filter_by_account(account)
+        |> User.filter_by_organization(organization)
     end
 
     paged_users =

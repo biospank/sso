@@ -5,6 +5,7 @@ import Organization from '../../../models/organization';
 const organizationChoiceView = {
   oninit(vnode) {
     this.organizations = [];
+    this.showLoader = vnode.attrs.showLoader;
 
     this.getAllOrganizations = () => {
       return Organization.all().then((response) => {
@@ -36,14 +37,17 @@ const organizationChoiceView = {
               "data-value": organization.id,
               className: (organization.id === Organization.choice.id() ? "active selected" : ""),
               onclick: (event) => {
-                Organization.choice.label(event.target.innerHTML);
-
-                let currentOrg = _.find(state.organizations, (org) => {
-                  return org.id == event.target.dataset.value;
-                })
-
-                Organization.current(currentOrg);
-                Organization.settings = currentOrg.settings;
+                state.showLoader(true);
+                _.delay(() => {
+                  Organization.choice.label(event.target.innerHTML);
+                  Organization.current(
+                    _.find(state.organizations, (org) => {
+                      return org.id == event.target.dataset.value;
+                    })
+                  );
+                  state.showLoader(false);
+                  m.redraw();
+                }, 500);
               }
             }, organization.name);
           })
