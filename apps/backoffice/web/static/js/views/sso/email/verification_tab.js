@@ -14,7 +14,10 @@ const verificationTabView = {
                 type: "checkbox",
                 id: "verification-active",
                 onclick(event) {
-                  Organization.current().settings.email_template.verification.active = event.target.checked
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {verification: {active: event.target.checked}}}}
+                  );
                 },
                 checked: _.get(
                   Organization.current(),
@@ -34,7 +37,10 @@ const verificationTabView = {
             type: "text",
             placeholder: "Oggetto della mail",
             oninput(event) {
-              Organization.current().settings.email_template.verification.subject = event.target.value
+              _.merge(
+                Organization.current(),
+                {settings: {email_template: {verification: {subject: event.target.value}}}}
+              );
             },
             value: _.get(
               Organization.current(),
@@ -62,7 +68,10 @@ const verificationTabView = {
               model: Organization.current(),
               value: 'settings.email_template.verification.html_body',
               inputHandler: (value) => {
-                Organization.current().settings.email_template.verification.html_body = value
+                _.merge(
+                  Organization.current(),
+                  {settings: {email_template: {verification: {html_body: value}}}}
+                );
               }
             })
           ])
@@ -78,7 +87,10 @@ const verificationTabView = {
               model: Organization.current(),
               value: 'settings.email_template.verification.text_body',
               inputHandler: (value) => {
-                Organization.current().settings.email_template.verification.text_body = value
+                _.merge(
+                  Organization.current(),
+                  {settings: {email_template: {verification: {text_body: value}}}}
+                );
               }
             })
           ])

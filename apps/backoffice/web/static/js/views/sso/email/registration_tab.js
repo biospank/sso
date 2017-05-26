@@ -13,7 +13,10 @@ const registrationTabView = {
             type: "text",
             placeholder: "Oggetto della mail",
             oninput(event) {
-              Organization.current().settings.email_template.registration.subject = event.target.value
+              _.merge(
+                Organization.current(),
+                {settings: {email_template: {registration: {subject: event.target.value}}}}
+              );
             },
             value: _.get(
               Organization.current(),
@@ -66,7 +69,10 @@ const registrationTabView = {
                 model: Organization.current(),
                 value: 'settings.email_template.registration.web.html_body',
                 inputHandler: (value) => {
-                  Organization.current().settings.email_template.registration.web.html_body = value
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {registration: {web: {html_body: value}}}}}
+                  );
                 }
               })
             ])
@@ -82,7 +88,10 @@ const registrationTabView = {
                 model: Organization.current(),
                 value: 'settings.email_template.registration.web.text_body',
                 inputHandler: (value) => {
-                  Organization.current().settings.email_template.registration.web.text_body = value
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {registration: {web: {text_body: value}}}}}
+                  );
                 }
               })
             ])
@@ -108,7 +117,10 @@ const registrationTabView = {
                 model: Organization.current(),
                 value: 'settings.email_template.registration.mobile.html_body',
                 inputHandler: (value) => {
-                  Organization.current().settings.email_template.registration.mobile.html_body = value
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {registration: {mobile: {html_body: value}}}}}
+                  );
                 }
               })
             ])
@@ -124,7 +136,10 @@ const registrationTabView = {
                 model: Organization.current(),
                 value: 'settings.email_template.registration.mobile.text_body',
                 inputHandler: (value) => {
-                  Organization.current().settings.email_template.registration.mobile.text_body = value
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {registration: {mobile: {text_body: value}}}}}
+                  );
                 }
               })
             ])

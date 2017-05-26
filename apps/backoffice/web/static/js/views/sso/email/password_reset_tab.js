@@ -13,7 +13,10 @@ const passwordResetTabView = {
             type: "text",
             placeholder: "Oggetto della mail",
             oninput(event) {
-              Organization.current().settings.email_template.password_reset.subject = event.target.value
+              _.merge(
+                Organization.current(),
+                {settings: {email_template: {password_reset: {subject: event.target.value}}}}
+              );
             },
             value: _.get(
               Organization.current(),
@@ -66,7 +69,10 @@ const passwordResetTabView = {
                 model: Organization.current(),
                 value: 'settings.email_template.password_reset.web.html_body',
                 inputHandler: (value) => {
-                  Organization.current().settings.email_template.password_reset.web.html_body = value
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {password_reset: {web: {html_body: value}}}}}
+                  );
                 }
               })
             ])
@@ -82,7 +88,10 @@ const passwordResetTabView = {
                 model: Organization.current(),
                 value: 'settings.email_template.password_reset.web.text_body',
                 inputHandler: (value) => {
-                  Organization.current().settings.email_template.password_reset.web.text_body = value
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {password_reset: {web: {text_body: value}}}}}
+                  );
                 }
               })
             ])
@@ -108,7 +117,10 @@ const passwordResetTabView = {
                 model: Organization.current(),
                 value: 'settings.email_template.password_reset.mobile.html_body',
                 inputHandler: (value) => {
-                  Organization.current().settings.email_template.password_reset.mobile.html_body = value
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {password_reset: {mobile: {html_body: value}}}}}
+                  );
                 }
               })
             ])
@@ -124,7 +136,10 @@ const passwordResetTabView = {
                 model: Organization.current(),
                 value: 'settings.email_template.password_reset.mobile.text_body',
                 inputHandler: (value) => {
-                  Organization.current().settings.email_template.password_reset.mobile.text_body = value
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {password_reset: {mobile: {text_body: value}}}}}
+                  );
                 }
               })
             ])
