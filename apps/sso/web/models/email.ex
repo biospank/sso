@@ -2,77 +2,51 @@ defmodule Sso.Email do
   use Bamboo.Phoenix, view: Sso.EmailView
 
   def welcome_email(user, account, link) when is_binary(link) do
+    subject_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "web", "registration", "subject"])
+      |> compile([user: user, account: account, link: link])
+
+    html_body_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "web", "registration", "html_body"])
+      |> compile([user: user, account: account, link: link])
+
+    text_body_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "web", "registration", "text_body"])
+      |> compile([user: user, account: account, link: link])
+
     new_email
     |> from(account)
     |> to(user)
-    |> subject("#{account.app_name} - Richiesta registrazione")
-    |> html_body("""
-        Gentile #{user.profile.first_name} #{user.profile.last_name}
-        <br />
-        è stata richiesta la registrazione al sito #{account.app_name} attraverso il servizio SSO Takeda.
-        <br />
-        <br />
-        Per confermare la sua identità e attivare l'account segua questo link:
-        <br />
-        <br />
-        #{link}
-        <br />
-        <br />
-        Entro 24 ore riceverà una mail di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
-        potrà accedere a tutti i servizi realizzati da Takeda Italia S.p.A. che supportano
-        questo servizio, utilizzando sempre le stesse credenziali.
-        <br />
-        <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di <a href="mailto:customercare@itakacloud.com">customercare</a>
-        <br />
-        <br />
-        Ignori questo messaggio se non ha effettuato questa richiesta
-        <br />
-        <br />
-        Cordiali saluti
-        <br />
-        Takeda Italia S.p.A.
-        <br />
-        <br />
-        #{disclaimer(account)}
-      """)
+    |> subject(subject_content)
+    |> html_body(html_body_content)
+    |> text_body(text_body_content)
   end
 
   def welcome_email(user, account, link) when is_nil(link) do
+    subject_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "mobile", "registration", "subject"])
+      |> compile([user: user, account: account])
+
+    html_body_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "mobile", "registration", "html_body"])
+      |> compile([user: user, account: account])
+
+    text_body_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "mobile", "registration", "text_body"])
+      |> compile([user: user, account: account])
+
     new_email
     |> from(account)
     |> to(user)
-    |> subject("#{account.app_name} - Richiesta registrazione")
-    |> html_body("""
-        Gentile #{user.profile.first_name} #{user.profile.last_name}
-        <br />
-        è stata richiesta la registrazione al sito #{account.app_name} attraverso il servizio SSO Takeda.
-        <br />
-        <br />
-        Per confermare la sua identità e attivare l'account inserisca il seguente codice di attivazione nell'app #{account.app_name}
-        <br />
-        <br />
-        #{user.activation_code}
-        <br />
-        <br />
-        Entro 24 ore riceverà una mail di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
-        potrà accedere a tutti i servizi realizzati da Takeda Italia S.p.A. che supportano
-        questo servizio, utilizzando sempre le stesse credenziali.
-        <br />
-        <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di <a href="mailto:customercare@itakacloud.com">customercare</a>
-        <br />
-        <br />
-        Ignori questo messaggio se non ha effettuato questa richiesta
-        <br />
-        <br />
-        Cordiali saluti
-        <br />
-        Takeda Italia S.p.A.
-        <br />
-        <br />
-        #{disclaimer(account)}
-      """)
+    |> subject(subject_content)
+    |> html_body(html_body_content)
+    |> text_body(text_body_content)
   end
 
   def dardy_new_registration_email(user, account) do
@@ -81,14 +55,12 @@ defmodule Sso.Email do
     |> to(Application.fetch_env!(:sso, :recipient_email_notification))
     |> subject("#{account.app_name} - Notifica registazione utente")
     |> html_body("""
-        <br />
-        <br />
-        Nome agenzia - #{account.organization.name}
-        Nome utente - #{user.profile.first_name} #{user.profile.last_name}
-        Nome app - #{account.app_name}
+        <p>
+        Nome agenzia - #{account.organization.name}<br />
+        Nome utente - #{user.profile.first_name} #{user.profile.last_name}<br />
+        Nome app - #{account.app_name}<br />
         Email - #{user.email}
-        <br />
-        <br />
+        </p>
       """)
   end
 
@@ -98,166 +70,97 @@ defmodule Sso.Email do
     |> to(account)
     |> subject("#{account.app_name} - Notifica registazione utente")
     |> html_body("""
+        <p>
         Spettabile #{account.organization.name}
-        <br />
-        <br />
+        </p>
+        <p>
         Si è registrato un nuovo utente:
-        <br />
-        <br />
-        Nome utente - #{user.profile.first_name} #{user.profile.last_name}
-        Nome app - #{account.app_name}
+        </p>
+        <p>
+        Nome utente - #{user.profile.first_name} #{user.profile.last_name}<br />
+        Nome app - #{account.app_name}<br />
         Email - #{user.email}
-        <br />
-        <br />
+        </p>
       """)
   end
 
   def password_reset_email(user, account, link) when is_binary(link) do
+    subject_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "web", "password_reset", "subject"])
+      |> compile([user: user, account: account, link: link])
+
+    html_body_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "web", "password_reset", "html_body"])
+      |> compile([user: user, account: account, link: link])
+
+    text_body_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "web", "password_reset", "text_body"])
+      |> compile([user: user, account: account, link: link])
+
     new_email
     |> from(account)
     |> to(user)
-    |> subject("#{account.app_name} - Recupera password")
-    |> html_body("""
-        È stata effettuata da #{account.app_name} una richiesta di recupero password per il suo account SSO Takeda.
-        Per procedere alla creazione di una nuova password segua questo link:
-        <br />
-        <br />
-        #{link}
-        <br />
-        <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
-        <a href="mailto:customercare@itakacloud.com">customercare</a>
-        <br />
-        <br />
-        Ignori questo messaggio se non ha effettuato questa richiesta
-        <br />
-        <br />
-        Cordiali saluti
-        <br />
-        Takeda Italia Spa
-        <br />
-        <br />
-        #{disclaimer(account)}
-      """)
+    |> subject(subject_content)
+    |> html_body(html_body_content)
+    |> text_body(text_body_content)
   end
 
   def password_reset_email(user, account, link) when is_nil(link) do
+    subject_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "mobile", "password_reset", "subject"])
+      |> compile([user: user, account: account])
+
+    html_body_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "mobile", "password_reset", "html_body"])
+      |> compile([user: user, account: account])
+
+    text_body_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "mobile", "password_reset", "text_body"])
+      |> compile([user: user, account: account])
+
     new_email
     |> from(account)
     |> to(user)
-    |> subject("#{account.app_name} - Recupera password")
-    |> html_body("""
-        È stata effettuata da #{account.app_name} una richiesta di recupero password per il suo account SSO Takeda.
-        Per procedere alla creazione di una nuova password inserisca il seguente
-        codice di attivazione nell'app #{account.app_name}:
-        <br />
-        <br />
-        #{user.reset_code}
-        <br />
-        <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
-        <a href="mailto:customercare@itakacloud.com">customercare</a>
-        <br />
-        <br />
-        Ignori questo messaggio se non ha effettuato questa richiesta
-        <br />
-        <br />
-        Cordiali saluti
-        <br />
-        Takeda Italia Spa
-        <br />
-        <br />
-        #{disclaimer(account)}
-      """)
+    |> subject(subject_content)
+    |> html_body(html_body_content)
+    |> text_body(text_body_content)
   end
 
   def courtesy_email(user, account) do
+    subject_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "web", "verification", "subject"])
+      |> compile([user: user, account: account])
+
+    html_body_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "web", "verification", "html_body"])
+      |> compile([user: user, account: account])
+
+    text_body_content =
+      account.organization.settings
+      |> lookup_content_for(["email_template", "web", "verification", "text_body"])
+      |> compile([user: user, account: account])
+
     new_email
     |> from(account)
     |> to(user)
-    |> subject("#{account.app_name} - Conferma registrazione")
-    |> html_body("""
-        Gentile #{user.profile.first_name} #{user.profile.last_name}
-        <br />
-        la sua registrazione a #{account.app_name} è confermata.
-        <br />
-        <br />
-        Le ricordiamo che adesso potrà accedere a tutti i siti/app realizzati da
-        Takeda Italia S.p.A. che supportano questo servizio, utilizzando sempre le
-        stesse credenziali indicate in fase di registrazione.
-        <br />
-        <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
-        <a href="mailto:customercare@itakacloud.com">customercare</a>
-        <br />
-        <br />
-        Ignori questo messaggio se non ha effettuato questa richiesta
-        <br />
-        <br />
-        Cordiali saluti
-        <br />
-        Takeda Italia S.p.A.
-        <br />
-        <br />
-        #{disclaimer(account)}
-      """)
+    |> subject(subject_content)
+    |> html_body(html_body_content)
+    |> text_body(text_body_content)
   end
 
-  defp disclaimer(account) do
-    """
-      <table cellpadding="0" cellspacing="0" border="0" style="border: 1px solid #ccc; padding 30px;">
-        <tr>
-          <td height="10"></td>
-        </tr>
-        <tr>
-          <td>
-            <table cellpadding="0" cellspacing="0" border="0">
-              <tr>
-                <td width="10"></td>
-                <td>
-                  <table cellpadding="0" cellspacing="0" border="0">
-                    <tr>
-                      <td>
-                        <small>
-                          <strong>SSO Takeda</strong>
-                        </small>
-                        <br />
-                        <br />
-                        <small>
-                          SSO Takeda è un sistema di autenticazione centralizzato per web e mobile
-                          realizzato in esclusiva per Takeda Italia S.p.A.
-                        </small>
-                        <br />
-                        <br />
-                        <small>
-                          Il sistema ha lo scopo di consentire la registrazione dei medici e operatori
-                          sanitari ai progetti digital promossi da Takeda (app/siti) e consentire
-                          la loro autenticazione come operatori professionali.
-                        </small>
-                        <br />
-                        <br />
-                        <small>
-                          La gestione del riconoscimento dell'operatore della salute e la trasmissione
-                          e archiviazione delle relative chiavi di accesso e dei dati personali del professionista
-                          della salute avviene mediante la piattaforma SSO Takeda nel rispetto dei requisiti
-                          richiesti da:
-                          - Il Ministero della Salute (Circolare Min. San. - Dipartimento Valutazione Farmaci
-                          e Farmacovigilanza n° 800.I/15/1267 del 22 marzo 2000)
-                          - Codice della Privacy (D.Lgs 30/06/2003 n. 196) sulla tutela dei dati personali
-                        </small>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-                <td width="10"></td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td height="10"></td>
-        </tr>
-      </table>
-    """
+  defp lookup_content_for(map, path) do
+    map |> get_in(path) || "No content found for #{Enum.join(path, ".")}"
+  end
+
+  defp compile(content, bindings) do
+    EEx.eval_string(content, bindings)
   end
 end
