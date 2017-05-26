@@ -21,7 +21,7 @@ const aceEditor = {
         editor.setOption("autoScrollEditorIntoView", true);
         editor.$blockScrolling = Infinity;
         editor.session.setMode(attrs.mode);
-        editor.setValue( _.get(attrs.model, attrs.value, ''));
+        editor.setValue( _.get(attrs.model, attrs.value, 'testo mancante'));
         editor.getSession().on('change', (e) => {
           if(attrs.inputHandler)
             attrs.inputHandler(editor.getValue());

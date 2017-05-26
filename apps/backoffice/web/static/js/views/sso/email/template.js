@@ -4,7 +4,8 @@ import stream from 'mithril/stream';
 import mixinLayout from '../../layout/mixin_layout';
 import loader from '../../../components/loader';
 import organizationChoiceView from './organization_choice';
-import deviceTabView from './device_tab';
+// import deviceTabView from './device_tab';
+import templateTabsView from './template_tabs';
 import loadingButton from '../../../components/loading_button';
 import Organization from '../../../models/organization';
 import message from '../../../components/message';
@@ -14,7 +15,7 @@ const templateContent = () => {
     return m('.ui attached segment')
   else
     return m('.ui attached segment', [
-      m(deviceTabView)
+      m(templateTabsView)
     ]);
 };
 

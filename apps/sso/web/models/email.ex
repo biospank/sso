@@ -4,17 +4,17 @@ defmodule Sso.Email do
   def welcome_email(user, account, link) when is_binary(link) do
     subject_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "web", "registration", "subject"])
+      |> lookup_content_for(["email_template", "registration", "subject"])
       |> compile([user: user, account: account, link: link])
 
     html_body_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "web", "registration", "html_body"])
+      |> lookup_content_for(["email_template", "registration", "web", "html_body"])
       |> compile([user: user, account: account, link: link])
 
     text_body_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "web", "registration", "text_body"])
+      |> lookup_content_for(["email_template", "registration", "web", "text_body"])
       |> compile([user: user, account: account, link: link])
 
     new_email
@@ -28,17 +28,17 @@ defmodule Sso.Email do
   def welcome_email(user, account, link) when is_nil(link) do
     subject_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "mobile", "registration", "subject"])
+      |> lookup_content_for(["email_template", "registration", "subject"])
       |> compile([user: user, account: account])
 
     html_body_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "mobile", "registration", "html_body"])
+      |> lookup_content_for(["email_template", "registration", "mobile", "html_body"])
       |> compile([user: user, account: account])
 
     text_body_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "mobile", "registration", "text_body"])
+      |> lookup_content_for(["email_template", "registration", "mobile", "text_body"])
       |> compile([user: user, account: account])
 
     new_email
@@ -87,17 +87,17 @@ defmodule Sso.Email do
   def password_reset_email(user, account, link) when is_binary(link) do
     subject_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "web", "password_reset", "subject"])
+      |> lookup_content_for(["email_template", "password_reset", "subject"])
       |> compile([user: user, account: account, link: link])
 
     html_body_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "web", "password_reset", "html_body"])
+      |> lookup_content_for(["email_template", "password_reset", "web", "html_body"])
       |> compile([user: user, account: account, link: link])
 
     text_body_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "web", "password_reset", "text_body"])
+      |> lookup_content_for(["email_template", "password_reset", "web", "text_body"])
       |> compile([user: user, account: account, link: link])
 
     new_email
@@ -111,17 +111,17 @@ defmodule Sso.Email do
   def password_reset_email(user, account, link) when is_nil(link) do
     subject_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "mobile", "password_reset", "subject"])
+      |> lookup_content_for(["email_template", "password_reset", "subject"])
       |> compile([user: user, account: account])
 
     html_body_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "mobile", "password_reset", "html_body"])
+      |> lookup_content_for(["email_template", "password_reset", "mobile", "html_body"])
       |> compile([user: user, account: account])
 
     text_body_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "mobile", "password_reset", "text_body"])
+      |> lookup_content_for(["email_template", "password_reset", "mobile", "text_body"])
       |> compile([user: user, account: account])
 
     new_email
@@ -135,17 +135,17 @@ defmodule Sso.Email do
   def courtesy_email(user, account) do
     subject_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "web", "verification", "subject"])
+      |> lookup_content_for(["email_template", "verification", "subject"])
       |> compile([user: user, account: account])
 
     html_body_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "web", "verification", "html_body"])
+      |> lookup_content_for(["email_template", "verification", "html_body"])
       |> compile([user: user, account: account])
 
     text_body_content =
       account.organization.settings
-      |> lookup_content_for(["email_template", "web", "verification", "text_body"])
+      |> lookup_content_for(["email_template", "verification", "text_body"])
       |> compile([user: user, account: account])
 
     new_email
