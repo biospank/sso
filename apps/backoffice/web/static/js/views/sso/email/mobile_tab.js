@@ -38,8 +38,7 @@ const mobileTabView = {
               $(dom).popup();
             }
           })
-        ]),
-        m("a.item", {"data-tab": "mobile-disclaimer"}, "Disclaimer")
+        ])
       ]),
       m(".ui tab segment active", {"data-tab": "mobile-registration"}, [
         m("form.ui form", [
@@ -97,23 +96,6 @@ const mobileTabView = {
                 }
               })
             ])
-          ])
-        ]),
-        m(".inline field", [
-          m(".ui checkbox", [
-            m("input", {
-              type: "checkbox",
-              id: "mobile-registration-include-disclaimer",
-              onclick(event) {
-                Organization.current().settings.email_template.mobile.registration.include_disclaimer = event.target.checked
-              },
-              checked: _.get(
-                Organization.current(),
-                'settings.email_template.mobile.registration.include_disclaimer',
-                true
-              )
-            }),
-            m("label", {for: "mobile-registration-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
           ])
         ])
       ]),
@@ -195,23 +177,6 @@ const mobileTabView = {
               })
             ])
           ])
-        ]),
-        m(".inline field", [
-          m(".ui checkbox", [
-            m("input", {
-              type: "checkbox",
-              id: "mobile-verification-include-disclaimer",
-              onclick(event) {
-                Organization.current().settings.email_template.mobile.verification.include_disclaimer = event.target.checked
-              },
-              checked: _.get(
-                Organization.current(),
-                'settings.email_template.mobile.verification.include_disclaimer',
-                true
-              )
-            }),
-            m("label", {for: "mobile-verification-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-          ])
         ])
       ]),
       m(".ui tab segment", {"data-tab": "mobile-password-reset"}, [
@@ -267,65 +232,6 @@ const mobileTabView = {
                 value: 'settings.email_template.mobile.password_reset.text_body',
                 inputHandler: (value) => {
                   Organization.current().settings.email_template.mobile.password_reset.text_body = value
-                }
-              })
-            ])
-          ])
-        ]),
-        m(".inline field", [
-          m(".ui checkbox", [
-            m("input", {
-              type: "checkbox",
-              id: "mobile-password-reset-include-disclaimer",
-              onclick(event) {
-                Organization.current().settings.email_template.mobile.password_reset.include_disclaimer = event.target.checked
-              },
-              checked: _.get(
-                Organization.current(),
-                'settings.email_template.mobile.password_reset.include_disclaimer',
-                true
-              )
-            }),
-            m("label", {for: "mobile-password-reset-include-disclaimer", style: "cursor: pointer;"}, "Includi Disclaimer")
-          ])
-        ])
-      ]),
-      m(".ui tab segment", {"data-tab": "mobile-disclaimer"}, [
-        m(".ui pointing secondary disclaimer-format menu", {
-          oncreate(_) {
-            $('div[data-tab="mobile"] .disclaimer-format.menu .item').tab();
-          }
-        }, [
-          m("a.item active", {"data-tab": "mobile-html-disclaimer"}, "HTML"),
-          m("a.item", {"data-tab": "mobile-text-disclaimer"}, "TESTO")
-        ]),
-        m(".ui tab segment active", {"data-tab": "mobile-html-disclaimer"}, [
-          m("form.ui form", [
-            m(".field", [
-              m("label", "Body (formato html)"),
-              m(aceEditor, {
-                className: "html-editor",
-                mode: "ace/mode/html_elixir",
-                model: Organization.current(),
-                value: 'settings.email_template.mobile.disclaimer.html_body',
-                inputHandler: (value) => {
-                  Organization.current().settings.email_template.mobile.disclaimer.html_body = value
-                }
-              })
-            ]),
-          ])
-        ]),
-        m(".ui tab segment", {"data-tab": "mobile-text-disclaimer"}, [
-          m("form.ui form", [
-            m(".field", [
-              m("label", "Body (formato testo)"),
-              m(aceEditor, {
-                className: "text-editor",
-                mode: "ace/mode/text",
-                model: Organization.current(),
-                value: 'settings.email_template.mobile.disclaimer.text_body',
-                inputHandler: (value) => {
-                  Organization.current().settings.email_template.mobile.disclaimer.text_body = value
                 }
               })
             ])
