@@ -1,10 +1,30 @@
 import m from 'mithril';
 import _ from 'lodash';
+import stream from 'mithril/stream';
 import aceEditor from '../../../components/ace_editor';
 import Organization from '../../../models/organization';
+import Backoffice from '../../../backoffice';
+import Template from '../../../models/template';
+import loadingButton from '../../../components/loading_button';
 
 const registrationTabView = {
-  view(vnode) {
+  oninit(vnode) {
+    this.loadingPreview = stream(false);
+    this.previewUrl = stream("");
+    this.emailPreview = stream("");
+
+    this.showPreview = (contents) => {
+      // this.loadingPreview(true);
+      return Template.createPreview(contents).then((response) => {
+        this.previewUrl(`${Backoffice.domain}/backoffice/email_preview/${response.preview_id}`);
+        this.emailPreview(response);
+        // this.loadingPreview(false);
+      }, (response) => {
+        // this.loadingPreview(false);
+      });
+    };
+  },
+  view({state}) {
     return m(".ui tab segment active", {"data-tab": "registration"}, [
       m("form.ui form", [
         m(".field", [
@@ -56,8 +76,20 @@ const registrationTabView = {
             $('div[data-tab="registration"] div[data-tab="web"] .format.menu .item').tab();
           }
         }, [
-          m("a.item active", {"data-tab": "web-html-registration"}, "HTML"),
-          m("a.item", {"data-tab": "web-text-registration"}, "TESTO")
+          m("a.item active", {"data-tab": "web-html-registration"}, "Html"),
+          m("a.item", {"data-tab": "web-text-registration"}, "Testo"),
+          m("a.item", {
+            "data-tab": "web-registration-preview",
+            onclick(event) {
+              // if(!event.target.classList.contains('active')) {
+                state.showPreview({
+                  subject: Organization.current().settings.email_template.registration.subject,
+                  htmlBody: Organization.current().settings.email_template.registration.web.html_body,
+                  textBody: Organization.current().settings.email_template.registration.web.text_body,
+                });
+              // }
+            }
+          }, "Anteprima")
         ]),
         m(".ui tab segment active", {"data-tab": "web-html-registration"}, [
           m("form.ui form", [
@@ -96,6 +128,37 @@ const registrationTabView = {
               })
             ])
           ])
+        ]),
+        m(".ui tab segment", {
+          className: (state.loadingPreview() ? 'loading': ''),
+          "data-tab": "web-registration-preview"
+        }, [
+          m(".ui icon message", [
+            m(".content", [
+              m(".header", [
+                "Html",
+                m("i.html5 icon"),
+              ]),
+              m("p", {
+                onupdate({dom}) {
+                  dom.innerHTML = state.emailPreview().html_body
+                }
+              })
+            ])
+          ]),
+          m(".ui icon message", [
+            m(".content", [
+              m(".header", [
+                "Testo",
+                m("i.align left icon"),
+              ]),
+              m("p", {
+                onupdate({dom}) {
+                  dom.innerHTML = state.emailPreview().text_body
+                }
+              })
+            ])
+          ])
         ])
       ]),
       m(".ui tab segment", {"data-tab": "mobile"}, [
@@ -104,8 +167,20 @@ const registrationTabView = {
             $('div[data-tab="registration"] div[data-tab="mobile"] .format.menu .item').tab();
           }
         }, [
-          m("a.item active", {"data-tab": "mobile-html-registration"}, "HTML"),
-          m("a.item", {"data-tab": "mobile-text-registration"}, "TESTO")
+          m("a.item active", {"data-tab": "mobile-html-registration"}, "Html"),
+          m("a.item", {"data-tab": "mobile-text-registration"}, "Testo"),
+          m("a.item", {
+            "data-tab": "mobile-registration-preview",
+            onclick(event) {
+              // if(!event.target.classList.contains('active')) {
+                state.showPreview({
+                  subject: Organization.current().settings.email_template.registration.subject,
+                  htmlBody: Organization.current().settings.email_template.registration.mobile.html_body,
+                  textBody: Organization.current().settings.email_template.registration.mobile.text_body,
+                });
+              // }
+            }
+          }, "Anteprima")
         ]),
         m(".ui tab segment active", {"data-tab": "mobile-html-registration"}, [
           m("form.ui form", [
@@ -140,6 +215,38 @@ const registrationTabView = {
                     Organization.current(),
                     {settings: {email_template: {registration: {mobile: {text_body: value}}}}}
                   );
+                }
+              })
+            ])
+          ])
+        ]),
+        m(".ui tab segment", {
+          className: (state.loadingPreview() ? 'loading': ''),
+          "data-tab": "mobile-registration-preview"
+        }, [
+          m(".ui icon message", [
+            m(".content", [
+              m(".header", [
+                "Html",
+                m("i.html5 icon"),
+              ]),
+              m("p", {
+                onupdate({dom}) {
+                  dom.innerHTML = state.emailPreview().html_body
+                }
+              })
+            ])
+          ]),
+          m(".ui icon message", [
+            m(".content", [
+              m(".header", [
+                "Testo",
+                m("i.align left icon"),
+              ]),
+
+              m("p", {
+                onupdate({dom}) {
+                  dom.innerHTML = state.emailPreview().text_body
                 }
               })
             ])

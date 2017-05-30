@@ -47,5 +47,7 @@ defmodule Backoffice.Router do
     scope "/bouser", BoUser, as: :bouser do
       put "/password", PasswordController, :change
     end
+
+    resources "/email_preview", EmailPreviewController, only: [:create]
   end
 end

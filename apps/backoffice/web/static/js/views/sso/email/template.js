@@ -4,7 +4,6 @@ import stream from 'mithril/stream';
 import mixinLayout from '../../layout/mixin_layout';
 import loader from '../../../components/loader';
 import organizationChoiceView from './organization_choice';
-// import deviceTabView from './device_tab';
 import templateTabsView from './template_tabs';
 import loadingButton from '../../../components/loading_button';
 import Organization from '../../../models/organization';

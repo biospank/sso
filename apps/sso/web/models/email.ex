@@ -156,6 +156,48 @@ defmodule Sso.Email do
     |> text_body(text_body_content)
   end
 
+  # def preview([link: link]=params)  do
+  def preview(params)  do
+    bindings = [
+      user: params[:user],
+      account: params[:account],
+      link: params[:link]
+    ]
+
+    subject_content = params[:subject] |> compile(bindings)
+
+    html_body_content = params[:html_body] |> compile(bindings)
+
+    text_body_content = params[:text_body] |> compile(bindings)
+
+    new_email
+    |> from(params[:account])
+    |> to(params[:user])
+    |> subject(subject_content)
+    |> html_body(html_body_content)
+    |> text_body(text_body_content)
+  end
+
+  # def preview(params) do
+  #   bindings = [
+  #     user: params[:user],
+  #     account: params[:account]
+  #   ]
+  #
+  #   subject_content = params[:subject] |> compile(bindings)
+  #
+  #   html_body_content = params[:html_body] |> compile(bindings)
+  #
+  #   text_body_content = params[:text_body] |> compile(bindings)
+  #
+  #   new_email
+  #   |> from(params[:account])
+  #   |> to(params[:user])
+  #   |> subject(subject_content)
+  #   |> html_body(html_body_content)
+  #   |> text_body(text_body_content)
+  # end
+
   defp lookup_content_for(map, path) do
     map |> get_in(path) || "No content found for #{Enum.join(path, ".")}"
   end
