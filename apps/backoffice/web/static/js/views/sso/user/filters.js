@@ -110,21 +110,24 @@ const userFilters = {
           }, [
             m("input", {
               type: "hidden",
-              name: "status",
-              value: User.filters.status(),
-              onchange: m.withAttr("value", User.filters.status)
+              name: "organization",
+              value: User.filters.organization(),
+              onchange(event) {
+                User.filters.organization(event.target.value);
+                state.getAllAccounts(User.filters.organization());
+              }
             }),
             m("i", { class: "dropdown icon" }),
-            m(".text", User.filters.statusLabel()),
+            m(".text", User.filters.organizationLabel()),
             m(".menu", [
-              User.filterStatuses.map((filter) => {
+              state.organizations.map((organization) => {
                 return m('.item', {
-                  "data-value": filter.statusValue,
-                  className: (filter.statusValue === User.filters.status() ? "active selected" : ""),
+                  "data-value": organization.id,
+                  className: (organization.id === User.filters.organization() ? "active selected" : ""),
                   onclick: (event) => {
-                    User.filters.statusLabel(event.target.outerText);
+                    User.filters.organizationLabel(event.target.outerText);
                   }
-                }, filter.statusLabel);
+                }, organization.name);
               })
             ])
           ])
@@ -164,24 +167,21 @@ const userFilters = {
           }, [
             m("input", {
               type: "hidden",
-              name: "organization",
-              value: User.filters.organization(),
-              onchange(event) {
-                User.filters.organization(event.target.value);
-                state.getAllAccounts(User.filters.organization());
-              }
+              name: "status",
+              value: User.filters.status(),
+              onchange: m.withAttr("value", User.filters.status)
             }),
             m("i", { class: "dropdown icon" }),
-            m(".text", User.filters.organizationLabel()),
+            m(".text", User.filters.statusLabel()),
             m(".menu", [
-              state.organizations.map((organization) => {
+              User.filterStatuses.map((filter) => {
                 return m('.item', {
-                  "data-value": organization.id,
-                  className: (organization.id === User.filters.organization() ? "active selected" : ""),
+                  "data-value": filter.statusValue,
+                  className: (filter.statusValue === User.filters.status() ? "active selected" : ""),
                   onclick: (event) => {
-                    User.filters.organizationLabel(event.target.outerText);
+                    User.filters.statusLabel(event.target.outerText);
                   }
-                }, organization.name);
+                }, filter.statusLabel);
               })
             ])
           ])

@@ -10,14 +10,24 @@ import loadingButton from '../../../components/loading_button';
 const registrationTabView = {
   oninit(vnode) {
     this.loadingPreview = stream(false);
-    this.previewUrl = stream("");
-    this.emailPreview = stream("");
+    // this.previewUrl = stream("");
+    this.webPreview = stream("");
+    this.mobilePreview = stream("");
 
-    this.showPreview = (contents) => {
+    this.showWebPreview = (contents) => {
       // this.loadingPreview(true);
       return Template.createPreview(contents).then((response) => {
-        this.previewUrl(`${Backoffice.domain}/backoffice/email_preview/${response.preview_id}`);
-        this.emailPreview(response);
+        this.webPreview(response);
+        // this.loadingPreview(false);
+      }, (response) => {
+        // this.loadingPreview(false);
+      });
+    };
+
+    this.showMobilePreview = (contents) => {
+      // this.loadingPreview(true);
+      return Template.createPreview(contents).then((response) => {
+        this.mobilePreview(response);
         // this.loadingPreview(false);
       }, (response) => {
         // this.loadingPreview(false);
@@ -82,7 +92,7 @@ const registrationTabView = {
             "data-tab": "web-registration-preview",
             onclick(event) {
               // if(!event.target.classList.contains('active')) {
-                state.showPreview({
+                state.showWebPreview({
                   subject: Organization.current().settings.email_template.registration.subject,
                   htmlBody: Organization.current().settings.email_template.registration.web.html_body,
                   textBody: Organization.current().settings.email_template.registration.web.text_body,
@@ -95,18 +105,38 @@ const registrationTabView = {
           m("form.ui form", [
             m(".field", [
               m("label", "Body (formato html)"),
-              m(aceEditor, {
+              m("p", {
                 className: "html-editor",
-                mode: "ace/mode/html_elixir",
-                model: Organization.current(),
-                value: 'settings.email_template.registration.web.html_body',
-                inputHandler: (value) => {
-                  _.merge(
-                    Organization.current(),
-                    {settings: {email_template: {registration: {web: {html_body: value}}}}}
-                  );
+                oncreate({dom}) {
+                  let editor = ace.edit(dom);
+                  editor.session.setOptions({
+                    useWorker: false,
+                    useSoftTabs: true,
+                    tabSize: 2
+                  });
+                  editor.setTheme("ace/theme/twilight");
+                  // editor.session.setMode("ace/mode/html");
+                  // editor.setValue( _.get(Organization.current(), 'settings.email_template.registration.web.html_body', ''));
+                  // editor.getSession().on('change', (e) => {
+                  //   _.merge(
+                  //     Organization.current(),
+                  //     {settings: {email_template: {registration: {web: {html_body: editor.getValue()}}}}}
+                  //   );
+                  // });
                 }
               })
+              // m(aceEditor, {
+              //   className: "html-editor",
+              //   mode: "ace/mode/html",
+              //   model: Organization.current(),
+              //   value: 'settings.email_template.registration.web.html_body',
+              //   inputHandler: (value) => {
+              //     _.merge(
+              //       Organization.current(),
+              //       {settings: {email_template: {registration: {web: {html_body: value}}}}}
+              //     );
+              //   }
+              // })
             ])
           ])
         ]),
@@ -114,18 +144,18 @@ const registrationTabView = {
           m("form.ui form", [
             m(".field", [
               m("label", "Body (formato testo)"),
-              m(aceEditor, {
-                className: "text-editor",
-                mode: "ace/mode/text",
-                model: Organization.current(),
-                value: 'settings.email_template.registration.web.text_body',
-                inputHandler: (value) => {
-                  _.merge(
-                    Organization.current(),
-                    {settings: {email_template: {registration: {web: {text_body: value}}}}}
-                  );
-                }
-              })
+              // m(aceEditor, {
+              //   className: "text-editor",
+              //   mode: "ace/mode/text",
+              //   model: Organization.current(),
+              //   value: 'settings.email_template.registration.web.text_body',
+              //   inputHandler: (value) => {
+              //     _.merge(
+              //       Organization.current(),
+              //       {settings: {email_template: {registration: {web: {text_body: value}}}}}
+              //     );
+              //   }
+              // })
             ])
           ])
         ]),
@@ -133,28 +163,30 @@ const registrationTabView = {
           className: (state.loadingPreview() ? 'loading': ''),
           "data-tab": "web-registration-preview"
         }, [
-          m(".ui icon message", [
-            m(".content", [
-              m(".header", [
-                "Html",
-                m("i.html5 icon"),
-              ]),
+          m(".ui styled fluid accordion", {
+            oncreate({dom}) {
+              $(dom).accordion();
+            }
+          }, [
+            m(".active title", [
+              m("i.dropdown icon"),
+              "Html"
+            ]),
+            m(".active content", [
               m("p", {
                 onupdate({dom}) {
-                  dom.innerHTML = state.emailPreview().html_body
+                  dom.innerHTML = state.webPreview().html_body
                 }
               })
-            ])
-          ]),
-          m(".ui icon message", [
+            ]),
+            m(".title", [
+              m("i.dropdown icon"),
+              "Testo"
+            ]),
             m(".content", [
-              m(".header", [
-                "Testo",
-                m("i.align left icon"),
-              ]),
               m("p", {
                 onupdate({dom}) {
-                  dom.innerHTML = state.emailPreview().text_body
+                  dom.innerHTML = state.webPreview().text_body
                 }
               })
             ])
@@ -173,7 +205,7 @@ const registrationTabView = {
             "data-tab": "mobile-registration-preview",
             onclick(event) {
               // if(!event.target.classList.contains('active')) {
-                state.showPreview({
+                state.showMobilePreview({
                   subject: Organization.current().settings.email_template.registration.subject,
                   htmlBody: Organization.current().settings.email_template.registration.mobile.html_body,
                   textBody: Organization.current().settings.email_template.registration.mobile.text_body,
@@ -186,18 +218,18 @@ const registrationTabView = {
           m("form.ui form", [
             m(".field", [
               m("label", "Body (formato html)"),
-              m(aceEditor, {
-                className: "html-editor",
-                mode: "ace/mode/html_elixir",
-                model: Organization.current(),
-                value: 'settings.email_template.registration.mobile.html_body',
-                inputHandler: (value) => {
-                  _.merge(
-                    Organization.current(),
-                    {settings: {email_template: {registration: {mobile: {html_body: value}}}}}
-                  );
-                }
-              })
+              // m(aceEditor, {
+              //   className: "html-editor",
+              //   mode: "ace/mode/html_elixir",
+              //   model: Organization.current(),
+              //   value: 'settings.email_template.registration.mobile.html_body',
+              //   inputHandler: (value) => {
+              //     _.merge(
+              //       Organization.current(),
+              //       {settings: {email_template: {registration: {mobile: {html_body: value}}}}}
+              //     );
+              //   }
+              // })
             ])
           ])
         ]),
@@ -205,18 +237,18 @@ const registrationTabView = {
           m("form.ui form", [
             m(".field", [
               m("label", "Body (formato testo)"),
-              m(aceEditor, {
-                className: "text-editor",
-                mode: "ace/mode/text",
-                model: Organization.current(),
-                value: 'settings.email_template.registration.mobile.text_body',
-                inputHandler: (value) => {
-                  _.merge(
-                    Organization.current(),
-                    {settings: {email_template: {registration: {mobile: {text_body: value}}}}}
-                  );
-                }
-              })
+              // m(aceEditor, {
+              //   className: "text-editor",
+              //   mode: "ace/mode/text",
+              //   model: Organization.current(),
+              //   value: 'settings.email_template.registration.mobile.text_body',
+              //   inputHandler: (value) => {
+              //     _.merge(
+              //       Organization.current(),
+              //       {settings: {email_template: {registration: {mobile: {text_body: value}}}}}
+              //     );
+              //   }
+              // })
             ])
           ])
         ]),
@@ -224,29 +256,30 @@ const registrationTabView = {
           className: (state.loadingPreview() ? 'loading': ''),
           "data-tab": "mobile-registration-preview"
         }, [
-          m(".ui icon message", [
-            m(".content", [
-              m(".header", [
-                "Html",
-                m("i.html5 icon"),
-              ]),
+          m(".ui styled fluid accordion", {
+            oncreate({dom}) {
+              $(dom).accordion();
+            }
+          }, [
+            m(".active title", [
+              m("i.dropdown icon"),
+              "Html"
+            ]),
+            m(".active content", [
               m("p", {
                 onupdate({dom}) {
-                  dom.innerHTML = state.emailPreview().html_body
+                  dom.innerHTML = state.mobilePreview().html_body
                 }
               })
-            ])
-          ]),
-          m(".ui icon message", [
+            ]),
+            m(".title", [
+              m("i.dropdown icon"),
+              "Testo"
+            ]),
             m(".content", [
-              m(".header", [
-                "Testo",
-                m("i.align left icon"),
-              ]),
-
               m("p", {
                 onupdate({dom}) {
-                  dom.innerHTML = state.emailPreview().text_body
+                  dom.innerHTML = state.mobilePreview().text_body
                 }
               })
             ])

@@ -12,7 +12,7 @@ defmodule Backoffice.EmailPreviewController do
         subject: subject,
         html_body: html_body,
         text_body: text_body,
-        link: "http://mysite.com/registration?code=#{Crypto.random_string(32)}"
+        link: "http://mysite.com/registration?code=v_TginHD2cel004jv-VR82u5PWH9o7-i"
       ) |> SentEmail.push
 
     conn
@@ -20,20 +20,9 @@ defmodule Backoffice.EmailPreviewController do
     |> render(Backoffice.EmailPreView, "create.json", %{email: pushed_email})
   end
 
-  # def show(conn, %{"id" => email_id}) do
-  #   case SentEmail.get(email_id) do
-  #     nil ->
-  #       conn
-  #       |> send_resp(404, "<h1>Email not found</h1>")
-  #     email ->
-  #       conn
-  #       |> send_resp(:ok, email.html_body)
-  #   end
-  # end
-
   defp account_preview() do
     %Sso.Account{
-      app_name: "AccountPreview",
+      app_name: "Company LTD",
       ref_email: "account.preview@dardy.com",
       access_key: "skkIInbIIhikIOJ",
       secret_key: "jsdjBuGHUGBGuHUBubNJbuBJBjHjNBBJbnjBNJ",
@@ -61,7 +50,11 @@ defmodule Backoffice.EmailPreviewController do
         sso_privacy_consent: true,
         privacy_consent: false,
         province_enployment: "Roma"
-      }
+      },
+      activation_code: "G89PAzhqjShK5_hBEZkbn_QrI5bpEK1E",
+      reset_code: "Bqw75sWHV_Ufmnu7n3aLawBfU7gbp4XC",
+      active: false,
+      status: :unverified
     }
   end
 end
