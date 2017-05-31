@@ -3,9 +3,7 @@ import _ from 'lodash';
 import stream from 'mithril/stream';
 import aceEditor from '../../../components/ace_editor';
 import Organization from '../../../models/organization';
-import Backoffice from '../../../backoffice';
 import Template from '../../../models/template';
-import loadingButton from '../../../components/loading_button';
 
 const registrationTabView = {
   oninit(vnode) {
@@ -93,9 +91,9 @@ const registrationTabView = {
             onclick(event) {
               // if(!event.target.classList.contains('active')) {
                 state.showWebPreview({
-                  subject: Organization.current().settings.email_template.registration.subject,
-                  htmlBody: Organization.current().settings.email_template.registration.web.html_body,
-                  textBody: Organization.current().settings.email_template.registration.web.text_body,
+                  subject: _.get(Organization.current(), "settings.email_template.registration.subject", undefined),
+                  htmlBody: _.get(Organization.current(), "settings.email_template.registration.web.html_body", undefined),
+                  textBody: _.get(Organization.current(), "settings.email_template.registration.web.text_body", undefined)
                 });
               // }
             }
@@ -105,38 +103,18 @@ const registrationTabView = {
           m("form.ui form", [
             m(".field", [
               m("label", "Body (formato html)"),
-              m("p", {
+              m(aceEditor, {
                 className: "html-editor",
-                oncreate({dom}) {
-                  let editor = ace.edit(dom);
-                  editor.session.setOptions({
-                    useWorker: false,
-                    useSoftTabs: true,
-                    tabSize: 2
-                  });
-                  editor.setTheme("ace/theme/twilight");
-                  // editor.session.setMode("ace/mode/html");
-                  // editor.setValue( _.get(Organization.current(), 'settings.email_template.registration.web.html_body', ''));
-                  // editor.getSession().on('change', (e) => {
-                  //   _.merge(
-                  //     Organization.current(),
-                  //     {settings: {email_template: {registration: {web: {html_body: editor.getValue()}}}}}
-                  //   );
-                  // });
+                mode: "ace/mode/html_elixir",
+                model: Organization.current(),
+                value: 'settings.email_template.registration.web.html_body',
+                inputHandler: (value) => {
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {registration: {web: {html_body: value}}}}}
+                  );
                 }
               })
-              // m(aceEditor, {
-              //   className: "html-editor",
-              //   mode: "ace/mode/html",
-              //   model: Organization.current(),
-              //   value: 'settings.email_template.registration.web.html_body',
-              //   inputHandler: (value) => {
-              //     _.merge(
-              //       Organization.current(),
-              //       {settings: {email_template: {registration: {web: {html_body: value}}}}}
-              //     );
-              //   }
-              // })
             ])
           ])
         ]),
@@ -144,18 +122,18 @@ const registrationTabView = {
           m("form.ui form", [
             m(".field", [
               m("label", "Body (formato testo)"),
-              // m(aceEditor, {
-              //   className: "text-editor",
-              //   mode: "ace/mode/text",
-              //   model: Organization.current(),
-              //   value: 'settings.email_template.registration.web.text_body',
-              //   inputHandler: (value) => {
-              //     _.merge(
-              //       Organization.current(),
-              //       {settings: {email_template: {registration: {web: {text_body: value}}}}}
-              //     );
-              //   }
-              // })
+              m(aceEditor, {
+                className: "text-editor",
+                mode: "ace/mode/text",
+                model: Organization.current(),
+                value: 'settings.email_template.registration.web.text_body',
+                inputHandler: (value) => {
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {registration: {web: {text_body: value}}}}}
+                  );
+                }
+              })
             ])
           ])
         ]),
@@ -173,22 +151,22 @@ const registrationTabView = {
               "Html"
             ]),
             m(".active content", [
-              m("p", {
-                onupdate({dom}) {
-                  dom.innerHTML = state.webPreview().html_body
-                }
-              })
+              m(".ui message", [
+                m("p", {
+                  onupdate({dom}) {
+                    dom.innerHTML = state.webPreview().html_body
+                  }
+                })
+              ])
             ]),
             m(".title", [
               m("i.dropdown icon"),
               "Testo"
             ]),
             m(".content", [
-              m("p", {
-                onupdate({dom}) {
-                  dom.innerHTML = state.webPreview().text_body
-                }
-              })
+              m(".ui message", [
+                m("pre.preview", state.webPreview().text_body)
+              ])
             ])
           ])
         ])
@@ -206,9 +184,9 @@ const registrationTabView = {
             onclick(event) {
               // if(!event.target.classList.contains('active')) {
                 state.showMobilePreview({
-                  subject: Organization.current().settings.email_template.registration.subject,
-                  htmlBody: Organization.current().settings.email_template.registration.mobile.html_body,
-                  textBody: Organization.current().settings.email_template.registration.mobile.text_body,
+                  subject: _.get(Organization.current(), "settings.email_template.registration.subject", undefined),
+                  htmlBody: _.get(Organization.current(), "settings.email_template.registration.mobile.html_body", undefined),
+                  textBody: _.get(Organization.current(), "settings.email_template.registration.mobile.text_body", undefined)
                 });
               // }
             }
@@ -218,18 +196,18 @@ const registrationTabView = {
           m("form.ui form", [
             m(".field", [
               m("label", "Body (formato html)"),
-              // m(aceEditor, {
-              //   className: "html-editor",
-              //   mode: "ace/mode/html_elixir",
-              //   model: Organization.current(),
-              //   value: 'settings.email_template.registration.mobile.html_body',
-              //   inputHandler: (value) => {
-              //     _.merge(
-              //       Organization.current(),
-              //       {settings: {email_template: {registration: {mobile: {html_body: value}}}}}
-              //     );
-              //   }
-              // })
+              m(aceEditor, {
+                className: "html-editor",
+                mode: "ace/mode/html_elixir",
+                model: Organization.current(),
+                value: 'settings.email_template.registration.mobile.html_body',
+                inputHandler: (value) => {
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {registration: {mobile: {html_body: value}}}}}
+                  );
+                }
+              })
             ])
           ])
         ]),
@@ -237,18 +215,18 @@ const registrationTabView = {
           m("form.ui form", [
             m(".field", [
               m("label", "Body (formato testo)"),
-              // m(aceEditor, {
-              //   className: "text-editor",
-              //   mode: "ace/mode/text",
-              //   model: Organization.current(),
-              //   value: 'settings.email_template.registration.mobile.text_body',
-              //   inputHandler: (value) => {
-              //     _.merge(
-              //       Organization.current(),
-              //       {settings: {email_template: {registration: {mobile: {text_body: value}}}}}
-              //     );
-              //   }
-              // })
+              m(aceEditor, {
+                className: "text-editor",
+                mode: "ace/mode/text",
+                model: Organization.current(),
+                value: 'settings.email_template.registration.mobile.text_body',
+                inputHandler: (value) => {
+                  _.merge(
+                    Organization.current(),
+                    {settings: {email_template: {registration: {mobile: {text_body: value}}}}}
+                  );
+                }
+              })
             ])
           ])
         ]),
@@ -266,22 +244,22 @@ const registrationTabView = {
               "Html"
             ]),
             m(".active content", [
-              m("p", {
-                onupdate({dom}) {
-                  dom.innerHTML = state.mobilePreview().html_body
-                }
-              })
+              m(".ui message", [
+                m("p", {
+                  onupdate({dom}) {
+                    dom.innerHTML = state.mobilePreview().html_body
+                  }
+                })
+              ])
             ]),
             m(".title", [
               m("i.dropdown icon"),
               "Testo"
             ]),
             m(".content", [
-              m("p", {
-                onupdate({dom}) {
-                  dom.innerHTML = state.mobilePreview().text_body
-                }
-              })
+              m(".ui message", [
+                m("pre.preview", state.mobilePreview().text_body)
+              ])
             ])
           ])
         ])

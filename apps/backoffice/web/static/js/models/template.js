@@ -9,8 +9,8 @@ const Template = {
       method: "POST",
       data: {
         subject: template.subject || "Oggetto mancante" ,
-        html_body: template.htmlBody || "Body formato html mancante",
-        text_body: template.textBody || "Body formato testo mancante"
+        html_body: template.htmlBody || "Anteprima formato html non disponibile",
+        text_body: template.textBody || "Anteprima formato testo non disponibile"
       },
       url: Backoffice.apiBaseUrl() + this.url,
       config: function(xhr) {

@@ -6,13 +6,13 @@ const aceEditor = {
     ace.edit(dom).setValue( _.get(attrs.model, attrs.value, ''));
   },
   view({attrs}) {
-    return m("", {
+    return m("pre", {
       className: attrs.className,
       oncreate({dom}) {
         dom.style.fontSize = attrs.fontSize || "16px";
         let editor = ace.edit(dom);
         // ace.require('ace/ext/statusbar').init(editor);
-        editor.setTheme(attrs.theme || "ace/theme/twilight");
+        editor.setTheme(attrs.theme || "ace/theme/monokai");
         editor.session.setOptions({
           useWorker: false,
           tabSize: 2,
@@ -26,6 +26,7 @@ const aceEditor = {
           if(attrs.inputHandler)
             attrs.inputHandler(editor.getValue());
         });
+        editor.clearSelection();
       }
     })
   }

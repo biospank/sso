@@ -1,23 +1,19 @@
 defmodule Backoffice.EmailPreviewController do
   use Backoffice.Web, :controller
 
-  alias Bamboo.SentEmail
-  alias Sso.Crypto
-
   def create(conn, %{"subject" => subject, "html_body" => html_body, "text_body" => text_body}) do
-    pushed_email =
-      Sso.Email.preview(
+    compiled_email = Sso.Email.preview(
         account: account_preview(),
         user: user_preview(),
         subject: subject,
         html_body: html_body,
         text_body: text_body,
         link: "http://mysite.com/registration?code=v_TginHD2cel004jv-VR82u5PWH9o7-i"
-      ) |> SentEmail.push
+      )
 
     conn
     |> put_status(:created)
-    |> render(Backoffice.EmailPreView, "create.json", %{email: pushed_email})
+    |> render(Backoffice.EmailPreView, "create.json", %{email: compiled_email})
   end
 
   defp account_preview() do

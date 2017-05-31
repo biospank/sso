@@ -12,6 +12,7 @@
   </head>
 
   <body id="app">
+    <script src="https://ajaxorg.github.io/ace-builds/src-min-noconflict/ace.js"></script>
     <script src="<%= Backoffice.PageView.backoffice_static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

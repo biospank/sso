@@ -1,10 +1,26 @@
 import m from 'mithril';
 import _ from 'lodash';
+import stream from 'mithril/stream';
 import aceEditor from '../../../components/ace_editor';
 import Organization from '../../../models/organization';
+import Template from '../../../models/template';
 
 const verificationTabView = {
-  view(vnode) {
+  oninit(vnode) {
+    this.loadingPreview = stream(false);
+    this.webPreview = stream("");
+
+    this.showPreview = (contents) => {
+      // this.loadingPreview(true);
+      return Template.createPreview(contents).then((response) => {
+        this.webPreview(response);
+        // this.loadingPreview(false);
+      }, (response) => {
+        // this.loadingPreview(false);
+      });
+    };
+  },
+  view({state}) {
     return m(".ui tab segment", {"data-tab": "verification"}, [
       m('.ui menu', [
         m(".right menu", [
@@ -55,8 +71,20 @@ const verificationTabView = {
           $('div[data-tab="verification"] .format.menu .item').tab();
         }
       }, [
-        m("a.item active", {"data-tab": "html-verification"}, "HTML"),
-        m("a.item", {"data-tab": "text-verification"}, "TESTO")
+        m("a.item active", {"data-tab": "html-verification"}, "Html"),
+        m("a.item", {"data-tab": "text-verification"}, "Testo"),
+        m("a.item", {
+          "data-tab": "verification-preview",
+          onclick(event) {
+            // if(!event.target.classList.contains('active')) {
+              state.showPreview({
+                subject: _.get(Organization.current(), "settings.email_template.verification.subject", undefined),
+                htmlBody: _.get(Organization.current(), "settings.email_template.verification.html_body", undefined),
+                textBody: _.get(Organization.current(), "settings.email_template.verification.text_body", undefined)
+              });
+            // }
+          }
+        }, "Anteprima")
       ]),
       m(".ui tab segment active", {"data-tab": "html-verification"}, [
         m("form.ui form", [
@@ -93,6 +121,39 @@ const verificationTabView = {
                 );
               }
             })
+          ])
+        ])
+      ]),
+      m(".ui tab segment", {
+        className: (state.loadingPreview() ? 'loading': ''),
+        "data-tab": "verification-preview"
+      }, [
+        m(".ui styled fluid accordion", {
+          oncreate({dom}) {
+            $(dom).accordion();
+          }
+        }, [
+          m(".active title", [
+            m("i.dropdown icon"),
+            "Html"
+          ]),
+          m(".active content", [
+            m(".ui message", [
+              m("p", {
+                onupdate({dom}) {
+                  dom.innerHTML = state.webPreview().html_body
+                }
+              })
+            ])
+          ]),
+          m(".title", [
+            m("i.dropdown icon"),
+            "Testo"
+          ]),
+          m(".content", [
+            m(".ui message", [
+              m("pre.preview", state.webPreview().text_body)
+            ])
           ])
         ])
       ])
