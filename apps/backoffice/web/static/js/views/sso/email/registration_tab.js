@@ -135,7 +135,6 @@ const registrationTabView = {
           ])
         ]),
         m(".ui tab segment", {
-          className: (state.loadingPreview() ? 'loading': ''),
           "data-tab": "web-registration-preview"
         }, [
           m(".ui styled fluid accordion", {
@@ -222,7 +221,6 @@ const registrationTabView = {
           ])
         ]),
         m(".ui tab segment", {
-          className: (state.loadingPreview() ? 'loading': ''),
           "data-tab": "mobile-registration-preview"
         }, [
           m(".ui styled fluid accordion", {

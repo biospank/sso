@@ -121,7 +121,6 @@ const verificationTabView = {
         ])
       ]),
       m(".ui tab segment", {
-        className: (state.loadingPreview() ? 'loading': ''),
         "data-tab": "verification-preview"
       }, [
         m(".ui styled fluid accordion", {

@@ -135,7 +135,6 @@ const passwordResetTabView = {
           ])
         ]),
         m(".ui tab segment", {
-          className: (state.loadingPreview() ? 'loading': ''),
           "data-tab": "web-password-reset-preview"
         }, [
           m(".ui styled fluid accordion", {
@@ -222,7 +221,6 @@ const passwordResetTabView = {
           ])
         ]),
         m(".ui tab segment", {
-          className: (state.loadingPreview() ? 'loading': ''),
           "data-tab": "mobile-password-reset-preview"
         }, [
           m(".ui styled fluid accordion", {
