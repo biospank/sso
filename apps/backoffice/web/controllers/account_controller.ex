@@ -9,9 +9,9 @@ defmodule Backoffice.AccountController do
 
     accounts = case Map.get(params, "org_id") do
       nil ->
-        Sso.Repo.all(Sso.Account)
+        Sso.Repo.all(from a in Sso.Account, order_by: a.app_name)
       org ->
-        Sso.Repo.all(from Sso.Account, where: [organization_id: ^org])
+        Sso.Repo.all(from a in Sso.Account, where: [organization_id: ^org], order_by: a.app_name)
     end
 
     render(conn, Sso.AccountView, "index.json", accounts: accounts)

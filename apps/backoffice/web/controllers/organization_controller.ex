@@ -5,7 +5,7 @@ defmodule Backoffice.OrganizationController do
   plug :set_sso_locale
 
   def index(conn, _) do
-    organizations = Sso.Repo.all(Sso.Organization)
+    organizations = Sso.Repo.all(from o in Sso.Organization, order_by: o.name)
 
     render(conn, Sso.OrganizationView, "index.json", organizations: organizations)
   end
