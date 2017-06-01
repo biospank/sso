@@ -38,6 +38,7 @@ const organizationChoiceView = {
               className: (organization.id === Organization.choice.id() ? "active selected" : ""),
               onclick: (event) => {
                 state.showLoader(true);
+                Organization.current({});
                 _.delay(() => {
                   Organization.choice.label(event.target.innerHTML);
                   Organization.current(

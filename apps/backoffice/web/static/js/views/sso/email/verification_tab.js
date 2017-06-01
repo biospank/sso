@@ -7,18 +7,20 @@ import Template from '../../../models/template';
 
 const verificationTabView = {
   oninit(vnode) {
-    this.loadingPreview = stream(false);
     this.webPreview = stream("");
 
-    this.showPreview = (contents) => {
-      // this.loadingPreview(true);
-      return Template.createPreview(contents).then((response) => {
+    this.showPreview = () => {
+      return Template.createPreview({
+        subject: _.get(Organization.current(), "settings.email_template.verification.subject", undefined),
+        htmlBody: _.get(Organization.current(), "settings.email_template.verification.html_body", undefined),
+        textBody: _.get(Organization.current(), "settings.email_template.verification.text_body", undefined)
+      }).then((response) => {
         this.webPreview(response);
-        // this.loadingPreview(false);
       }, (response) => {
-        // this.loadingPreview(false);
       });
     };
+
+    this.showPreview();
   },
   view({state}) {
     return m(".ui tab segment", {"data-tab": "verification"}, [
@@ -76,13 +78,7 @@ const verificationTabView = {
         m("a.item", {
           "data-tab": "verification-preview",
           onclick(event) {
-            // if(!event.target.classList.contains('active')) {
-              state.showPreview({
-                subject: _.get(Organization.current(), "settings.email_template.verification.subject", undefined),
-                htmlBody: _.get(Organization.current(), "settings.email_template.verification.html_body", undefined),
-                textBody: _.get(Organization.current(), "settings.email_template.verification.text_body", undefined)
-              });
-            // }
+            state.showPreview();
           }
         }, "Anteprima")
       ]),

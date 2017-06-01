@@ -7,30 +7,33 @@ import Template from '../../../models/template';
 
 const registrationTabView = {
   oninit(vnode) {
-    this.loadingPreview = stream(false);
-    // this.previewUrl = stream("");
     this.webPreview = stream("");
     this.mobilePreview = stream("");
 
-    this.showWebPreview = (contents) => {
-      // this.loadingPreview(true);
-      return Template.createPreview(contents).then((response) => {
+    this.showWebPreview = () => {
+      return Template.createPreview({
+        subject: _.get(Organization.current(), "settings.email_template.registration.subject", undefined),
+        htmlBody: _.get(Organization.current(), "settings.email_template.registration.web.html_body", undefined),
+        textBody: _.get(Organization.current(), "settings.email_template.registration.web.text_body", undefined)
+      }).then((response) => {
         this.webPreview(response);
-        // this.loadingPreview(false);
       }, (response) => {
-        // this.loadingPreview(false);
       });
     };
 
-    this.showMobilePreview = (contents) => {
-      // this.loadingPreview(true);
-      return Template.createPreview(contents).then((response) => {
+    this.showMobilePreview = () => {
+      return Template.createPreview({
+        subject: _.get(Organization.current(), "settings.email_template.registration.subject", undefined),
+        htmlBody: _.get(Organization.current(), "settings.email_template.registration.mobile.html_body", undefined),
+        textBody: _.get(Organization.current(), "settings.email_template.registration.mobile.text_body", undefined)
+      }).then((response) => {
         this.mobilePreview(response);
-        // this.loadingPreview(false);
       }, (response) => {
-        // this.loadingPreview(false);
       });
     };
+
+    this.showWebPreview();
+    this.showMobilePreview();
   },
   view({state}) {
     return m(".ui tab segment active", {"data-tab": "registration"}, [
@@ -89,13 +92,7 @@ const registrationTabView = {
           m("a.item", {
             "data-tab": "web-registration-preview",
             onclick(event) {
-              // if(!event.target.classList.contains('active')) {
-                state.showWebPreview({
-                  subject: _.get(Organization.current(), "settings.email_template.registration.subject", undefined),
-                  htmlBody: _.get(Organization.current(), "settings.email_template.registration.web.html_body", undefined),
-                  textBody: _.get(Organization.current(), "settings.email_template.registration.web.text_body", undefined)
-                });
-              // }
+              state.showWebPreview();
             }
           }, "Anteprima")
         ]),
@@ -182,13 +179,7 @@ const registrationTabView = {
           m("a.item", {
             "data-tab": "mobile-registration-preview",
             onclick(event) {
-              // if(!event.target.classList.contains('active')) {
-                state.showMobilePreview({
-                  subject: _.get(Organization.current(), "settings.email_template.registration.subject", undefined),
-                  htmlBody: _.get(Organization.current(), "settings.email_template.registration.mobile.html_body", undefined),
-                  textBody: _.get(Organization.current(), "settings.email_template.registration.mobile.text_body", undefined)
-                });
-              // }
+              state.showMobilePreview();
             }
           }, "Anteprima")
         ]),

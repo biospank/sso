@@ -2,9 +2,9 @@ import m from 'mithril';
 import _ from 'lodash';
 
 const aceEditor = {
-  onupdate({attrs, dom}) {
-    ace.edit(dom).setValue( _.get(attrs.model, attrs.value, ''));
-  },
+  // onupdate({attrs, dom}) {
+  //   ace.edit(dom).setValue( _.get(attrs.model, attrs.value, ''), -1);
+  // },
   view({attrs}) {
     return m("pre", {
       className: attrs.className,
@@ -21,12 +21,12 @@ const aceEditor = {
         editor.setOption("autoScrollEditorIntoView", true);
         editor.$blockScrolling = Infinity;
         editor.session.setMode(attrs.mode);
-        editor.setValue( _.get(attrs.model, attrs.value, ''));
+        editor.setValue( _.get(attrs.model, attrs.value, ''), -1);
+        // editor.clearSelection();
         editor.getSession().on('change', (e) => {
           if(attrs.inputHandler)
             attrs.inputHandler(editor.getValue());
         });
-        editor.clearSelection();
       }
     })
   }

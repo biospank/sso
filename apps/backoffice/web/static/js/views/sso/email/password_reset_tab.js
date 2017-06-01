@@ -7,30 +7,33 @@ import Template from '../../../models/template';
 
 const passwordResetTabView = {
   oninit(vnode) {
-    this.loadingPreview = stream(false);
-    // this.previewUrl = stream("");
     this.webPreview = stream("");
     this.mobilePreview = stream("");
 
-    this.showWebPreview = (contents) => {
-      // this.loadingPreview(true);
-      return Template.createPreview(contents).then((response) => {
+    this.showWebPreview = () => {
+      return Template.createPreview({
+        subject: _.get(Organization.current(), "settings.email_template.password_reset.subject", undefined),
+        htmlBody: _.get(Organization.current(), "settings.email_template.password_reset.web.html_body", undefined),
+        textBody: _.get(Organization.current(), "settings.email_template.password_reset.web.text_body", undefined)
+      }).then((response) => {
         this.webPreview(response);
-        // this.loadingPreview(false);
       }, (response) => {
-        // this.loadingPreview(false);
       });
     };
 
-    this.showMobilePreview = (contents) => {
-      // this.loadingPreview(true);
-      return Template.createPreview(contents).then((response) => {
+    this.showMobilePreview = () => {
+      return Template.createPreview({
+        subject: _.get(Organization.current(), "settings.email_template.password_reset.subject", undefined),
+        htmlBody: _.get(Organization.current(), "settings.email_template.password_reset.mobile.html_body", undefined),
+        textBody: _.get(Organization.current(), "settings.email_template.password_reset.mobile.text_body", undefined)
+      }).then((response) => {
         this.mobilePreview(response);
-        // this.loadingPreview(false);
       }, (response) => {
-        // this.loadingPreview(false);
       });
     };
+
+    this.showWebPreview();
+    this.showMobilePreview();
   },
   view({state}) {
     return m(".ui tab segment", {"data-tab": "password-reset"}, [
@@ -89,13 +92,7 @@ const passwordResetTabView = {
           m("a.item", {
             "data-tab": "web-password-reset-preview",
             onclick(event) {
-              // if(!event.target.classList.contains('active')) {
-                state.showWebPreview({
-                  subject: _.get(Organization.current(), "settings.email_template.password_reset.subject", undefined),
-                  htmlBody: _.get(Organization.current(), "settings.email_template.password_reset.web.html_body", undefined),
-                  textBody: _.get(Organization.current(), "settings.email_template.password_reset.web.text_body", undefined)
-                });
-              // }
+              state.showWebPreview();
             }
           }, "Anteprima")
         ]),
@@ -182,13 +179,7 @@ const passwordResetTabView = {
           m("a.item", {
             "data-tab": "mobile-password-reset-preview",
             onclick(event) {
-              // if(!event.target.classList.contains('active')) {
-                state.showMobilePreview({
-                  subject: _.get(Organization.current(), "settings.email_template.password_reset.subject", undefined),
-                  htmlBody: _.get(Organization.current(), "settings.email_template.password_reset.mobile.html_body", undefined),
-                  textBody: _.get(Organization.current(), "settings.email_template.password_reset.mobile.text_body", undefined)
-                });
-              // }
+              state.showMobilePreview();
             }
           }, "Anteprima")
         ]),
