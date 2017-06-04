@@ -29,7 +29,12 @@ defmodule Sso.User.RegistrationController do
           account
           |> Repo.preload(:organization)
 
-        Email.courtesy_email(user, account) |> Sso.Mailer.deliver_later
+        case get_in(account.organization.settings, ["email_template", "verification", "active"]) do
+          value when value in [true, nil] ->
+            Email.courtesy_email(user, account) |> Sso.Mailer.deliver_later
+          _ ->
+            false
+        end
 
         conn
         |> put_status(:created)

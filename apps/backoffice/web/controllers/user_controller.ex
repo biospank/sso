@@ -76,7 +76,12 @@ defmodule Backoffice.UserController do
       |> Ecto.Query.preload(:organization)
       |> Sso.Repo.get!(updated_user.account_id)
 
-    Sso.Email.courtesy_email(updated_user, account) |> Sso.Mailer.deliver_later
+      case get_in(account.organization.settings, ["email_template", "verification", "active"]) do
+        value when value in [true, nil] ->
+          Sso.Email.courtesy_email(updated_user, account) |> Sso.Mailer.deliver_later
+        _ ->
+          false
+      end
 
     render(conn, Sso.UserView, "show_with_org_and_account.json", user: updated_user)
   end
