@@ -45,6 +45,17 @@ defmodule Sso.Account do
     |> put_secret_hash()
   end
 
+  def preview() do
+    %Sso.Account{
+      app_name: "Company LTD",
+      ref_email: "account.preview@dardy.com",
+      access_key: "skkIInbIIhikIOJ",
+      secret_key: "jsdjBuGHUGBGuHUBubNJbuBJBjHjNBBJbnjBNJ",
+      secret_hash: Comeonin.Bcrypt.hashpwsalt("jsdjBuGHUGBGuHUBubNJbuBJBjHjNBBJbnjBNJ"),
+      active: true
+    }
+  end
+
   defp put_secret_hash(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{secret_key: secret_key}} ->

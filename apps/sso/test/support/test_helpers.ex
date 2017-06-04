@@ -4,7 +4,33 @@ defmodule Sso.TestHelpers do
   def insert_organization(attrs \\ %{}) do
     changes = Dict.merge(%{
       name: "name",
-      ref_email: "test@example.com"
+      ref_email: "test@example.com",
+      settings: %{
+        email_template: %{
+          registration: %{
+            subject: "app name - Richiesta registrazione",
+            web: %{
+              html_body: "Gentile first name last name http://anysite.com/opt-in?code=<%= user.activation_code %>"
+            },
+            mobile: %{
+              html_body: "Gentile first name last name <%= user.activation_code %>"
+            }
+          },
+          verification: %{
+            subject: "app name - Conferma registrazione",
+            html_body: "Gentile first name last name"
+          },
+          password_reset: %{
+            subject: "app name - Recupera password",
+            web: %{
+              html_body: "Gentile first name last name http://anysite.com/resetpwd?code=<%= user.reset_code %>"
+            },
+            mobile: %{
+              html_body: "Gentile first name last name <%= user.reset_code %>"
+            }
+          }
+        }
+      }
     }, attrs)
 
     %Organization{}

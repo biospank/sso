@@ -48,27 +48,8 @@ defmodule Backoffice.EmailPreviewControllerTest do
         }
       )
 
-      assert json_response(post_conn, 201)["preview_id"]
-      assert json_response(post_conn, 201)["preview_text_body"] =~ "Gentile"
-    end
-
-    test "show a preview", %{conn: conn} do
-      post_conn = post(conn, email_preview_path(conn, :create), %{
-          subject: "preview subject",
-          html_body: """
-            Gentile <%= user.profile.first_name %> <%= user.profile.last_name %>
-          """,
-          text_body: """
-            Gentile <%= user.profile.first_name %> <%= user.profile.last_name %>
-          """
-        }
-      )
-
-      conn = put_req_header(conn, "accept", "text/html")
-
-      get_conn = get(conn, email_preview_path(conn, :show, json_response(post_conn, 201)["preview_id"]))
-
-      assert json_response(get_conn, 200)["email"] == %Bamboo.Email{}
+      assert json_response(post_conn, 201)["html_body"] =~ "Mario Rossi"
+      assert json_response(post_conn, 201)["text_body"] =~ "Mario Rossi"
     end
   end
 end

@@ -184,4 +184,33 @@ defmodule Sso.User do
   def limit(query, size) do
     from v in query, limit: ^size
   end
+
+  def preview() do
+    %Sso.User{
+      email: "mario.rossi@example.com",
+      profile: %Sso.Profile{
+        first_name: "Mario",
+        last_name: "Rossi",
+        fiscal_code: "mrarss21s50h501z",
+        date_of_birth: "1981-02-12",
+        place_of_birth: "Roma",
+        phone_number: "062277266",
+        profession: "Pediatra",
+        specialization: "Pediatria",
+        board_member: "Medici",
+        board_number: "3773662882",
+        province_board: "Roma",
+        employment: "Medico generico",
+        sso_privacy_consent: true,
+        privacy_consent: false,
+        news_consent: false,
+        data_transfer_consent: false,
+        province_enployment: "Roma"
+      },
+      activation_code: "G89PAzhqjShK5_hBEZkbn_QrI5bpEK1E",
+      reset_code: "Bqw75sWHV_Ufmnu7n3aLawBfU7gbp4XC",
+      active: false,
+      status: :unverified
+    }
+  end
 end
