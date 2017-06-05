@@ -1,5 +1,6 @@
 defmodule Sso.User.ActivationController do
   use Sso.Web, :controller
+  require Logger
 
   alias Sso.{User, Email, Mailer}
 
@@ -50,7 +51,12 @@ defmodule Sso.User.ActivationController do
           account
           |> Repo.preload(:organization)
 
-        Email.welcome_email(user, account, link) |> Mailer.deliver_later
+        case Email.welcome_email(user, account, link) do
+          {:error, message} ->
+            Logger.error message
+          {:ok, email} ->
+            Mailer.deliver_later(email)
+        end
 
         render(conn, Sso.UserView, "show.json", user: user)
     end

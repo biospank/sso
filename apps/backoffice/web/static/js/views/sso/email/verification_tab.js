@@ -17,6 +17,12 @@ const verificationTabView = {
       }).then((response) => {
         this.webPreview(response);
       }, (response) => {
+        this.webPreview({
+          error: true,
+          subject: this.webPreview().subject,
+          html_body: ((response.errors.context === "html_body") ? response.errors.message : this.webPreview().html_body),
+          text_body: ((response.errors.context === "text_body") ? response.errors.message : this.webPreview().text_body)
+        });
       });
     };
 
@@ -133,7 +139,9 @@ const verificationTabView = {
             "Html"
           ]),
           m(".active content", [
-            m(".ui message", [
+            m(".ui", {
+              className: (state.webPreview().error ? 'error message' : 'message')
+            }, [
               m("p", {
                 onupdate({dom}) {
                   dom.innerHTML = state.webPreview().html_body
@@ -146,7 +154,9 @@ const verificationTabView = {
             "Testo"
           ]),
           m(".content", [
-            m(".ui message", [
+            m(".ui", {
+              className: (state.webPreview().error ? 'error message' : 'message')
+            }, [
               m("pre.preview", state.webPreview().text_body)
             ])
           ])

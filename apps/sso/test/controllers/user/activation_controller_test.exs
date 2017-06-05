@@ -76,14 +76,19 @@ defmodule Sso.User.ActivationControllerTest do
         "email" => user.email
       }
       user = Repo.get(User, json_response(conn, 200)["user"]["id"])
-      assert_delivered_email Sso.Email.welcome_email(user, account, nil)
+
+      {:ok, email} = Sso.Email.welcome_email(user, account, nil)
+
+      assert_delivered_email email
     end
 
     test "welcome email", %{conn: conn, account: account, user: user} do
       post(conn, user_resend_activation_code_path(conn, :resend), user: %{
         "email" => user.email
       })
-      email = Sso.Email.welcome_email(user, account, nil)
+
+      {:ok, email} = Sso.Email.welcome_email(user, account, nil)
+
       assert email.from == account
       assert email.to == user
       assert email.subject == "app name - Richiesta registrazione"
@@ -96,7 +101,10 @@ defmodule Sso.User.ActivationControllerTest do
         "callback_url" => @callback_url
       })
       location = @callback_url <> "?code=#{user.activation_code}"
-      assert_delivered_email Sso.Email.welcome_email(user, account, location)
+
+      {:ok, email} = Sso.Email.welcome_email(user, account, location)
+
+      assert_delivered_email email
     end
 
     test "welcome email with link", %{conn: conn, account: account, user: user} do
@@ -105,7 +113,9 @@ defmodule Sso.User.ActivationControllerTest do
         "callback_url" => @callback_url
       })
       location = @callback_url <> "?code=#{user.activation_code}"
-      email = Sso.Email.welcome_email(user, account, location)
+
+      {:ok, email} = Sso.Email.welcome_email(user, account, location)
+
       assert email.from == account
       assert email.to == user
       assert email.subject == "app name - Richiesta registrazione"

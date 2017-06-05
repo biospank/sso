@@ -2,51 +2,57 @@ defmodule Sso.Email do
   use Bamboo.Phoenix, view: Sso.EmailView
 
   def welcome_email(user, account, link) when is_binary(link) do
-    subject_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "registration", "subject"])
-      |> compile([user: user, account: account, link: link])
+    bindings = [user: user, account: account, link: link]
 
-    html_body_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "registration", "web", "html_body"])
-      |> compile([user: user, account: account, link: link])
+    with {:ok, subject_content} <- account.organization.settings
+                                    |> lookup_content_for(["email_template", "registration", "subject"])
+                                    |> compile(bindings, :subject),
+         {:ok, html_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "registration", "web", "html_body"])
+                                      |> compile(bindings, :html_body),
+         {:ok, text_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "registration", "web", "text_body"])
+                                      |> compile(bindings, :text_body)
+    do
+      email = new_email
+        |> from(account)
+        |> to(user)
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
 
-    text_body_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "registration", "web", "text_body"])
-      |> compile([user: user, account: account, link: link])
-
-    new_email
-    |> from(account)
-    |> to(user)
-    |> subject(subject_content)
-    |> html_body(html_body_content)
-    |> text_body(text_body_content)
+      {:ok, email}
+    else
+      {:error, message, _} ->
+        {:error, message}
+    end
   end
 
   def welcome_email(user, account, link) when is_nil(link) do
-    subject_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "registration", "subject"])
-      |> compile([user: user, account: account])
+    bindings = [user: user, account: account]
 
-    html_body_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "registration", "mobile", "html_body"])
-      |> compile([user: user, account: account])
+    with {:ok, subject_content} <- account.organization.settings
+                                    |> lookup_content_for(["email_template", "registration", "subject"])
+                                    |> compile(bindings, :subject),
+         {:ok, html_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "registration", "mobile", "html_body"])
+                                      |> compile(bindings, :html_body),
+         {:ok, text_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "registration", "mobile", "text_body"])
+                                      |> compile(bindings, :text_body)
+    do
+      email = new_email
+        |> from(account)
+        |> to(user)
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
 
-    text_body_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "registration", "mobile", "text_body"])
-      |> compile([user: user, account: account])
-
-    new_email
-    |> from(account)
-    |> to(user)
-    |> subject(subject_content)
-    |> html_body(html_body_content)
-    |> text_body(text_body_content)
+      {:ok, email}
+    else
+      {:error, message, _} ->
+        {:error, message}
+    end
   end
 
   def dardy_new_registration_email(user, account) do
@@ -85,78 +91,86 @@ defmodule Sso.Email do
   end
 
   def password_reset_email(user, account, link) when is_binary(link) do
-    subject_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "password_reset", "subject"])
-      |> compile([user: user, account: account, link: link])
+    bindings = [user: user, account: account, link: link]
 
-    html_body_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "password_reset", "web", "html_body"])
-      |> compile([user: user, account: account, link: link])
+    with {:ok, subject_content} <- account.organization.settings
+                                    |> lookup_content_for(["email_template", "password_reset", "subject"])
+                                    |> compile(bindings, :subject),
+         {:ok, html_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "password_reset", "web", "html_body"])
+                                      |> compile(bindings, :html_body),
+         {:ok, text_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "password_reset", "web", "text_body"])
+                                      |> compile(bindings, :text_body)
+    do
+      email = new_email
+        |> from(account)
+        |> to(user)
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
 
-    text_body_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "password_reset", "web", "text_body"])
-      |> compile([user: user, account: account, link: link])
-
-    new_email
-    |> from(account)
-    |> to(user)
-    |> subject(subject_content)
-    |> html_body(html_body_content)
-    |> text_body(text_body_content)
+      {:ok, email}
+    else
+      {:error, message, _} ->
+        {:error, message}
+    end
   end
 
   def password_reset_email(user, account, link) when is_nil(link) do
-    subject_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "password_reset", "subject"])
-      |> compile([user: user, account: account])
+    bindings = [user: user, account: account]
 
-    html_body_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "password_reset", "mobile", "html_body"])
-      |> compile([user: user, account: account])
+    with {:ok, subject_content} <- account.organization.settings
+                                    |> lookup_content_for(["email_template", "password_reset", "subject"])
+                                    |> compile(bindings, :subject),
+         {:ok, html_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "password_reset", "mobile", "html_body"])
+                                      |> compile(bindings, :html_body),
+         {:ok, text_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "password_reset", "mobile", "text_body"])
+                                      |> compile(bindings, :text_body)
+    do
+      email = new_email
+        |> from(account)
+        |> to(user)
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
 
-    text_body_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "password_reset", "mobile", "text_body"])
-      |> compile([user: user, account: account])
-
-    new_email
-    |> from(account)
-    |> to(user)
-    |> subject(subject_content)
-    |> html_body(html_body_content)
-    |> text_body(text_body_content)
+      {:ok, email}
+    else
+      {:error, message, _} ->
+        {:error, message}
+    end
   end
 
   def courtesy_email(user, account) do
-    subject_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "verification", "subject"])
-      |> compile([user: user, account: account])
+    bindings = [user: user, account: account]
 
-    html_body_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "verification", "html_body"])
-      |> compile([user: user, account: account])
+    with {:ok, subject_content} <- account.organization.settings
+                                    |> lookup_content_for(["email_template", "verification", "subject"])
+                                    |> compile(bindings, :subject),
+         {:ok, html_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "verification", "html_body"])
+                                      |> compile(bindings, :html_body),
+         {:ok, text_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "verification", "text_body"])
+                                      |> compile(bindings, :text_body)
+    do
+      email = new_email
+        |> from(account)
+        |> to(user)
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
 
-    text_body_content =
-      account.organization.settings
-      |> lookup_content_for(["email_template", "verification", "text_body"])
-      |> compile([user: user, account: account])
-
-    new_email
-    |> from(account)
-    |> to(user)
-    |> subject(subject_content)
-    |> html_body(html_body_content)
-    |> text_body(text_body_content)
+      {:ok, email}
+    else
+      {:error, message, _} ->
+        {:error, message}
+    end
   end
 
-  # def preview([link: link]=params)  do
   def preview(params)  do
     bindings = [
       user: params[:user],
@@ -164,45 +178,36 @@ defmodule Sso.Email do
       link: params[:link]
     ]
 
-    subject_content = params[:subject] |> compile(bindings)
+    with {:ok, subject_content} <- compile(params[:subject], bindings, :subject),
+         {:ok, html_body_content} <- compile(params[:html_body], bindings, :html_body),
+         {:ok, text_body_content} <- compile(params[:text_body], bindings, :text_body)
+    do
+      email = new_email
+        |> from(params[:account])
+        |> to(params[:user])
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
 
-    html_body_content = params[:html_body] |> compile(bindings)
-
-    text_body_content = params[:text_body] |> compile(bindings)
-
-    new_email
-    |> from(params[:account])
-    |> to(params[:user])
-    |> subject(subject_content)
-    |> html_body(html_body_content)
-    |> text_body(text_body_content)
+      {:ok, email}
+    else
+      {:error, message, context} ->
+        {:error, message, context}
+    end
   end
-
-  # def preview(params) do
-  #   bindings = [
-  #     user: params[:user],
-  #     account: params[:account]
-  #   ]
-  #
-  #   subject_content = params[:subject] |> compile(bindings)
-  #
-  #   html_body_content = params[:html_body] |> compile(bindings)
-  #
-  #   text_body_content = params[:text_body] |> compile(bindings)
-  #
-  #   new_email
-  #   |> from(params[:account])
-  #   |> to(params[:user])
-  #   |> subject(subject_content)
-  #   |> html_body(html_body_content)
-  #   |> text_body(text_body_content)
-  # end
 
   defp lookup_content_for(map, path) do
     map |> get_in(path) || "No content found for #{Enum.join(path, ".")}"
   end
 
-  defp compile(content, bindings) do
-    EEx.eval_string(content, bindings)
+  defp compile(content, bindings, context \\ :no_context) do
+    try do
+      {:ok, EEx.eval_string(content, bindings)}
+    rescue
+      e in CompileError ->
+        {:error, "Errore di compilazione: #{e.description}", context}
+      e in KeyError ->
+        {:error, "Errore di compilazione: chiave `#{e.key}` non trovata", context}
+    end
   end
 end

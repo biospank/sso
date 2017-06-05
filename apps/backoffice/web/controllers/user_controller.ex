@@ -1,5 +1,6 @@
 defmodule Backoffice.UserController do
   use Backoffice.Web, :controller
+  require Logger
 
   alias Sso.{User, Account}
 
@@ -78,7 +79,12 @@ defmodule Backoffice.UserController do
 
       case get_in(account.organization.settings, ["email_template", "verification", "active"]) do
         value when value in [true, nil] ->
-          Sso.Email.courtesy_email(updated_user, account) |> Sso.Mailer.deliver_later
+          case Sso.Email.courtesy_email(updated_user, account) do
+            {:error, message} ->
+              Logger.error message
+            {:ok, email} ->
+              Sso.Mailer.deliver_later(email)
+          end
         _ ->
           false
       end

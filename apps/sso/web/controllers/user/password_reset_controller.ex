@@ -1,9 +1,10 @@
 defmodule Sso.User.PasswordResetController do
   use Sso.Web, :controller
+  require Logger
 
   alias Sso.{User, Email, Mailer}
-
   plug :scrub_params, "user" when action in [:create, :update]
+
 
   def action(conn, _) do
     apply(__MODULE__, action_name(conn),
@@ -30,8 +31,12 @@ defmodule Sso.User.PasswordResetController do
           account
           |> Repo.preload(:organization)
 
-        Email.password_reset_email(user, account, location)
-        |> Mailer.deliver_later
+        case Email.password_reset_email(user, account, location) do
+          {:error, message} ->
+            Logger.error message
+          {:ok, email} ->
+            Mailer.deliver_later(email)
+        end
 
         send_resp conn, 201, ""
       true ->
