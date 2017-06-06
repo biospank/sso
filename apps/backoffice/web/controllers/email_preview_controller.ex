@@ -12,10 +12,10 @@ defmodule Backoffice.EmailPreviewController do
     )
 
     case result do
-      {:error, message, context} ->
+      {:error, compiled_email} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Backoffice.ErrorView, :"422", errors: %{message: message, context: context})
+        |> render(Backoffice.EmailPreView, "create.json", %{email: compiled_email})
       {:ok, compiled_email} ->
         conn
         |> put_status(:created)

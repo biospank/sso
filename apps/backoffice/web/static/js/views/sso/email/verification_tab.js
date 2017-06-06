@@ -17,12 +17,7 @@ const verificationTabView = {
       }).then((response) => {
         this.webPreview(response);
       }, (response) => {
-        this.webPreview({
-          error: true,
-          subject: this.webPreview().subject,
-          html_body: ((response.errors.context === "html_body") ? response.errors.message : this.webPreview().html_body),
-          text_body: ((response.errors.context === "text_body") ? response.errors.message : this.webPreview().text_body)
-        });
+        this.webPreview(_.merge(response, {error: true}));
       });
     };
 
@@ -134,6 +129,17 @@ const verificationTabView = {
             $(dom).accordion();
           }
         }, [
+          m(".title", [
+            m("i.dropdown icon"),
+            "Oggetto"
+          ]),
+          m(".content", [
+            m(".ui", {
+              className: (state.webPreview().error ? 'error message' : 'message')
+            }, [
+              m("pre.preview", state.webPreview().subject)
+            ])
+          ]),
           m(".active title", [
             m("i.dropdown icon"),
             "Html"

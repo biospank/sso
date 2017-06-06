@@ -6,13 +6,13 @@ defmodule Sso.Email do
 
     with {:ok, subject_content} <- account.organization.settings
                                     |> lookup_content_for(["email_template", "registration", "subject"])
-                                    |> compile(bindings, :subject),
+                                    |> compile(bindings),
          {:ok, html_body_content} <- account.organization.settings
                                       |> lookup_content_for(["email_template", "registration", "web", "html_body"])
-                                      |> compile(bindings, :html_body),
+                                      |> compile(bindings),
          {:ok, text_body_content} <- account.organization.settings
                                       |> lookup_content_for(["email_template", "registration", "web", "text_body"])
-                                      |> compile(bindings, :text_body)
+                                      |> compile(bindings)
     do
       email = new_email
         |> from(account)
@@ -23,7 +23,7 @@ defmodule Sso.Email do
 
       {:ok, email}
     else
-      {:error, message, _} ->
+      {:error, message} ->
         {:error, message}
     end
   end
@@ -33,13 +33,13 @@ defmodule Sso.Email do
 
     with {:ok, subject_content} <- account.organization.settings
                                     |> lookup_content_for(["email_template", "registration", "subject"])
-                                    |> compile(bindings, :subject),
+                                    |> compile(bindings),
          {:ok, html_body_content} <- account.organization.settings
                                       |> lookup_content_for(["email_template", "registration", "mobile", "html_body"])
-                                      |> compile(bindings, :html_body),
+                                      |> compile(bindings),
          {:ok, text_body_content} <- account.organization.settings
                                       |> lookup_content_for(["email_template", "registration", "mobile", "text_body"])
-                                      |> compile(bindings, :text_body)
+                                      |> compile(bindings)
     do
       email = new_email
         |> from(account)
@@ -50,7 +50,7 @@ defmodule Sso.Email do
 
       {:ok, email}
     else
-      {:error, message, _} ->
+      {:error, message} ->
         {:error, message}
     end
   end
@@ -95,13 +95,13 @@ defmodule Sso.Email do
 
     with {:ok, subject_content} <- account.organization.settings
                                     |> lookup_content_for(["email_template", "password_reset", "subject"])
-                                    |> compile(bindings, :subject),
+                                    |> compile(bindings),
          {:ok, html_body_content} <- account.organization.settings
                                       |> lookup_content_for(["email_template", "password_reset", "web", "html_body"])
-                                      |> compile(bindings, :html_body),
+                                      |> compile(bindings),
          {:ok, text_body_content} <- account.organization.settings
                                       |> lookup_content_for(["email_template", "password_reset", "web", "text_body"])
-                                      |> compile(bindings, :text_body)
+                                      |> compile(bindings)
     do
       email = new_email
         |> from(account)
@@ -112,7 +112,7 @@ defmodule Sso.Email do
 
       {:ok, email}
     else
-      {:error, message, _} ->
+      {:error, message} ->
         {:error, message}
     end
   end
@@ -122,13 +122,13 @@ defmodule Sso.Email do
 
     with {:ok, subject_content} <- account.organization.settings
                                     |> lookup_content_for(["email_template", "password_reset", "subject"])
-                                    |> compile(bindings, :subject),
+                                    |> compile(bindings),
          {:ok, html_body_content} <- account.organization.settings
                                       |> lookup_content_for(["email_template", "password_reset", "mobile", "html_body"])
-                                      |> compile(bindings, :html_body),
+                                      |> compile(bindings),
          {:ok, text_body_content} <- account.organization.settings
                                       |> lookup_content_for(["email_template", "password_reset", "mobile", "text_body"])
-                                      |> compile(bindings, :text_body)
+                                      |> compile(bindings)
     do
       email = new_email
         |> from(account)
@@ -139,7 +139,7 @@ defmodule Sso.Email do
 
       {:ok, email}
     else
-      {:error, message, _} ->
+      {:error, message} ->
         {:error, message}
     end
   end
@@ -149,13 +149,13 @@ defmodule Sso.Email do
 
     with {:ok, subject_content} <- account.organization.settings
                                     |> lookup_content_for(["email_template", "verification", "subject"])
-                                    |> compile(bindings, :subject),
+                                    |> compile(bindings),
          {:ok, html_body_content} <- account.organization.settings
                                       |> lookup_content_for(["email_template", "verification", "html_body"])
-                                      |> compile(bindings, :html_body),
+                                      |> compile(bindings),
          {:ok, text_body_content} <- account.organization.settings
                                       |> lookup_content_for(["email_template", "verification", "text_body"])
-                                      |> compile(bindings, :text_body)
+                                      |> compile(bindings)
     do
       email = new_email
         |> from(account)
@@ -166,7 +166,7 @@ defmodule Sso.Email do
 
       {:ok, email}
     else
-      {:error, message, _} ->
+      {:error, message} ->
         {:error, message}
     end
   end
@@ -178,9 +178,15 @@ defmodule Sso.Email do
       link: params[:link]
     ]
 
-    with {:ok, subject_content} <- compile(params[:subject], bindings, :subject),
-         {:ok, html_body_content} <- compile(params[:html_body], bindings, :html_body),
-         {:ok, text_body_content} <- compile(params[:text_body], bindings, :text_body)
+    compiled_subject = compile(params[:subject], bindings)
+
+    compiled_html_body = compile(params[:html_body], bindings)
+
+    compiled_text_body = compile(params[:text_body], bindings)
+
+    with {:ok, subject_content} <- compiled_subject,
+         {:ok, html_body_content} <- compiled_html_body,
+         {:ok, text_body_content} <- compiled_text_body
     do
       email = new_email
         |> from(params[:account])
@@ -191,8 +197,15 @@ defmodule Sso.Email do
 
       {:ok, email}
     else
-      {:error, message, context} ->
-        {:error, message, context}
+      {:error, _} ->
+        email = new_email
+          |> from(params[:account])
+          |> to(params[:user])
+          |> subject(elem(compiled_subject, 1))
+          |> html_body(elem(compiled_html_body, 1))
+          |> text_body(elem(compiled_text_body, 1))
+
+        {:error, email}
     end
   end
 
@@ -200,14 +213,14 @@ defmodule Sso.Email do
     map |> get_in(path) || "No content found for #{Enum.join(path, ".")}"
   end
 
-  defp compile(content, bindings, context \\ :no_context) do
+  defp compile(content, bindings) do
     try do
       {:ok, EEx.eval_string(content, bindings)}
     rescue
       e in CompileError ->
-        {:error, "Errore di compilazione: #{e.description}", context}
+        {:error, "Errore di compilazione: #{e.description}"}
       e in KeyError ->
-        {:error, "Errore di compilazione: chiave `#{e.key}` non trovata", context}
+        {:error, "Errore di compilazione: chiave `#{e.key}` non trovata"}
     end
   end
 end

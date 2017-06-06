@@ -61,9 +61,9 @@ defmodule Backoffice.EmailPreviewControllerTest do
         }
       )
 
-      assert json_response(post_conn, 422)["errors"] == %{
-        "message" => "Errore di compilazione: undefined function unknown_object/0",
-        "context" => "html_body"
+      assert json_response(post_conn, 422) == %{
+        "html_body" => "Errore di compilazione: undefined function unknown_object/0",
+        "text_body" => "", "subject" => "preview subject"
       }
     end
 
@@ -77,9 +77,23 @@ defmodule Backoffice.EmailPreviewControllerTest do
         }
       )
 
-      assert json_response(post_conn, 422)["errors"] == %{
-        "message" => "Errore di compilazione: undefined function unknown_object/0",
-        "context" => "text_body"
+      assert json_response(post_conn, 422) == %{
+        "text_body" => "Errore di compilazione: undefined function unknown_object/0",
+        "html_body" => "", "subject" => "preview subject"
+      }
+    end
+
+    test "subject template compilation error", %{conn: conn} do
+      post_conn = post(conn, email_preview_path(conn, :create), %{
+          subject: "<%= unknown_object %>",
+          html_body: "",
+          text_body: ""
+        }
+      )
+
+      assert json_response(post_conn, 422) == %{
+        "text_body" => "",
+        "html_body" => "", "subject" => "Errore di compilazione: undefined function unknown_object/0"
       }
     end
 
@@ -93,9 +107,9 @@ defmodule Backoffice.EmailPreviewControllerTest do
         }
       )
 
-      assert json_response(post_conn, 422)["errors"] == %{
-        "message" => "Errore di compilazione: chiave `unknown_attribute` non trovata",
-        "context" => "html_body"
+      assert json_response(post_conn, 422) == %{
+        "html_body" => "Errore di compilazione: chiave `unknown_attribute` non trovata",
+        "text_body" => "", "subject" => "preview subject"
       }
     end
 
@@ -109,9 +123,23 @@ defmodule Backoffice.EmailPreviewControllerTest do
         }
       )
 
-      assert json_response(post_conn, 422)["errors"] == %{
-        "message" => "Errore di compilazione: chiave `unknown_attribute` non trovata",
-        "context" => "text_body"
+      assert json_response(post_conn, 422) == %{
+        "text_body" => "Errore di compilazione: chiave `unknown_attribute` non trovata",
+        "html_body" => "", "subject" => "preview subject"
+      }
+    end
+
+    test "subject template key error", %{conn: conn} do
+      post_conn = post(conn, email_preview_path(conn, :create), %{
+          subject: "<%= user.unknown_attribute %>",
+          html_body: "",
+          text_body: ""
+        }
+      )
+
+      assert json_response(post_conn, 422) == %{
+        "text_body" => "",
+        "html_body" => "", "subject" => "Errore di compilazione: chiave `unknown_attribute` non trovata"
       }
     end
   end
