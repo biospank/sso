@@ -8,7 +8,7 @@ defmodule Backoffice.Auth.User do
 
   def login(conn, user, opts \\ []) do
     conn = case opts do
-      [ttl: expires] ->
+      [repo: _, ttl: expires] ->
         Guardian.Plug.api_sign_in(conn, user, :token, ttl: expires)
       _ ->
         Guardian.Plug.api_sign_in(conn, user)

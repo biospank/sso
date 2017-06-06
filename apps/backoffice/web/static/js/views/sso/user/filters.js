@@ -2,16 +2,30 @@ import m from 'mithril';
 import _ from 'lodash';
 import User from '../../../models/user';
 import Account from '../../../models/account';
+import Organization from '../../../models/organization';
 
 const userFilters = {
   oninit(vnode) {
     this.accounts = [];
+    this.organizations = [];
     this.errors = {};
     this.showLoader = vnode.attrs.showLoader;
 
-    this.getAllAccounts = () => {
-      return Account.all().then((response) => {
-        this.accounts = _.concat([{id: "", app_name: 'Tutte le app'}], response.accounts);
+    this.accountResponse = (response) => {
+      this.accounts = _.concat([{id: "", app_name: 'Tutte le app'}], response.accounts);
+    };
+
+    this.getAllAccounts = (organization) => {
+      if(organization) {
+        return Account.allBy(organization).then(this.accountResponse, (response) => {})
+      } else {
+        return Account.all().then(this.accountResponse, (response) => {})
+      }
+    };
+
+    this.getAllOrganizations = () => {
+      return Organization.all().then((response) => {
+        this.organizations = _.concat([{id: "", name: 'Tutte le organizzazioni'}], response.organizations);
       }, (response) => {})
     };
 
@@ -38,13 +52,13 @@ const userFilters = {
     };
 
     this.getAllAccounts();
-
+    this.getAllOrganizations();
   },
   view({state}) {
     return m("form", { class: "ui form segment mb-40" }, [
-      m(".five fields mb-0", [
+      m(".four fields", [
         m(".field", [
-          m(".ui selection dropdown", {
+          m(".ui fluid selection dropdown", {
             oncreate: function(vnode) {
               $('.ui.dropdown').dropdown();
             }
@@ -85,30 +99,35 @@ const userFilters = {
             type: "email",
             placeholder: "Filtra per Email"
           })
-        ]),
+        ])
+      ]),
+      m(".four fields", [
         m(".field", [
-          m(".ui selection dropdown", {
+          m(".ui fluid selection dropdown", {
             oncreate: function(vnode) {
               $('.ui.dropdown').dropdown();
             }
           }, [
             m("input", {
               type: "hidden",
-              name: "status",
-              value: User.filters.status(),
-              onchange: m.withAttr("value", User.filters.status)
+              name: "organization",
+              value: User.filters.organization(),
+              onchange(event) {
+                User.filters.organization(event.target.value);
+                state.getAllAccounts(User.filters.organization());
+              }
             }),
             m("i", { class: "dropdown icon" }),
-            m(".text", User.filters.statusLabel()),
+            m(".text", User.filters.organizationLabel()),
             m(".menu", [
-              User.filterStatuses.map((filter) => {
+              state.organizations.map((organization) => {
                 return m('.item', {
-                  "data-value": filter.statusValue,
-                  className: (filter.statusValue === User.filters.status() ? "active selected" : ""),
+                  "data-value": organization.id,
+                  className: (organization.id === User.filters.organization() ? "active selected" : ""),
                   onclick: (event) => {
-                    User.filters.statusLabel(event.target.outerText);
+                    User.filters.organizationLabel(event.target.outerText);
                   }
-                }, filter.statusLabel);
+                }, organization.name);
               })
             ])
           ])
@@ -136,6 +155,33 @@ const userFilters = {
                     User.filters.accountLabel(event.target.outerText);
                   }
                 }, account.app_name);
+              })
+            ])
+          ])
+        ]),
+        m(".field", [
+          m(".ui fluid selection dropdown", {
+            oncreate: function(vnode) {
+              $('.ui.dropdown').dropdown();
+            }
+          }, [
+            m("input", {
+              type: "hidden",
+              name: "status",
+              value: User.filters.status(),
+              onchange: m.withAttr("value", User.filters.status)
+            }),
+            m("i", { class: "dropdown icon" }),
+            m(".text", User.filters.statusLabel()),
+            m(".menu", [
+              User.filterStatuses.map((filter) => {
+                return m('.item', {
+                  "data-value": filter.statusValue,
+                  className: (filter.statusValue === User.filters.status() ? "active selected" : ""),
+                  onclick: (event) => {
+                    User.filters.statusLabel(event.target.outerText);
+                  }
+                }, filter.statusLabel);
               })
             ])
           ])

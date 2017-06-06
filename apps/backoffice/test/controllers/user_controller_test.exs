@@ -90,7 +90,33 @@ defmodule Backoffice.UserControllerTest do
         |> Ecto.Query.preload(:organization)
         |> Sso.Repo.get!(user.account_id)
 
-      assert_delivered_email Sso.Email.courtesy_email(user, account)
+      {:ok, email} = Sso.Email.courtesy_email(user, account)
+      assert_delivered_email email
+    end
+
+    test "does not deliver a courtesy email if verification active flag is false", %{conn: conn} do
+      organization = insert_organization(
+        settings: %{
+          email_template: %{
+            verification: %{
+              active: false
+            }
+          }
+        }
+      )
+
+      account = insert_account(organization)
+      user = insert_user(account)
+
+      conn = put conn, user_authorize_path(conn, :authorize, user)
+      user = Sso.Repo.get(Sso.User, json_response(conn, 200)["user"]["id"])
+      account =
+        Sso.Account
+        |> Ecto.Query.preload(:organization)
+        |> Sso.Repo.get!(user.account_id)
+
+      {:ok, email} = Sso.Email.courtesy_email(user, account)
+      refute_delivered_email email
     end
 
     test "welcome email", %{conn: conn} do
@@ -105,7 +131,7 @@ defmodule Backoffice.UserControllerTest do
         |> Ecto.Query.preload(:organization)
         |> Sso.Repo.get!(user.account_id)
 
-      email = Sso.Email.courtesy_email(user, account)
+      {:ok, email} = Sso.Email.courtesy_email(user, account)
       assert email.to == user
       assert email.subject == "app name - Conferma registrazione"
       assert email.html_body =~ user.profile.first_name

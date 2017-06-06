@@ -5,8 +5,14 @@ defmodule Backoffice.AccountController do
 
   plug :set_sso_locale
 
-  def index(conn, _) do
-    accounts = Sso.Repo.all(Sso.Account)
+  def index(conn, params) do
+
+    accounts = case Map.get(params, "org_id") do
+      nil ->
+        Sso.Repo.all(from a in Sso.Account, order_by: a.app_name)
+      org ->
+        Sso.Repo.all(from a in Sso.Account, where: [organization_id: ^org], order_by: a.app_name)
+    end
 
     render(conn, Sso.AccountView, "index.json", accounts: accounts)
   end

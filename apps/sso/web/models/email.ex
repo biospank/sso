@@ -2,77 +2,57 @@ defmodule Sso.Email do
   use Bamboo.Phoenix, view: Sso.EmailView
 
   def welcome_email(user, account, link) when is_binary(link) do
-    new_email
-    |> from(account)
-    |> to(user)
-    |> subject("#{account.app_name} - Richiesta registrazione")
-    |> html_body("""
-        Gentile #{user.profile.first_name} #{user.profile.last_name}
-        <br />
-        è stata richiesta la registrazione al sito #{account.app_name} attraverso il servizio SSO Takeda.
-        <br />
-        <br />
-        Per confermare la sua identità e attivare l'account segua questo link:
-        <br />
-        <br />
-        #{link}
-        <br />
-        <br />
-        Entro 24 ore riceverà una mail di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
-        potrà accedere a tutti i servizi realizzati da Takeda Italia S.p.A. che supportano
-        questo servizio, utilizzando sempre le stesse credenziali.
-        <br />
-        <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di <a href="mailto:customercare@itakacloud.com">customercare</a>
-        <br />
-        <br />
-        Ignori questo messaggio se non ha effettuato questa richiesta
-        <br />
-        <br />
-        Cordiali saluti
-        <br />
-        Takeda Italia S.p.A.
-        <br />
-        <br />
-        #{disclaimer(account)}
-      """)
+    bindings = [user: user, account: account, link: link]
+
+    with {:ok, subject_content} <- account.organization.settings
+                                    |> lookup_content_for(["email_template", "registration", "subject"])
+                                    |> compile(bindings),
+         {:ok, html_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "registration", "web", "html_body"])
+                                      |> compile(bindings),
+         {:ok, text_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "registration", "web", "text_body"])
+                                      |> compile(bindings)
+    do
+      email = new_email
+        |> from(account)
+        |> to(user)
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
+
+      {:ok, email}
+    else
+      {:error, message} ->
+        {:error, message}
+    end
   end
 
   def welcome_email(user, account, link) when is_nil(link) do
-    new_email
-    |> from(account)
-    |> to(user)
-    |> subject("#{account.app_name} - Richiesta registrazione")
-    |> html_body("""
-        Gentile #{user.profile.first_name} #{user.profile.last_name}
-        <br />
-        è stata richiesta la registrazione al sito #{account.app_name} attraverso il servizio SSO Takeda.
-        <br />
-        <br />
-        Per confermare la sua identità e attivare l'account inserisca il seguente codice di attivazione nell'app #{account.app_name}
-        <br />
-        <br />
-        #{user.activation_code}
-        <br />
-        <br />
-        Entro 24 ore riceverà una mail di conferma del suo nuovo account. Una volta ricevuta la mail di conferma
-        potrà accedere a tutti i servizi realizzati da Takeda Italia S.p.A. che supportano
-        questo servizio, utilizzando sempre le stesse credenziali.
-        <br />
-        <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di <a href="mailto:customercare@itakacloud.com">customercare</a>
-        <br />
-        <br />
-        Ignori questo messaggio se non ha effettuato questa richiesta
-        <br />
-        <br />
-        Cordiali saluti
-        <br />
-        Takeda Italia S.p.A.
-        <br />
-        <br />
-        #{disclaimer(account)}
-      """)
+    bindings = [user: user, account: account]
+
+    with {:ok, subject_content} <- account.organization.settings
+                                    |> lookup_content_for(["email_template", "registration", "subject"])
+                                    |> compile(bindings),
+         {:ok, html_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "registration", "mobile", "html_body"])
+                                      |> compile(bindings),
+         {:ok, text_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "registration", "mobile", "text_body"])
+                                      |> compile(bindings)
+    do
+      email = new_email
+        |> from(account)
+        |> to(user)
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
+
+      {:ok, email}
+    else
+      {:error, message} ->
+        {:error, message}
+    end
   end
 
   def dardy_new_registration_email(user, account) do
@@ -81,14 +61,12 @@ defmodule Sso.Email do
     |> to(Application.fetch_env!(:sso, :recipient_email_notification))
     |> subject("#{account.app_name} - Notifica registazione utente")
     |> html_body("""
-        <br />
-        <br />
-        Nome agenzia - #{account.organization.name}
-        Nome utente - #{user.profile.first_name} #{user.profile.last_name}
-        Nome app - #{account.app_name}
+        <p>
+        Nome agenzia - #{account.organization.name}<br />
+        Nome utente - #{user.profile.first_name} #{user.profile.last_name}<br />
+        Nome app - #{account.app_name}<br />
         Email - #{user.email}
-        <br />
-        <br />
+        </p>
       """)
   end
 
@@ -98,169 +76,151 @@ defmodule Sso.Email do
     |> to(account)
     |> subject("#{account.app_name} - Notifica registazione utente")
     |> html_body("""
+        <p>
         Spettabile #{account.organization.name}
-        <br />
-        <br />
+        </p>
+        <p>
         Si è registrato un nuovo utente:
-        <br />
-        <br />
-        Nome utente - #{user.profile.first_name} #{user.profile.last_name}
-        Nome app - #{account.app_name}
+        </p>
+        <p>
+        Nome utente - #{user.profile.first_name} #{user.profile.last_name}<br />
+        Nome app - #{account.app_name}<br />
         Email - #{user.email}
-        <br />
-        <br />
+        </p>
       """)
   end
 
   def password_reset_email(user, account, link) when is_binary(link) do
-    new_email
-    |> from(account)
-    |> to(user)
-    |> subject("#{account.app_name} - Recupera password")
-    |> html_body("""
-        È stata effettuata da #{account.app_name} una richiesta di recupero password per il suo account SSO Takeda.
-        Per procedere alla creazione di una nuova password segua questo link:
-        <br />
-        <br />
-        #{link}
-        <br />
-        <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
-        <a href="mailto:customercare@itakacloud.com">customercare</a>
-        <br />
-        <br />
-        Ignori questo messaggio se non ha effettuato questa richiesta
-        <br />
-        <br />
-        Cordiali saluti
-        <br />
-        Takeda Italia Spa
-        <br />
-        <br />
-        #{disclaimer(account)}
-      """)
+    bindings = [user: user, account: account, link: link]
+
+    with {:ok, subject_content} <- account.organization.settings
+                                    |> lookup_content_for(["email_template", "password_reset", "subject"])
+                                    |> compile(bindings),
+         {:ok, html_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "password_reset", "web", "html_body"])
+                                      |> compile(bindings),
+         {:ok, text_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "password_reset", "web", "text_body"])
+                                      |> compile(bindings)
+    do
+      email = new_email
+        |> from(account)
+        |> to(user)
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
+
+      {:ok, email}
+    else
+      {:error, message} ->
+        {:error, message}
+    end
   end
 
   def password_reset_email(user, account, link) when is_nil(link) do
-    new_email
-    |> from(account)
-    |> to(user)
-    |> subject("#{account.app_name} - Recupera password")
-    |> html_body("""
-        È stata effettuata da #{account.app_name} una richiesta di recupero password per il suo account SSO Takeda.
-        Per procedere alla creazione di una nuova password inserisca il seguente
-        codice di attivazione nell'app #{account.app_name}:
-        <br />
-        <br />
-        #{user.reset_code}
-        <br />
-        <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
-        <a href="mailto:customercare@itakacloud.com">customercare</a>
-        <br />
-        <br />
-        Ignori questo messaggio se non ha effettuato questa richiesta
-        <br />
-        <br />
-        Cordiali saluti
-        <br />
-        Takeda Italia Spa
-        <br />
-        <br />
-        #{disclaimer(account)}
-      """)
+    bindings = [user: user, account: account]
+
+    with {:ok, subject_content} <- account.organization.settings
+                                    |> lookup_content_for(["email_template", "password_reset", "subject"])
+                                    |> compile(bindings),
+         {:ok, html_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "password_reset", "mobile", "html_body"])
+                                      |> compile(bindings),
+         {:ok, text_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "password_reset", "mobile", "text_body"])
+                                      |> compile(bindings)
+    do
+      email = new_email
+        |> from(account)
+        |> to(user)
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
+
+      {:ok, email}
+    else
+      {:error, message} ->
+        {:error, message}
+    end
   end
 
   def courtesy_email(user, account) do
-    new_email
-    |> from(account)
-    |> to(user)
-    |> subject("#{account.app_name} - Conferma registrazione")
-    |> html_body("""
-        Gentile #{user.profile.first_name} #{user.profile.last_name}
-        <br />
-        la sua registrazione a #{account.app_name} è confermata.
-        <br />
-        <br />
-        Le ricordiamo che adesso potrà accedere a tutti i siti/app realizzati da
-        Takeda Italia S.p.A. che supportano questo servizio, utilizzando sempre le
-        stesse credenziali indicate in fase di registrazione.
-        <br />
-        <br />
-        Per eventuali informazioni o chiarimenti contatti il nostro servizio di
-        <a href="mailto:customercare@itakacloud.com">customercare</a>
-        <br />
-        <br />
-        Vai su <a href="http://itakacloud.com/">Itakacloud.com</a>
-        <br />
-        <br />
-        Ignori questo messaggio se non ha effettuato questa richiesta
-        <br />
-        <br />
-        Cordiali saluti
-        <br />
-        Takeda Italia S.p.A.
-        <br />
-        <br />
-        #{disclaimer(account)}
-      """)
+    bindings = [user: user, account: account]
+
+    with {:ok, subject_content} <- account.organization.settings
+                                    |> lookup_content_for(["email_template", "verification", "subject"])
+                                    |> compile(bindings),
+         {:ok, html_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "verification", "html_body"])
+                                      |> compile(bindings),
+         {:ok, text_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "verification", "text_body"])
+                                      |> compile(bindings)
+    do
+      email = new_email
+        |> from(account)
+        |> to(user)
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
+
+      {:ok, email}
+    else
+      {:error, message} ->
+        {:error, message}
+    end
   end
 
-  defp disclaimer(account) do
-    """
-      <table cellpadding="0" cellspacing="0" border="0" style="border: 1px solid #ccc; padding 30px;">
-        <tr>
-          <td height="10"></td>
-        </tr>
-        <tr>
-          <td>
-            <table cellpadding="0" cellspacing="0" border="0">
-              <tr>
-                <td width="10"></td>
-                <td>
-                  <table cellpadding="0" cellspacing="0" border="0">
-                    <tr>
-                      <td>
-                        <small>
-                          <strong>SSO Takeda</strong>
-                        </small>
-                        <br />
-                        <br />
-                        <small>
-                          SSO Takeda è un sistema di autenticazione centralizzato per web e mobile
-                          realizzato in esclusiva per Takeda Italia S.p.A.
-                        </small>
-                        <br />
-                        <br />
-                        <small>
-                          Il sistema ha lo scopo di consentire la registrazione dei medici e operatori
-                          sanitari ai progetti digital promossi da Takeda (app/siti) e consentire
-                          la loro autenticazione come operatori professionali.
-                        </small>
-                        <br />
-                        <br />
-                        <small>
-                          La gestione del riconoscimento dell'operatore della salute e la trasmissione
-                          e archiviazione delle relative chiavi di accesso e dei dati personali del professionista
-                          della salute avviene mediante la piattaforma SSO Takeda nel rispetto dei requisiti
-                          richiesti da:
-                          - Il Ministero della Salute (Circolare Min. San. - Dipartimento Valutazione Farmaci
-                          e Farmacovigilanza n° 800.I/15/1267 del 22 marzo 2000)
-                          - Codice della Privacy (D.Lgs 30/06/2003 n. 196) sulla tutela dei dati personali
-                        </small>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-                <td width="10"></td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td height="10"></td>
-        </tr>
-      </table>
-    """
+  def preview(params)  do
+    bindings = [
+      user: params[:user],
+      account: params[:account],
+      link: params[:link]
+    ]
+
+    compiled_subject = compile(params[:subject], bindings)
+
+    compiled_html_body = compile(params[:html_body], bindings)
+
+    compiled_text_body = compile(params[:text_body], bindings)
+
+    with {:ok, subject_content} <- compiled_subject,
+         {:ok, html_body_content} <- compiled_html_body,
+         {:ok, text_body_content} <- compiled_text_body
+    do
+      email = new_email
+        |> from(params[:account])
+        |> to(params[:user])
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
+
+      {:ok, email}
+    else
+      {:error, _} ->
+        email = new_email
+          |> from(params[:account])
+          |> to(params[:user])
+          |> subject(elem(compiled_subject, 1))
+          |> html_body(elem(compiled_html_body, 1))
+          |> text_body(elem(compiled_text_body, 1))
+
+        {:error, email}
+    end
+  end
+
+  defp lookup_content_for(map, path) do
+    map |> get_in(path) || "No content found for #{Enum.join(path, ".")}"
+  end
+
+  defp compile(content, bindings) do
+    try do
+      {:ok, EEx.eval_string(content, bindings)}
+    rescue
+      e in CompileError ->
+        {:error, "Errore di compilazione: #{e.description}"}
+      e in KeyError ->
+        {:error, "Errore di compilazione: chiave `#{e.key}` non trovata"}
+    end
   end
 end

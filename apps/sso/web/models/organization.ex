@@ -4,9 +4,10 @@ defmodule Sso.Organization do
   schema "organizations" do
     field :name, :string
     field :ref_email, :string
+    field :settings, :map
 
     has_many :accounts, Sso.Account
-    
+
     timestamps()
   end
 
@@ -15,7 +16,7 @@ defmodule Sso.Organization do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name, :ref_email])
+    |> cast(params, [:name, :ref_email, :settings])
     |> validate_required([:name, :ref_email])
   end
 

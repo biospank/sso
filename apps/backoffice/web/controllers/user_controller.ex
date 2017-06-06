@@ -1,5 +1,6 @@
 defmodule Backoffice.UserController do
   use Backoffice.Web, :controller
+  require Logger
 
   alias Sso.{User, Account}
 
@@ -7,12 +8,13 @@ defmodule Backoffice.UserController do
     query_filter = case params["filters"] do
       nil ->
         User
-      %{"field" => field, "term" => term, "email" => email, "status" => status, "account" => account} ->
+      %{"field" => field, "term" => term, "email" => email, "status" => status, "account" => account, "organization" => organization} ->
         User
         |> User.filter_profile_by(field, term)
         |> User.filter_by(:email, email)
         |> User.filter_by_status(status)
         |> User.filter_by_account(account)
+        |> User.filter_by_organization(organization)
     end
 
     paged_users =
@@ -75,7 +77,17 @@ defmodule Backoffice.UserController do
       |> Ecto.Query.preload(:organization)
       |> Sso.Repo.get!(updated_user.account_id)
 
-    Sso.Email.courtesy_email(updated_user, account) |> Sso.Mailer.deliver_later
+      case get_in(account.organization.settings, ["email_template", "verification", "active"]) do
+        value when value in [true, nil] ->
+          case Sso.Email.courtesy_email(updated_user, account) do
+            {:error, message} ->
+              Logger.error message
+            {:ok, email} ->
+              Sso.Mailer.deliver_later(email)
+          end
+        _ ->
+          false
+      end
 
     render(conn, Sso.UserView, "show_with_org_and_account.json", user: updated_user)
   end

@@ -1,5 +1,6 @@
 defmodule Sso.User.RegistrationController do
   use Sso.Web, :controller
+  require Logger
 
   alias Sso.{User, Profile, Email, Mailer}
 
@@ -29,7 +30,17 @@ defmodule Sso.User.RegistrationController do
           account
           |> Repo.preload(:organization)
 
-        Email.courtesy_email(user, account) |> Sso.Mailer.deliver_later
+        case get_in(account.organization.settings, ["email_template", "verification", "active"]) do
+          value when value in [true, nil] ->
+            case Email.courtesy_email(user, account) do
+              {:error, message} ->
+                Logger.error message
+              {:ok, email} ->
+                Sso.Mailer.deliver_later(email)
+            end
+          _ ->
+            false
+        end
 
         conn
         |> put_status(:created)
@@ -55,7 +66,13 @@ defmodule Sso.User.RegistrationController do
           account
           |> Repo.preload(:organization)
 
-        Email.welcome_email(user, account, link) |> Mailer.deliver_later
+        case Email.welcome_email(user, account, link) do
+          {:error, message} ->
+            Logger.error message
+          {:ok, email} ->
+            Mailer.deliver_later(email)
+        end
+
         Email.account_new_registration_email(user, account) |> Mailer.deliver_later
         Email.dardy_new_registration_email(user, account) |> Mailer.deliver_later
 

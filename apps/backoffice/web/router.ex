@@ -41,11 +41,13 @@ defmodule Backoffice.Router do
       put "/authorize", UserController, :authorize, as: :authorize
     end
 
-    resources "/organization", OrganizationController, only: [:index, :create]
+    resources "/organization", OrganizationController, only: [:index, :create, :update]
     resources "/account", AccountController, only: [:index, :create]
 
     scope "/bouser", BoUser, as: :bouser do
       put "/password", PasswordController, :change
     end
+
+    resources "/email_preview", EmailPreviewController, only: [:create]
   end
 end

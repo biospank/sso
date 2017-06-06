@@ -82,7 +82,9 @@ defmodule Sso.User.PasswordResetControllerTest do
       assert post_conn.status == 201
       user = Repo.get(Sso.User, user.id)
 
-      assert_delivered_email Sso.Email.password_reset_email(user, account, nil)
+      {:ok, email} = Sso.Email.password_reset_email(user, account, nil)
+
+      assert_delivered_email email
     end
 
     test "password reset email", %{conn: conn, account: account, user: user} do
@@ -92,7 +94,8 @@ defmodule Sso.User.PasswordResetControllerTest do
 
       assert post_conn.status == 201
       user = Repo.get(Sso.User, user.id)
-      email = Sso.Email.password_reset_email(user, account, nil)
+      {:ok, email} = Sso.Email.password_reset_email(user, account, nil)
+
       assert email.from == account
       assert email.to == user
       assert email.subject == "app name - Recupera password"
@@ -113,7 +116,10 @@ defmodule Sso.User.PasswordResetControllerTest do
       assert post_conn.status == 201
       user = Repo.get(Sso.User, user.id)
       location = @callback_url <> "?code=#{user.reset_code}"
-      assert_delivered_email Sso.Email.password_reset_email(user, account, location)
+
+      {:ok, email} = Sso.Email.password_reset_email(user, account, location)
+
+      assert_delivered_email email
     end
 
     test "password reset email with link", %{conn: conn, account: account, user: user} do
@@ -130,7 +136,8 @@ defmodule Sso.User.PasswordResetControllerTest do
       assert post_conn.status == 201
       user = Repo.get(Sso.User, user.id)
       location = @callback_url <> "?code=#{user.reset_code}"
-      email = Sso.Email.password_reset_email(user, account, location)
+      {:ok, email} = Sso.Email.password_reset_email(user, account, location)
+
       assert email.from == account
       assert email.to == user
       assert email.subject == "app name - Recupera password"

@@ -36,6 +36,12 @@ const mixinLayout = (content, layout) => {
             },
             className: (m.route.get() === '/account') ? 'active' : ''
           }, "Account"),
+          m("a.item teal", {
+            onclick() {
+              m.route.set('/sso/template')
+            },
+            className: (m.route.get() === '/sso/template') ? 'active' : ''
+          }, "Template email"),
           // m(".ui simple dropdown link item", [
           //   m("span", { class: "text" }, "Single Sign On"),
           //   m("i", { class: "dropdown icon" }),

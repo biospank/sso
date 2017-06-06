@@ -3,7 +3,8 @@ defmodule Backoffice.OrganizationControllerTest do
 
   @valid_attrs %{
     name: "TestOrg",
-    ref_email: "test@example.com"
+    ref_email: "test@example.com",
+    setting: %{}
   }
 
   setup %{conn: conn} do
@@ -20,7 +21,8 @@ defmodule Backoffice.OrganizationControllerTest do
     test "requires user authentication", %{conn: conn} do
       Enum.each([
           get(conn, organization_path(conn, :index)),
-          post(conn, organization_path(conn, :create), organization: %{})
+          post(conn, organization_path(conn, :create), organization: %{}),
+          put(conn, organization_path(conn, :update, 123), organization: %{})
         ], fn conn ->
           assert json_response(conn, 498)["errors"] == %{
             "message" => "Richiesta autorizzazione (token non valido)"
@@ -53,6 +55,27 @@ defmodule Backoffice.OrganizationControllerTest do
     test "invalid organization", %{conn: conn} do
       conn = post conn, organization_path(conn, :create), organization: %{ref_email: "test@example.com"}
       assert json_response(conn, 422)["errors"] != %{}
+    end
+
+    test "update email settings", %{conn: conn} do
+      new_settings = %{
+        "email_template" => %{
+          "web" => %{},
+          "mobile" => %{}
+        }
+      }
+
+      org = %Sso.Organization{}
+      |> Sso.Organization.registration_changeset(@valid_attrs)
+      |> Sso.Repo.insert!
+
+      put_conn = put(
+        conn,
+        organization_path(conn, :update, org),
+        organization: Map.put(@valid_attrs, :settings, new_settings)
+      )
+
+      assert json_response(put_conn, 200)["organization"]["settings"] == new_settings
     end
   end
 end
