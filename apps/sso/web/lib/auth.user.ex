@@ -12,12 +12,12 @@ defmodule Sso.Auth.User do
       |> repo.get_by(email: email)
 
     cond do
+      user && user.organization_id != account.organization_id ->
+        {:error, :not_found, conn}
       user && !user.active ->
         {:error, :inactive, conn}
       user && user.status == :unverified ->
         {:error, :unverified, conn}
-      user && user.organization_id != account.organization_id ->
-        {:error, :not_found, conn}
       user && checkpw(password, user.password_hash) ->
         {:ok, user, conn}
       user ->
