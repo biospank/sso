@@ -27,10 +27,17 @@ defmodule Sso.User.ActivationController do
         |> put_status(304)
         |> render(Sso.ErrorView, :"304", errors: %{message: gettext("Not Modified")})
       user ->
-        {:ok, user} =
-          user
-          |> User.activation_changeset
-          |> Repo.update
+        user = user
+          |> Repo.preload(:organization)
+
+        user_changeset = case get_in(user.organization.settings, ["email_template", "verification", "active"]) do
+          value when value in [true, nil] ->
+            User.activation_changeset(user)
+          _ ->
+            User.authorize_changeset(user)
+        end
+
+        {:ok, user} = Repo.update(user_changeset)
 
         conn
         |> render(Sso.UserView, "show.json", user: user)

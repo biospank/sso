@@ -41,9 +41,21 @@ defmodule Sso.User.ActivationControllerTest do
       {:ok, conn: conn, user: user, account: account}
     end
 
-    test "valid activation code", %{conn: conn, user: user} do
+    test "confirm activation set active = true", %{conn: conn, user: user} do
       conn = put conn, user_activation_path(conn, :confirm, user.activation_code)
-      assert json_response(conn, 200)
+      assert json_response(conn, 200)["user"]["active"] == true
+      assert json_response(conn, 200)["user"]["status"] == "unverified"
+    end
+
+    test "confirm activation with verification disabled set active = true and verified", %{conn: conn, user: user} do
+      Sso.Organization
+      |> Repo.get!(user.organization_id)
+      |> Ecto.Changeset.change(settings: %{email_template: %{verification: %{active: false}}})
+      |> Repo.update!
+
+      conn = put conn, user_activation_path(conn, :confirm, user.activation_code)
+      assert json_response(conn, 200)["user"]["active"] == true
+      assert json_response(conn, 200)["user"]["status"] == "verified"
     end
 
     test "invalid activation code", %{conn: conn} do
