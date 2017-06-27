@@ -39,6 +39,10 @@ const userFilters = {
       })
     };
 
+    this.exportUsers = (params) => {
+      window.location.href = User.exportUrl(params);
+    };
+
     this.unwrapSuccess = (response) => {
       if(response) {
         User.pageInfo = {
@@ -99,6 +103,18 @@ const userFilters = {
             type: "email",
             placeholder: "Filtra per Email"
           })
+        ]),
+        m(".field", [
+          m("button", {
+            onclick: (event) => {
+              event.preventDefault();
+              this.exportUsers({filters: User.filters});
+            },
+            class: "ui submit teal basic button full"
+          }, [
+            m("i.icon download"),
+            "Esporta"
+          ])
         ])
       ]),
       m(".four fields", [
@@ -193,7 +209,10 @@ const userFilters = {
               this.getAllUsers({filters: User.filters});
             },
             class: "ui submit teal basic button full"
-          }, "Filtra")
+          }, [
+            m("i.icon search"),
+            "Filtra"
+          ])
         ])
       ])
     ]);

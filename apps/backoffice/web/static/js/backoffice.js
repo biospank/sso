@@ -3,6 +3,9 @@ const Backoffice = {
   apiBaseUrl: function() {
     return this.domain + "/backoffice/api";
   },
+  exportBaseUrl: function() {
+    return this.domain + "/backoffice";
+  },
   realm: "Dardy"
 };
 

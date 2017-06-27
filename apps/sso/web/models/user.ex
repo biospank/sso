@@ -47,9 +47,10 @@ defmodule Sso.User do
     |> put_activation_code()
   end
 
-  def authorize_changeset(struct) do
+  def activate_and_authorize_changeset(struct) do
     struct
-    |> Ecto.Changeset.change(active: true, status: :verified)
+    |> activate_changeset
+    |> Ecto.Changeset.change(status: :verified)
   end
 
   def gen_code_reset_changeset(struct) do
@@ -65,7 +66,7 @@ defmodule Sso.User do
     |> put_password_hash()
   end
 
-  def activation_changeset(struct) do
+  def activate_changeset(struct) do
     Ecto.Changeset.change(struct, active: true)
   end
 

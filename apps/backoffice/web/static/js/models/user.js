@@ -44,6 +44,9 @@ const User = {
       }
     });
   },
+  exportUrl(params) {
+    return `${Backoffice.exportBaseUrl()}/user_export/${Session.token()}/?${m.buildQueryString(params)}`;
+  },
   get(userId) {
     return m.request({
       method: "GET",

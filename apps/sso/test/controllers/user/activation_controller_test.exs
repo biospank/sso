@@ -47,6 +47,22 @@ defmodule Sso.User.ActivationControllerTest do
       assert json_response(conn, 200)["user"]["status"] == "unverified"
     end
 
+    test "activation deliver a notification email to Dardy", %{conn: conn, account: account, user: user} do
+      conn = put conn, user_activation_path(conn, :confirm, user.activation_code)
+      user = Repo.get(User, json_response(conn, 200)["user"]["id"])
+      assert_delivered_email Sso.Email.dardy_new_registration_email(user, account)
+    end
+
+    test "dardy notification email", %{conn: conn, account: account, user: user} do
+      conn = put conn, user_activation_path(conn, :confirm, user.activation_code)
+      user = Repo.get(User, json_response(conn, 200)["user"]["id"])
+      email = Sso.Email.dardy_new_registration_email(user, account)
+      assert email.from == account
+      assert email.to == Application.fetch_env!(:sso, :recipient_email_notification)
+      assert email.subject == "app name - Notifica registazione utente"
+      assert email.html_body =~ "Nome utente - first name last name"
+    end
+
     test "confirm activation with verification disabled set active = true and verified", %{conn: conn, user: user} do
       Sso.Organization
       |> Repo.get!(user.organization_id)
@@ -56,6 +72,16 @@ defmodule Sso.User.ActivationControllerTest do
       conn = put conn, user_activation_path(conn, :confirm, user.activation_code)
       assert json_response(conn, 200)["user"]["active"] == true
       assert json_response(conn, 200)["user"]["status"] == "verified"
+    end
+
+    test "confirm activation with verification disabled does not send notification email", %{conn: conn, account: account, user: user} do
+      Sso.Organization
+      |> Repo.get!(user.organization_id)
+      |> Ecto.Changeset.change(settings: %{email_template: %{verification: %{active: false}}})
+      |> Repo.update!
+
+      put conn, user_activation_path(conn, :confirm, user.activation_code)
+      refute_delivered_email Sso.Email.dardy_new_registration_email(user, account)
     end
 
     test "invalid activation code", %{conn: conn} do

@@ -5,6 +5,10 @@ defmodule Backoffice.ErrorView do
     "Page not found"
   end
 
+  def render("498.html", _assigns) do
+    "Authentication required (invalid token)"
+  end
+
   def render("500.html", _assigns) do
     "Internal server error"
   end

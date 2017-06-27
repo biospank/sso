@@ -14,7 +14,7 @@ defmodule Sso.User.ActivationController do
     )
   end
 
-  def confirm(conn, %{"code" => activation_code}, _) do
+  def confirm(conn, %{"code" => activation_code}, account) do
     user = Repo.get_by(User, activation_code: activation_code)
 
     case user do
@@ -30,11 +30,15 @@ defmodule Sso.User.ActivationController do
         user = user
           |> Repo.preload(:organization)
 
+        account = account
+          |> Repo.preload(:organization)
+
         user_changeset = case get_in(user.organization.settings, ["email_template", "verification", "active"]) do
           value when value in [true, nil] ->
-            User.activation_changeset(user)
+            Email.dardy_new_registration_email(user, account) |> Mailer.deliver_later
+            User.activate_changeset(user)
           _ ->
-            User.authorize_changeset(user)
+            User.activate_and_authorize_changeset(user)
         end
 
         {:ok, user} = Repo.update(user_changeset)

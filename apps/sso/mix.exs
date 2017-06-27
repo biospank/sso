@@ -54,6 +54,8 @@ defmodule Sso.Mixfile do
      {:comeonin, "~> 3.0"},
      {:bamboo_sendinblue, "~> 0.1.0"},
      {:ecto_enum, "~> 1.0"},
+     {:csv, "~> 2.0.0"},
+     {:chronos, "~> 1.7.0"},
     #  {:faker, "~> 0.7", only: [:dev, :test]},
      {:credo, "~> 0.5.3", only: [:dev, :test]}]
   end

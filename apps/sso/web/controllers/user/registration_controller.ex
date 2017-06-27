@@ -22,7 +22,7 @@ defmodule Sso.User.RegistrationController do
       |> build_assoc(:users, %{organization_id: account.organization_id})
       |> User.registration_changeset(user_params)
       |> Profile.add_app_consents(user_params, account)
-      |> User.authorize_changeset
+      |> User.activate_and_authorize_changeset
 
     case Repo.insert(changeset) do
       {:ok, user} ->
@@ -74,7 +74,7 @@ defmodule Sso.User.RegistrationController do
         end
 
         Email.account_new_registration_email(user, account) |> Mailer.deliver_later
-        Email.dardy_new_registration_email(user, account) |> Mailer.deliver_later
+        # Email.dardy_new_registration_email(user, account) |> Mailer.deliver_later
 
         conn
         |> put_status(:created)

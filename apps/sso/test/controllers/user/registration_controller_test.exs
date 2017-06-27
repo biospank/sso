@@ -210,22 +210,6 @@ defmodule Sso.User.RegistrationControllerTest do
       assert email.html_body =~ location
     end
 
-    test "deliver a notification email to Dardy", %{conn: conn, account: account} do
-      conn = post conn, user_registration_path(conn, :create), user: @new_user
-      user = Repo.get(User, json_response(conn, 201)["user"]["id"])
-      assert_delivered_email Sso.Email.dardy_new_registration_email(user, account)
-    end
-
-    test "dardy notification email", %{conn: conn, account: account} do
-      conn = post conn, user_registration_path(conn, :create), user: @new_user
-      user = Repo.get(User, json_response(conn, 201)["user"]["id"])
-      email = Sso.Email.dardy_new_registration_email(user, account)
-      assert email.from == account
-      assert email.to == Application.fetch_env!(:sso, :recipient_email_notification)
-      assert email.subject == "app name - Notifica registazione utente"
-      assert email.html_body =~ "Nome utente - first name last name"
-    end
-
     test "deliver a notification email to the account", %{conn: conn, account: account} do
       conn = post conn, user_registration_path(conn, :create), user: @new_user
       user = Repo.get(User, json_response(conn, 201)["user"]["id"])

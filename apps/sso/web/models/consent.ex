@@ -9,6 +9,12 @@ defmodule Sso.Consent do
     field :privacy, :boolean
   end
 
+  defimpl(String.Chars, for: Sso.Consent) do
+    def to_string(consent) do
+      consent.app_name
+    end
+  end
+
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:app_id, :app_name, :privacy])

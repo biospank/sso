@@ -24,6 +24,7 @@ defmodule Backoffice.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    get "/user_export/:token", CsvController, :user_export, as: :csv_user_export
   end
 
   scope "/backoffice/api", Backoffice do
