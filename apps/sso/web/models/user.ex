@@ -214,4 +214,9 @@ defmodule Sso.User do
       status: :unverified
     }
   end
+
+  def to_lowercase(field, term) do
+    from u in __MODULE__,
+      where: fragment("lower(?)", field(u, ^field)) == ^String.downcase(term)
+  end
 end

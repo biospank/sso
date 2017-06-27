@@ -35,6 +35,15 @@ defmodule Sso.User.SessionControllerTest do
       assert json_response(conn, 201)["user"]["id"]
     end
 
+    test "with case sensitive email", %{conn: conn} do
+      conn = post(
+        conn,
+        user_session_path(conn, :create),
+        user: Map.put(@valid_attrs, :email, "TeSt@eXamPlE.com")
+      )
+      assert json_response(conn, 201)["user"]["id"]
+    end
+
     test "with invalid email", %{conn: conn} do
       conn = post(
         conn,

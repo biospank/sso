@@ -8,8 +8,8 @@ defmodule Sso.Auth.User do
     repo = Keyword.fetch!(opts, :repo)
     account = Keyword.fetch!(opts, :account)
     user =
-      Sso.User
-      |> repo.get_by(email: email)
+      Sso.User.to_lowercase(:email, email)
+      |> repo.one
 
     cond do
       user && user.organization_id != account.organization_id ->
