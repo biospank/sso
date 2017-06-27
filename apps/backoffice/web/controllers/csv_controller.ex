@@ -21,6 +21,8 @@ defmodule Backoffice.CsvController do
         filtered_users =
           query_filter
           |> User.order_by(:inserted_at)
+          |> Ecto.Query.preload(:organization)
+          |> Ecto.Query.preload(:account)
           |> Backoffice.Repo.all
 
         conn

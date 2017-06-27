@@ -60,6 +60,7 @@ defmodule Sso.UserView do
 
   defp csv_headers() do
     [
+      "Organizzazione", "App",
       "Data registrazione", "Nome", "Cognome", "Email", "Attivo", "Stato",
       "Codice fiscale", "Data di Nascita", "Luogo di nascita",
       "Telefono", "Professione", "Specializzazione", "Attività lavorativa",
@@ -67,20 +68,21 @@ defmodule Sso.UserView do
     ]
   end
 
-  defp csv_data(%Sso.User{inserted_at: registration_date, email: email, active: active, status: status, profile: profile}) do
+  defp csv_data(user) do
     %{
-      "Data registrazione" => "#{registration_date |> NaiveDateTime.to_erl |> Chronos.Formatter.strftime("%d/%m/%Y")}",
-      "Nome" => "#{profile.first_name}", "Cognome" => "#{profile.last_name}",
-      "Email" => "#{email}", "Attivo" => "#{active}", "Stato" => "#{status}",
-      "Codice fiscale" => "#{profile.fiscal_code}",
-      "Data di Nascita" => "#{profile.date_of_birth}",
-      "Luogo di nascita" => "#{profile.place_of_birth}",
-      "Telefono" => "#{profile.phone_number}", "Professione" => "#{profile.profession}",
-      "Specializzazione" => "#{profile.specialization}",
-      "Attività lavorativa" => "#{profile.employment}",
-      "Consensi privacy" => "#{profile.app_consents |> Enum.join(", ")}",
-      "Consenso comunicazioni" => "#{profile.news_consent}",
-      "Consenso raccolta dati" => "#{profile.data_transfer_consent}"
+      "Organizzazione" => user.organization.name, "App" => user.account.app_name,
+      "Data registrazione" => "#{user.inserted_at |> NaiveDateTime.to_erl |> Chronos.Formatter.strftime("%d/%m/%Y")}",
+      "Nome" => user.profile.first_name, "Cognome" => user.profile.last_name,
+      "Email" => user.email, "Attivo" => user.active, "Stato" => user.status,
+      "Codice fiscale" => user.profile.fiscal_code,
+      "Data di Nascita" => user.profile.date_of_birth,
+      "Luogo di nascita" => user.profile.place_of_birth,
+      "Telefono" => user.profile.phone_number, "Professione" => user.profile.profession,
+      "Specializzazione" => user.profile.specialization,
+      "Attività lavorativa" => user.profile.employment,
+      "Consensi privacy" => "#{user.profile.app_consents |> Enum.join(", ")}",
+      "Consenso comunicazioni" => user.profile.news_consent,
+      "Consenso raccolta dati" => user.profile.data_transfer_consent
     }
   end
 end
