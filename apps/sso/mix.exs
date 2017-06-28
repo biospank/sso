@@ -30,8 +30,9 @@ defmodule Sso.Mixfile do
        :gettext,
        :phoenix_ecto,
        :postgrex,
-       :bamboo,
-       :faker]
+       :bamboo]
+      #  ,
+      #  :faker]
      ]
   end
 
@@ -55,7 +56,7 @@ defmodule Sso.Mixfile do
      {:ecto_enum, "~> 1.0"},
      {:csv, "~> 2.0.0"},
      {:chronos, "~> 1.7.0"},
-     {:faker, "~> 0.7", only: [:dev, :test]},
+    #  {:faker, "~> 0.7", only: [:dev, :test]},
      {:credo, "~> 0.5.3", only: [:dev, :test]}]
   end
 
