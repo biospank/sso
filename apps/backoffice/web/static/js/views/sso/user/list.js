@@ -62,7 +62,7 @@ const userList = {
           ]);
         } else {
           return [
-            m('.ui top attached pagination menu mt-0', [
+            m('.ui top attached borderless pagination menu mt-0', [
               paginate(vnode)
             ]),
             m('.ui attached segment', [
@@ -79,7 +79,7 @@ const userList = {
                 })
               ])
             ]),
-            m('.ui bottom attached pagination menu', [
+            m('.ui bottom attached borderless pagination menu', [
               paginate(vnode)
             ])
           ];

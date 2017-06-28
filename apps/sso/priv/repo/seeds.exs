@@ -34,7 +34,7 @@ account = org
     })
   |> Repo.insert!
 
-for n <- 1..30 do
+for n <- 1..120 do
   profile = %{
     first_name: Faker.Name.first_name,
     last_name: Faker.Name.last_name,
@@ -48,7 +48,9 @@ for n <- 1..30 do
     board_number: Faker.Phone.EnUs.subscriber_number,
     province_board: Faker.Address.city,
     employment: Faker.Team.En.name,
-    province_enployment: Faker.Address.city
+    province_enployment: Faker.Address.city,
+    sso_privacy_consent: true,
+    privacy_consent: true
   }
 
   password = Faker.Internet.user_name
