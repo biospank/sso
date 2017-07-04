@@ -15,7 +15,12 @@ const templateTabsView = {
           $('.template.menu .item').tab();
         }
       }, [
-        m("a.item active", {"data-tab": "registration"}, [
+        m("a.item active", {
+          "data-tab": "registration",
+          onclick() {
+            $('div[data-tab="registration"] .device.menu .item').tab('change tab', 'web');
+          }
+        }, [
           "Registrazione",
           m("i.help circle outline icon", {
             "data-content": "Mail inviata all'utente all'atto della registrazione.",
@@ -24,7 +29,12 @@ const templateTabsView = {
             }
           })
         ]),
-        m("a.item", {"data-tab": "verification"}, [
+        m("a.item", {
+          "data-tab": "verification",
+          onclick() {
+            $('div[data-tab="verification"] .format.menu .item').tab('change tab', 'html-verification');
+          }
+        }, [
           "Verifica Utente",
           m("i.help circle outline icon", {
             "data-content": "Mail inviata all'utente alla verifica dei suoi dati.",
@@ -33,7 +43,12 @@ const templateTabsView = {
             }
           })
         ]),
-        m("a.item", {"data-tab": "password-reset"}, [
+        m("a.item", {
+          "data-tab": "password-reset",
+          onclick() {
+            $('div[data-tab="password-reset"] .device.menu .item').tab('change tab', 'web');
+          }
+        }, [
           "Reset Password",
           m("i.help circle outline icon", {
             "data-content": "Mail inviata all'utente alla richiesta di reset della password.",
