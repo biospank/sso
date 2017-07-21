@@ -39,6 +39,13 @@ defmodule Sso.UserTest do
     new_password_confirmation: "secret123"
   }
 
+  @email_change_valid_attrs %{
+    email: "test@example.com",
+    new_email: "new.test@example.com",
+    new_email_confirmation: "new.test@example.com",
+    password: "secret"
+  }
+
   test "changeset with valid attributes" do
     changeset = User.changeset(%User{}, @valid_attrs)
     assert changeset.valid?
@@ -143,5 +150,38 @@ defmodule Sso.UserTest do
   test "password change changeset with unmatched new password confimation" do
     changeset = User.password_change_changeset(%User{}, Map.merge(@password_change_valid_attrs, %{new_password_confirmation: "invalid"}))
     refute changeset.valid?
+  end
+
+  test "email change changeset with missing email is not valid" do
+    changeset = User.email_change_changeset(%User{}, Map.merge(@email_change_valid_attrs, %{email: nil}))
+    refute changeset.valid?
+    assert changeset.errors == [email: {"can't be blank", [validation: :required]}]
+  end
+
+  test "email change changeset with missing new email is not valid" do
+    changeset = User.email_change_changeset(
+      %User{},
+      Map.merge(@email_change_valid_attrs, %{new_email: nil, new_email_confirmation: nil})
+    )
+    refute changeset.valid?
+    assert changeset.errors == [new_email: {"can't be blank", [validation: :required]}]
+  end
+
+  test "email change changeset with missing new email confirmation is not valid" do
+    changeset = User.email_change_changeset(
+      %User{},
+      Map.merge(@email_change_valid_attrs, %{new_email_confirmation: nil})
+    )
+    refute changeset.valid?
+    assert changeset.errors == [new_email_confirmation: {"does not match", [validation: :confirmation]}]
+  end
+
+  test "email change changeset with missing new email invalid format is not valid" do
+    changeset = User.email_change_changeset(
+      %User{},
+      Map.merge(@email_change_valid_attrs, %{new_email: "invalid_email", new_email_confirmation: "invalid_email"})
+    )
+    refute changeset.valid?
+    assert changeset.errors == [new_email: {"has invalid format", [validation: :format]}]
   end
 end

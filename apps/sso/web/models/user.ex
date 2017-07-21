@@ -6,11 +6,13 @@ defmodule Sso.User do
 
   schema "users" do
     field :email, :string
+    field :new_email, :string, virtual: true
     field :password, :string, virtual: true
     field :new_password, :string, virtual: true
     field :password_hash, :string
     field :activation_code, :string
     field :reset_code, :string
+    field :email_change_code, :string
     field :active, :boolean, read_after_writes: true
     field :status, StatusEnum, read_after_writes: true
     embeds_one :profile, Sso.Profile
@@ -53,8 +55,8 @@ defmodule Sso.User do
     |> Ecto.Changeset.change(status: :verified)
   end
 
-  def gen_code_reset_changeset(struct) do
-    Ecto.Changeset.change(struct, reset_code: Crypto.random_string(32))
+  def gen_crypto_code_changeset_for(struct, field) do
+    Ecto.Changeset.change(struct, [{field, Crypto.random_string(32)}])
   end
 
   def password_reset_changeset(struct, params \\ %{}) do
@@ -77,6 +79,14 @@ defmodule Sso.User do
     |> validate_length(:new_password, min: 6)
     |> validate_confirmation(:new_password, required: true, message: "non corrisponde")
     |> put_new_password_hash()
+  end
+
+  def email_change_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:email, :new_email, :password])
+    |> validate_required([:email, :new_email, :password])
+    |> validate_format(:new_email, ~r/@/)
+    |> validate_confirmation(:new_email, required: true, message: "does not match")
   end
 
   # used for password reset
@@ -122,6 +132,13 @@ defmodule Sso.User do
     nil
   end
 
+  def gen_email_change_link(user, %{"callback_url" => callback_url}) do
+    callback_url <> "?code=#{user.email_change_code}"
+  end
+  def gen_email_change_link(_, _) do
+    nil
+  end
+
   def filter_by(query, field, term) do
     case String.strip(term) do
       "" ->
@@ -152,7 +169,7 @@ defmodule Sso.User do
     end
   end
 
-  def filter_by_organization(query, organization) do
+  def filter_by_organization(query, organization) when is_binary(organization) do
     case String.strip(organization) do
       "" ->
         query
@@ -160,6 +177,10 @@ defmodule Sso.User do
         from u in query,
           where: u.organization_id == ^(String.to_integer(stripped_term))
     end
+  end
+  def filter_by_organization(query, organization) do
+    from u in query,
+      where: u.organization_id == ^organization
   end
 
   def filter_profile_by(query, field, term) when is_binary(term) do
@@ -189,6 +210,7 @@ defmodule Sso.User do
   def preview() do
     %Sso.User{
       email: "mario.rossi@example.com",
+      new_email: "vasco.rossi@example.com",
       profile: %Sso.Profile{
         first_name: "Mario",
         last_name: "Rossi",
@@ -210,6 +232,7 @@ defmodule Sso.User do
       },
       activation_code: "G89PAzhqjShK5_hBEZkbn_QrI5bpEK1E",
       reset_code: "Bqw75sWHV_Ufmnu7n3aLawBfU7gbp4XC",
+      email_change_code: "Ast75sBST_Ufmnu7n3aLteBfU7yui4YZ",
       active: false,
       status: :unverified
     }
@@ -217,6 +240,6 @@ defmodule Sso.User do
 
   def to_lowercase(field, term) do
     from u in __MODULE__,
-      where: fragment("lower(?)", field(u, ^field)) == ^String.downcase(term)
+      where: fragment("lower(?)", field(u, ^field)) == ^String.downcase(term || "")
   end
 end

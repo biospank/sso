@@ -23,7 +23,7 @@ defmodule Sso.User.PasswordResetController do
       user ->
         {:ok, user} =
           user
-          |> User.gen_code_reset_changeset
+          |> User.gen_crypto_code_changeset_for(:reset_code)
           |> Repo.update
 
         location = User.gen_password_reset_link(user, user_params)
