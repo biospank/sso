@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Language: it\n"
 
-#: web/controllers/user/activation_controller.ex:23
+#: web/controllers/user/activation_controller.ex:24
 msgid "Activation code not found"
 msgstr "Codice di attivazione non trovato"
 
@@ -20,14 +20,14 @@ msgstr "Richiesta autenticazione (token non valido)"
 
 #: web/lib/token.ex:16
 msgid "Authorization required"
-msgstr "Richiesta autorizzazioneAuthorization required"
+msgstr "Richiesta autorizzazione"
 
-#: web/controllers/user/activation_controller.ex:46
-#: web/controllers/user/password_reset_controller.ex:40
+#: web/controllers/user/activation_controller.ex:58
+#: web/controllers/user/password_reset_controller.ex:45
 msgid "Email not found"
 msgstr "Email non trovata"
 
-#: web/controllers/user/password_reset_controller.ex:62
+#: web/controllers/user/password_reset_controller.ex:67
 msgid "Reset code not found"
 msgstr "Codice reset password non trovato"
 
@@ -62,10 +62,23 @@ msgstr "Utente non autorizzato"
 msgid "User not verified"
 msgstr "Utente non verificato"
 
-#: web/controllers/user/activation_controller.ex:27
+#: web/controllers/user/activation_controller.ex:28
 msgid "Not Modified"
 msgstr "Non modificato"
 
+#: web/controllers/user/email_change_controller.ex:75
 #: web/controllers/user/password_change_controller.ex:42
 msgid "not valid"
 msgstr "non valida"
+
+#: web/controllers/user/email_change_controller.ex:32
+msgid "has already been taken"
+msgstr "è già stata utilizzata"
+
+#: web/controllers/user/email_change_controller.ex:45
+msgid "not found"
+msgstr "non trovata"
+
+#: web/controllers/user/email_change_controller.ex:111
+msgid "not found"
+msgstr "non trovato"
