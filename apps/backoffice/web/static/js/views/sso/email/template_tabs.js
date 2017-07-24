@@ -3,6 +3,7 @@ import _ from 'lodash';
 import registrationTabView from './registration_tab';
 import verificationTabView from './verification_tab';
 import passwordResetTabView from './password_reset_tab';
+import emailChangeTabView from './email_change_tab';
 import aceEditor from '../../../components/ace_editor';
 import Organization from '../../../models/organization';
 
@@ -56,11 +57,26 @@ const templateTabsView = {
               $(dom).popup();
             }
           })
+        ]),
+        m("a.item", {
+          "data-tab": "email-change",
+          onclick() {
+            $('div[data-tab="email-change"] .device.menu .item').tab('change tab', 'web');
+          }
+        }, [
+          "Cambio Mail",
+          m("i.help circle outline icon", {
+            "data-content": "Mail inviata all'utente alla richiesta di cambio mail.",
+            oncreate({dom}) {
+              $(dom).popup();
+            }
+          })
         ])
       ]),
       m(registrationTabView),
       m(verificationTabView),
-      m(passwordResetTabView)
+      m(passwordResetTabView),
+      m(emailChangeTabView)
     ];
   }
 }

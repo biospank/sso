@@ -76,9 +76,6 @@ msgid "has already been taken"
 msgstr "è già stata utilizzata"
 
 #: web/controllers/user/email_change_controller.ex:45
-msgid "not found"
-msgstr "non trovata"
-
 #: web/controllers/user/email_change_controller.ex:111
 msgid "not found"
 msgstr "non trovato"
