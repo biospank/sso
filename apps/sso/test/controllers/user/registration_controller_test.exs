@@ -164,14 +164,14 @@ defmodule Sso.User.RegistrationControllerTest do
     test "deliver a welcome email", %{conn: conn, account: account} do
       conn = post conn, user_registration_path(conn, :create), user: @new_user
       user = Repo.get(User, json_response(conn, 201)["user"]["id"])
-      {:ok, email} = Sso.Email.welcome_email(user, account, nil)
+      {:ok, email} = Sso.Email.welcome_template(user, account, nil)
       assert_delivered_email email
     end
 
     test "welcome email", %{conn: conn, account: account} do
       conn = post conn, user_registration_path(conn, :create), user: @new_user
       user = Repo.get(User, json_response(conn, 201)["user"]["id"])
-      {:ok, email} = Sso.Email.welcome_email(user, account, nil)
+      {:ok, email} = Sso.Email.welcome_template(user, account, nil)
 
       assert email.from == account
       assert email.to == user
@@ -188,7 +188,7 @@ defmodule Sso.User.RegistrationControllerTest do
         )
       user = Repo.get(User, json_response(post_conn, 201)["user"]["id"])
       location = @callback_url <> "?code=#{user.activation_code}"
-      {:ok, email} = Sso.Email.welcome_email(user, account, location)
+      {:ok, email} = Sso.Email.welcome_template(user, account, location)
 
       assert_delivered_email email
     end
@@ -202,7 +202,7 @@ defmodule Sso.User.RegistrationControllerTest do
         )
       user = Repo.get(User, json_response(post_conn, 201)["user"]["id"])
       location = @callback_url <> "?code=#{user.activation_code}"
-      {:ok, email} = Sso.Email.welcome_email(user, account, location)
+      {:ok, email} = Sso.Email.welcome_template(user, account, location)
 
       assert email.from == account
       assert email.to == user
@@ -213,13 +213,13 @@ defmodule Sso.User.RegistrationControllerTest do
     test "deliver a notification email to the account", %{conn: conn, account: account} do
       conn = post conn, user_registration_path(conn, :create), user: @new_user
       user = Repo.get(User, json_response(conn, 201)["user"]["id"])
-      assert_delivered_email Sso.Email.account_new_registration_email(user, account)
+      assert_delivered_email Sso.Email.account_new_registration_template(user, account)
     end
 
     test "account notification email", %{conn: conn, account: account} do
       conn = post conn, user_registration_path(conn, :create), user: @new_user
       user = Repo.get(User, json_response(conn, 201)["user"]["id"])
-      email = Sso.Email.account_new_registration_email(user, account)
+      email = Sso.Email.account_new_registration_template(user, account)
       assert email.from == Application.fetch_env!(:sso, :recipient_email_notification)
       assert email.to == account
       assert email.subject == "app name - Notifica registazione utente"
@@ -236,14 +236,14 @@ defmodule Sso.User.RegistrationControllerTest do
     test "deliver a courtesy email to the user", %{conn: conn, account: account} do
       conn = post conn, user_registration_path(conn, :create), user: @new_user, authorize: true
       user = Repo.get(User, json_response(conn, 201)["user"]["id"])
-      {:ok, email} = Sso.Email.courtesy_email(user, account)
+      {:ok, email} = Sso.Email.courtesy_template(user, account)
       assert_delivered_email email
     end
 
     test "user courtesy email", %{conn: conn, account: account} do
       conn = post conn, user_registration_path(conn, :create), user: @new_user, authorize: true
       user = Repo.get(User, json_response(conn, 201)["user"]["id"])
-      {:ok, email} = Sso.Email.courtesy_email(user, account)
+      {:ok, email} = Sso.Email.courtesy_template(user, account)
       assert email.from == account
       assert email.to == user
       assert email.subject == "app name - Conferma registrazione"

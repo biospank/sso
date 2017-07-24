@@ -31,7 +31,7 @@ defmodule Sso.User.PasswordResetController do
           account
           |> Repo.preload(:organization)
 
-        case Email.password_reset_email(user, account, location) do
+        case Email.password_reset_template(user, account, location) do
           {:error, message} ->
             Logger.error message
           {:ok, email} ->

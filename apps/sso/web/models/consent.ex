@@ -36,6 +36,11 @@ defmodule Sso.Consent do
     struct
   end
 
+  def clone_changeset(struct, consent) do
+    struct
+    |> changeset(Map.from_struct(consent))
+  end
+
   defp create_new_consent(account, privacy_consent) do
     %__MODULE__{}
     |> changeset(%{

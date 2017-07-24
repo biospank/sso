@@ -82,7 +82,7 @@ defmodule Sso.User.PasswordResetControllerTest do
       assert post_conn.status == 201
       user = Repo.get(Sso.User, user.id)
 
-      {:ok, email} = Sso.Email.password_reset_email(user, account, nil)
+      {:ok, email} = Sso.Email.password_reset_template(user, account, nil)
 
       assert_delivered_email email
     end
@@ -94,7 +94,7 @@ defmodule Sso.User.PasswordResetControllerTest do
 
       assert post_conn.status == 201
       user = Repo.get(Sso.User, user.id)
-      {:ok, email} = Sso.Email.password_reset_email(user, account, nil)
+      {:ok, email} = Sso.Email.password_reset_template(user, account, nil)
 
       assert email.from == account
       assert email.to == user
@@ -117,7 +117,7 @@ defmodule Sso.User.PasswordResetControllerTest do
       user = Repo.get(Sso.User, user.id)
       location = @callback_url <> "?code=#{user.reset_code}"
 
-      {:ok, email} = Sso.Email.password_reset_email(user, account, location)
+      {:ok, email} = Sso.Email.password_reset_template(user, account, location)
 
       assert_delivered_email email
     end
@@ -136,7 +136,7 @@ defmodule Sso.User.PasswordResetControllerTest do
       assert post_conn.status == 201
       user = Repo.get(Sso.User, user.id)
       location = @callback_url <> "?code=#{user.reset_code}"
-      {:ok, email} = Sso.Email.password_reset_email(user, account, location)
+      {:ok, email} = Sso.Email.password_reset_template(user, account, location)
 
       assert email.from == account
       assert email.to == user

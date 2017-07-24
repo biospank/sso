@@ -90,7 +90,7 @@ defmodule Backoffice.UserControllerTest do
         |> Ecto.Query.preload(:organization)
         |> Sso.Repo.get!(user.account_id)
 
-      {:ok, email} = Sso.Email.courtesy_email(user, account)
+      {:ok, email} = Sso.Email.courtesy_template(user, account)
       assert_delivered_email email
     end
 
@@ -115,7 +115,7 @@ defmodule Backoffice.UserControllerTest do
         |> Ecto.Query.preload(:organization)
         |> Sso.Repo.get!(user.account_id)
 
-      {:ok, email} = Sso.Email.courtesy_email(user, account)
+      {:ok, email} = Sso.Email.courtesy_template(user, account)
       refute_delivered_email email
     end
 
@@ -131,7 +131,7 @@ defmodule Backoffice.UserControllerTest do
         |> Ecto.Query.preload(:organization)
         |> Sso.Repo.get!(user.account_id)
 
-      {:ok, email} = Sso.Email.courtesy_email(user, account)
+      {:ok, email} = Sso.Email.courtesy_template(user, account)
       assert email.to == user
       assert email.subject == "app name - Conferma registrazione"
       assert email.html_body =~ user.profile.first_name

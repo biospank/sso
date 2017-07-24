@@ -32,7 +32,7 @@ defmodule Sso.User.RegistrationController do
 
         case get_in(account.organization.settings, ["email_template", "verification", "active"]) do
           value when value in [true, nil] ->
-            case Email.courtesy_email(user, account) do
+            case Email.courtesy_template(user, account) do
               {:error, message} ->
                 Logger.error message
               {:ok, email} ->
@@ -66,15 +66,15 @@ defmodule Sso.User.RegistrationController do
           account
           |> Repo.preload(:organization)
 
-        case Email.welcome_email(user, account, link) do
+        case Email.welcome_template(user, account, link) do
           {:error, message} ->
             Logger.error message
           {:ok, email} ->
             Mailer.deliver_later(email)
         end
 
-        Email.account_new_registration_email(user, account) |> Mailer.deliver_later
-        # Email.dardy_new_registration_email(user, account) |> Mailer.deliver_later
+        Email.account_new_registration_template(user, account) |> Mailer.deliver_later
+        # Email.dardy_new_registration_template(user, account) |> Mailer.deliver_later
 
         conn
         |> put_status(:created)

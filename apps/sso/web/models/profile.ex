@@ -98,6 +98,12 @@ defmodule Sso.Profile do
     # |> cast_embed(:app_consents) we don't update app consents using params
   end
 
+  def clone_changeset(struct, profile) do
+    struct
+    |> changeset(Map.from_struct(profile))
+    |> cast_embed(:app_consents, with: &Sso.Consent.clone_changeset/2)
+  end
+
   # def add_app_consents(user_params, account) do
   #   if Map.has_key?(user_params, "profile") do
   #     put_in(user_params, ["profile", "app_consents"], [

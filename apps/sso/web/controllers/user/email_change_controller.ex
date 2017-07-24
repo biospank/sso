@@ -3,9 +3,9 @@ defmodule Sso.User.EmailChangeController do
 
   require Logger
 
-  alias Sso.{User, Email, Mailer, Repo}
+  alias Sso.{User, ArchivedUser, Email, Mailer, Repo}
 
-  plug :scrub_params, "user" when action in [:create, :update]
+  plug :scrub_params, "user" when action in [:create]
 
   def action(conn, _) do
     apply(__MODULE__, action_name(conn),
@@ -52,6 +52,7 @@ defmodule Sso.User.EmailChangeController do
               {:ok, user} =
                 user
                 |> User.gen_crypto_code_changeset_for(:email_change_code)
+                |> Ecto.Changeset.put_change(:new_email, user_params["new_email"])
                 |> Repo.update
 
               location = User.gen_email_change_link(user, user_params)
@@ -60,7 +61,7 @@ defmodule Sso.User.EmailChangeController do
                 account
                 |> Repo.preload(:organization)
 
-              case Email.email_address_change_email(user_params["new_email"], user, account, location) do
+              case Email.email_address_change_template(user_params["new_email"], user, account, location) do
                 {:error, message} ->
                   Logger.error message
                 {:ok, email} ->
@@ -70,7 +71,7 @@ defmodule Sso.User.EmailChangeController do
               send_resp conn, 201, ""
             else
               changeset =
-                Ecto.Changeset.change(%User{}, %{password: ""})
+                Ecto.Changeset.change(%User{})
                 |> Ecto.Changeset.add_error(:password, gettext("not valid"))
 
               conn
@@ -86,25 +87,32 @@ defmodule Sso.User.EmailChangeController do
     end
   end
 
-  # def update(conn, %{"id" => email_change_code}, _) do
-  #   user = Repo.get_by(User, email_change_code: email_change_code)
-  #
-  #   cond do
-  #     user ->
-  #       changeset = User.password_reset_changeset(user, reset_params)
-  #
-  #       case Repo.update(changeset) do
-  #         {:ok, user} ->
-  #           render(conn, Sso.UserView, "show.json", user: user)
-  #         {:error, changeset} ->
-  #           conn
-  #           |> put_status(:unprocessable_entity)
-  #           |> render(Sso.ChangesetView, "error.json", changeset: changeset)
-  #       end
-  #     true ->
-  #       conn
-  #       |> put_status(:not_found)
-  #       |> render(Sso.ErrorView, :"404", errors: %{message: gettext("Reset code not found")})
-  #   end
-  # end
+  def update(conn, %{"id" => email_change_code}, account) do
+    user = Repo.get_by(User, email_change_code: email_change_code)
+
+    cond do
+      user ->
+        user
+        |> build_assoc(:archived_users, %{
+            account_id: account.id,
+            organization_id: account.organization_id
+          })
+        |> ArchivedUser.clone_changeset(user)
+        |> Repo.insert!
+
+        user
+        |> Ecto.Changeset.change(email: user.new_email)
+        |> Repo.update!
+
+        render(conn, Sso.UserView, "show.json", user: user)
+      true ->
+        error_changeset =
+          Ecto.Changeset.change(%User{})
+          |> Ecto.Changeset.add_error(:code, gettext("not found"))
+
+        conn
+        |> put_status(:not_found)
+        |> render(Sso.ChangesetView, "error.json", changeset: error_changeset)
+    end
+  end
 end

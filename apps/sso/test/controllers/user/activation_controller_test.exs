@@ -50,13 +50,13 @@ defmodule Sso.User.ActivationControllerTest do
     test "activation deliver a notification email to Dardy", %{conn: conn, account: account, user: user} do
       conn = put conn, user_activation_path(conn, :confirm, user.activation_code)
       user = Repo.get(User, json_response(conn, 200)["user"]["id"])
-      assert_delivered_email Sso.Email.dardy_new_registration_email(user, account)
+      assert_delivered_email Sso.Email.dardy_new_registration_template(user, account)
     end
 
     test "dardy notification email", %{conn: conn, account: account, user: user} do
       conn = put conn, user_activation_path(conn, :confirm, user.activation_code)
       user = Repo.get(User, json_response(conn, 200)["user"]["id"])
-      email = Sso.Email.dardy_new_registration_email(user, account)
+      email = Sso.Email.dardy_new_registration_template(user, account)
       assert email.from == account
       assert email.to == Application.fetch_env!(:sso, :recipient_email_notification)
       assert email.subject == "app name - Notifica registazione utente"
@@ -81,7 +81,7 @@ defmodule Sso.User.ActivationControllerTest do
       |> Repo.update!
 
       put conn, user_activation_path(conn, :confirm, user.activation_code)
-      refute_delivered_email Sso.Email.dardy_new_registration_email(user, account)
+      refute_delivered_email Sso.Email.dardy_new_registration_template(user, account)
     end
 
     test "invalid activation code", %{conn: conn} do
@@ -115,7 +115,7 @@ defmodule Sso.User.ActivationControllerTest do
       }
       user = Repo.get(User, json_response(conn, 200)["user"]["id"])
 
-      {:ok, email} = Sso.Email.welcome_email(user, account, nil)
+      {:ok, email} = Sso.Email.welcome_template(user, account, nil)
 
       assert_delivered_email email
     end
@@ -125,7 +125,7 @@ defmodule Sso.User.ActivationControllerTest do
         "email" => user.email
       })
 
-      {:ok, email} = Sso.Email.welcome_email(user, account, nil)
+      {:ok, email} = Sso.Email.welcome_template(user, account, nil)
 
       assert email.from == account
       assert email.to == user
@@ -140,7 +140,7 @@ defmodule Sso.User.ActivationControllerTest do
       })
       location = @callback_url <> "?code=#{user.activation_code}"
 
-      {:ok, email} = Sso.Email.welcome_email(user, account, location)
+      {:ok, email} = Sso.Email.welcome_template(user, account, location)
 
       assert_delivered_email email
     end
@@ -152,7 +152,7 @@ defmodule Sso.User.ActivationControllerTest do
       })
       location = @callback_url <> "?code=#{user.activation_code}"
 
-      {:ok, email} = Sso.Email.welcome_email(user, account, location)
+      {:ok, email} = Sso.Email.welcome_template(user, account, location)
 
       assert email.from == account
       assert email.to == user

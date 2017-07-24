@@ -1,7 +1,7 @@
 defmodule Sso.Email do
   use Bamboo.Phoenix, view: Sso.EmailView
 
-  def welcome_email(user, account, link) when is_binary(link) do
+  def welcome_template(user, account, link) when is_binary(link) do
     bindings = [user: user, account: account, link: link]
 
     with {:ok, subject_content} <- account.organization.settings
@@ -28,7 +28,7 @@ defmodule Sso.Email do
     end
   end
 
-  def welcome_email(user, account, link) when is_nil(link) do
+  def welcome_template(user, account, link) when is_nil(link) do
     bindings = [user: user, account: account]
 
     with {:ok, subject_content} <- account.organization.settings
@@ -55,7 +55,7 @@ defmodule Sso.Email do
     end
   end
 
-  def dardy_new_registration_email(user, account) do
+  def dardy_new_registration_template(user, account) do
     new_email
     |> from(account)
     |> to(Application.fetch_env!(:sso, :recipient_email_notification))
@@ -70,7 +70,7 @@ defmodule Sso.Email do
       """)
   end
 
-  def account_new_registration_email(user, account) do
+  def account_new_registration_template(user, account) do
     new_email
     |> from(Application.fetch_env!(:sso, :recipient_email_notification))
     |> to(account)
@@ -90,7 +90,7 @@ defmodule Sso.Email do
       """)
   end
 
-  def password_reset_email(user, account, link) when is_binary(link) do
+  def password_reset_template(user, account, link) when is_binary(link) do
     bindings = [user: user, account: account, link: link]
 
     with {:ok, subject_content} <- account.organization.settings
@@ -117,7 +117,7 @@ defmodule Sso.Email do
     end
   end
 
-  def password_reset_email(user, account, link) when is_nil(link) do
+  def password_reset_template(user, account, link) when is_nil(link) do
     bindings = [user: user, account: account]
 
     with {:ok, subject_content} <- account.organization.settings
@@ -144,7 +144,7 @@ defmodule Sso.Email do
     end
   end
 
-  def email_address_change_email(recipient, user, account, link) when is_binary(link) do
+  def email_address_change_template(recipient, user, account, link) when is_binary(link) do
     bindings = [user: user, account: account, link: link]
 
     with {:ok, subject_content} <- account.organization.settings
@@ -171,7 +171,7 @@ defmodule Sso.Email do
     end
   end
 
-  def email_address_change_email(recipient, user, account, link) when is_nil(link) do
+  def email_address_change_template(recipient, user, account, link) when is_nil(link) do
     bindings = [user: user, account: account]
 
     with {:ok, subject_content} <- account.organization.settings
@@ -198,7 +198,7 @@ defmodule Sso.Email do
     end
   end
 
-  def courtesy_email(user, account) do
+  def courtesy_template(user, account) do
     bindings = [user: user, account: account]
 
     with {:ok, subject_content} <- account.organization.settings

@@ -35,7 +35,7 @@ defmodule Sso.User.ActivationController do
 
         user_changeset = case get_in(user.organization.settings, ["email_template", "verification", "active"]) do
           value when value in [true, nil] ->
-            Email.dardy_new_registration_email(user, account) |> Mailer.deliver_later
+            Email.dardy_new_registration_template(user, account) |> Mailer.deliver_later
             User.activate_changeset(user)
           _ ->
             User.activate_and_authorize_changeset(user)
@@ -62,7 +62,7 @@ defmodule Sso.User.ActivationController do
           account
           |> Repo.preload(:organization)
 
-        case Email.welcome_email(user, account, link) do
+        case Email.welcome_template(user, account, link) do
           {:error, message} ->
             Logger.error message
           {:ok, email} ->

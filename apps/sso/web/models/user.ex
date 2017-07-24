@@ -6,7 +6,7 @@ defmodule Sso.User do
 
   schema "users" do
     field :email, :string
-    field :new_email, :string, virtual: true
+    field :new_email
     field :password, :string, virtual: true
     field :new_password, :string, virtual: true
     field :password_hash, :string
@@ -19,6 +19,7 @@ defmodule Sso.User do
 
     belongs_to :account, Sso.Account
     belongs_to :organization, Sso.Organization
+    has_many :archived_users, Sso.ArchivedUser
 
     timestamps
   end

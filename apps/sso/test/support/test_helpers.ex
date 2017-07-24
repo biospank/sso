@@ -28,6 +28,15 @@ defmodule Sso.TestHelpers do
             mobile: %{
               html_body: "Gentile first name last name <%= user.reset_code %>"
             }
+          },
+          email_change: %{
+            subject: "app name - Cambio mail",
+            web: %{
+              html_body: "Gentile first name last name http://anysite.com/resetpwd?code=<%= user.email_change_code %>"
+            },
+            mobile: %{
+              html_body: "Gentile first name last name <%= user.email_change_code %>"
+            }
           }
         }
       }
@@ -75,14 +84,27 @@ defmodule Sso.TestHelpers do
       province_board: "Roma",
       employment: "Medico generico",
       sso_privacy_consent: true,
-      privacy_consent: false,
+      privacy_consent: true,
       province_enployment: "Roma"
     }, attrs["profile"] || %{})
+
+    consent_changeset =
+      %Sso.Consent{}
+      |> Sso.Consent.changeset(%{
+          app_id: account.id,
+          app_name: account.app_name,
+          privacy: true
+        })
+
+    profile_changeset =
+      %Sso.Profile{}
+      |> Sso.Profile.changeset(profile)
+      |> Ecto.Changeset.put_embed(:app_consents, [consent_changeset])
 
     account
     |> Ecto.build_assoc(:users, %{organization_id: account.organization_id})
     |> Ecto.Changeset.change(changes)
-    |> Ecto.Changeset.put_embed(:profile, profile)
+    |> Ecto.Changeset.put_embed(:profile, profile_changeset)
     |> Repo.insert!
   end
 end

@@ -79,7 +79,7 @@ defmodule Backoffice.UserController do
 
       case get_in(account.organization.settings, ["email_template", "verification", "active"]) do
         value when value in [true, nil] ->
-          case Sso.Email.courtesy_email(updated_user, account) do
+          case Sso.Email.courtesy_template(updated_user, account) do
             {:error, message} ->
               Logger.error message
             {:ok, email} ->
