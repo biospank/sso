@@ -268,6 +268,17 @@ defmodule Sso.User.EmailChangeControllerTest do
       assert new_user
     end
 
+    test "on successful change, reset email change code and new email fields", %{conn: conn} do
+      user = Repo.one(from u in Sso.User, where: u.email == ^@valid_attrs.email)
+
+      put(conn, user_email_change_path(conn, :update, user.email_change_code))
+
+      new_user = Repo.one(from u in Sso.User, where: u.email == ^@valid_attrs.new_email)
+
+      assert is_nil(new_user.email_change_code)
+      assert is_nil(new_user.new_email)
+    end
+
     test "archive old user", %{conn: conn} do
       user = Repo.one(from u in Sso.User, where: u.email == ^@valid_attrs.email)
 

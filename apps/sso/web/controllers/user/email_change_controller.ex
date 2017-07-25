@@ -100,9 +100,14 @@ defmodule Sso.User.EmailChangeController do
         |> ArchivedUser.clone_changeset(user)
         |> Repo.insert!
 
-        user
-        |> Ecto.Changeset.change(email: user.new_email)
-        |> Repo.update!
+        user =
+          user
+          |> Ecto.Changeset.change(
+              email: user.new_email,
+              email_change_code: nil,
+              new_email: nil
+            )
+          |> Repo.update!
 
         render(conn, Sso.UserView, "show.json", user: user)
       true ->

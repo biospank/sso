@@ -28,8 +28,11 @@ msgstr "non è un valore valido"
 msgid "is reserved"
 msgstr "non può essere utilizzato"
 
+msgid "does not match"
+msgstr "non corrisponde"
+
 msgid "does not match confirmation"
-msgstr "con corrisponde"
+msgstr "non corrisponde"
 
 msgid "must be accepted"
 msgstr "deve essere accettato"
