@@ -33,9 +33,10 @@ defmodule Sso.Router do
       put "/activate/:code", ActivationController, :confirm
       post "/activation/resend", ActivationController, :resend, as: :resend_activation_code
       resources "/password/reset", PasswordResetController, only: [:create, :update]
-      resources "/email/change", EmailChangeController, only: [:create, :update]
       put "/:id/profile", ProfileController, :update
       put "/:id/password/change", PasswordChangeController, :change
+      post "/:id/email/change", EmailChangeController, :create
+      put "/email/change/:code", EmailChangeController, :update
     end
   end
 

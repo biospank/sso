@@ -17,51 +17,47 @@ defmodule Sso.User.EmailChangeController do
     )
   end
 
-  def create(conn, %{"user" => user_params}, account) do
-    user_changeset = User.email_change_changeset(%User{}, user_params)
+  def create(conn, %{"id" => user_id, "user" => user_params}, account) do
+    case Repo.get_by(User, id: user_id, organization_id: account.organization_id) do
+      nil ->
+        changeset =
+          Ecto.Changeset.change(%User{})
+          |> Ecto.Changeset.add_error(:user, gettext("not found"))
 
-    check_unique_new_mail_query =
-      User.to_lowercase(:email, user_params["new_email"])
-      |> User.filter_by_organization(account.organization_id)
+        conn
+        |> put_status(:not_found)
+        |> render(Sso.ChangesetView, "error.json", changeset: changeset)
+      user ->
+        params_changeset = User.email_change_changeset(%User{}, user_params)
 
-    changeset =
-      case Repo.one(check_unique_new_mail_query) do
-        nil ->
-          user_changeset
-        _ ->
-          Ecto.Changeset.add_error(user_changeset, :new_email, gettext("has already been taken"))
-      end
+        if params_changeset.valid? do
+          check_unique_new_mail_query =
+            User.to_lowercase(:email, user_params["new_email"])
+            |> User.filter_by_organization(account.organization_id)
 
-    case changeset.valid? do
-      true ->
-        user_query =
-          User.to_lowercase(:email, user_params["email"])
-          |> User.filter_by_organization(account.organization_id)
-
-        case Repo.one(user_query) do
-          nil ->
-            changeset =
+          if Repo.one(check_unique_new_mail_query) do
+            duplicate_error_changeset =
               Ecto.Changeset.change(%User{})
-              |> Ecto.Changeset.add_error(:email, gettext("not found"))
+              |> Ecto.Changeset.add_error(:new_email, gettext("has already been taken"))
 
             conn
-            |> put_status(:not_found)
-            |> render(Sso.ChangesetView, "error.json", changeset: changeset)
-          user ->
+            |> put_status(:unprocessable_entity)
+            |> render(Sso.ChangesetView, "error.json", changeset: duplicate_error_changeset)
+          else
             if Comeonin.Bcrypt.checkpw(user_params["password"], user.password_hash) do
-              {:ok, user} =
+              prepare_user_change =
                 user
                 |> User.gen_crypto_code_changeset_for(:email_change_code)
                 |> Ecto.Changeset.put_change(:new_email, user_params["new_email"])
-                |> Repo.update
+                |> Repo.update!
 
-              location = User.gen_email_change_link(user, user_params)
+              location = User.gen_email_change_link(prepare_user_change, user_params)
 
               account =
                 account
                 |> Repo.preload(:organization)
 
-              case Email.email_address_change_template(user_params["new_email"], user, account, location) do
+              case Email.email_address_change_template(user_params["new_email"], prepare_user_change, account, location) do
                 {:error, message} ->
                   Logger.error message
                 {:ok, email} ->
@@ -70,24 +66,24 @@ defmodule Sso.User.EmailChangeController do
 
               send_resp conn, 201, ""
             else
-              changeset =
+              password_error_changeset =
                 Ecto.Changeset.change(%User{})
                 |> Ecto.Changeset.add_error(:password, gettext("not valid"))
 
               conn
               |> put_status(:unauthorized)
-              |> render(Sso.ChangesetView, "error.json", changeset: changeset)
+              |> render(Sso.ChangesetView, "error.json", changeset: password_error_changeset)
             end
+          end
+        else
+          conn
+          |> put_status(:unprocessable_entity)
+          |> render(Sso.ChangesetView, "error.json", changeset: params_changeset)
         end
-
-      false ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Sso.ChangesetView, "error.json", changeset: changeset)
     end
   end
 
-  def update(conn, %{"id" => email_change_code}, account) do
+  def update(conn, %{"code" => email_change_code}, account) do
     user = Repo.get_by(User, email_change_code: email_change_code)
 
     cond do

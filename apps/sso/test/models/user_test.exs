@@ -152,12 +152,6 @@ defmodule Sso.UserTest do
     refute changeset.valid?
   end
 
-  test "email change changeset with missing email is not valid" do
-    changeset = User.email_change_changeset(%User{}, Map.merge(@email_change_valid_attrs, %{email: nil}))
-    refute changeset.valid?
-    assert changeset.errors == [email: {"can't be blank", [validation: :required]}]
-  end
-
   test "email change changeset with missing new email is not valid" do
     changeset = User.email_change_changeset(
       %User{},
@@ -167,7 +161,7 @@ defmodule Sso.UserTest do
     assert changeset.errors == [new_email: {"can't be blank", [validation: :required]}]
   end
 
-  test "email change changeset with missing new email confirmation is not valid" do
+  test "email change changeset with unmatched new email confirmation is not valid" do
     changeset = User.email_change_changeset(
       %User{},
       Map.merge(@email_change_valid_attrs, %{new_email_confirmation: nil})

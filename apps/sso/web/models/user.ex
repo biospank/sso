@@ -84,8 +84,8 @@ defmodule Sso.User do
 
   def email_change_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:email, :new_email, :password])
-    |> validate_required([:email, :new_email, :password])
+    |> cast(params, [:new_email, :password])
+    |> validate_required([:new_email, :password])
     |> validate_format(:new_email, ~r/@/)
     |> validate_confirmation(:new_email, required: true, message: "does not match")
   end

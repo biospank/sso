@@ -3,7 +3,6 @@ defmodule Sso.User.EmailChangeControllerTest do
   use Bamboo.Test, shared: :true
 
   @valid_attrs %{
-    email: "test@example.com",
     new_email: "new.test@example.com",
     new_email_confirmation: "new.test@example.com",
     password: "secret"
@@ -24,7 +23,7 @@ defmodule Sso.User.EmailChangeControllerTest do
 
     test "requires accept header", %{conn: conn} do
       Enum.each([
-          post(conn, user_email_change_path(conn, :create), user: %{}),
+          post(conn, user_email_change_path(conn, :create, 123), user: %{}),
           put(conn, user_email_change_path(conn, :update, 123))
         ], fn conn ->
           assert conn.status == 406
@@ -37,7 +36,7 @@ defmodule Sso.User.EmailChangeControllerTest do
     @tag :accept_header
     test "requires account authentication", %{conn: conn} do
       Enum.each([
-          post(conn, user_email_change_path(conn, :create), user: %{}),
+          post(conn, user_email_change_path(conn, :create, 123), user: %{}),
           put(conn, user_email_change_path(conn, :update, 123))
         ], fn conn ->
           assert json_response(conn, 498)["errors"] == %{
@@ -65,53 +64,43 @@ defmodule Sso.User.EmailChangeControllerTest do
       {:ok, conn: conn, account: account, user: user}
     end
 
-    test "valid parameters", %{conn: conn} do
-      conn = post(conn, user_email_change_path(conn, :create), user: @valid_attrs)
+    test "valid parameters", %{conn: conn, user: user} do
+      conn = post(conn, user_email_change_path(conn, :create, user.id), user: @valid_attrs)
       assert conn.status == 201
     end
 
-    test "save new email", %{conn: conn} do
-      post(conn, user_email_change_path(conn, :create), user: @valid_attrs)
+    test "save new email", %{conn: conn, user: user, user: user} do
+      post(conn, user_email_change_path(conn, :create, user.id), user: @valid_attrs)
 
-      user = Repo.one(from u in Sso.User, where: u.email == ^@valid_attrs.email)
+      user = Repo.one(from u in Sso.User, where: u.email == ^user.email)
 
       assert user.new_email == @valid_attrs.new_email
     end
 
-    test "invalid parameters", %{conn: conn} do
+    test "invalid parameters", %{conn: conn, user: user} do
       conn = post(
         conn,
-        user_email_change_path(conn, :create),
+        user_email_change_path(conn, :create, user.id),
         user: Map.merge(@valid_attrs, %{new_email: ""})
       )
 
       assert json_response(conn, 422)["errors"] != %{}
     end
 
-    test "new email must be unique within the same organization", %{conn: conn} do
+    test "new email must be unique within the same organization", %{conn: conn, user: user} do
       conn = post(
         conn,
-        user_email_change_path(conn, :create),
+        user_email_change_path(conn, :create, user.id),
         user: Map.merge(@valid_attrs, %{new_email: "test@example.com", new_email_confirmation: "test@example.com"})
       )
 
       assert json_response(conn, 422)["errors"] == %{"new_email" => ["has already been taken"]}
     end
 
-    test "non existent email parameters returns 404", %{conn: conn} do
+    test "invalid password parameters returns 401", %{conn: conn, user: user} do
       conn = post(
         conn,
-        user_email_change_path(conn, :create),
-        user: Map.merge(@valid_attrs, %{email: "non.existent@example.com"})
-      )
-
-      assert json_response(conn, 404)["errors"] == %{"email" => ["not found"]}
-    end
-
-    test "invalid password parameters returns 401", %{conn: conn} do
-      conn = post(
-        conn,
-        user_email_change_path(conn, :create),
+        user_email_change_path(conn, :create, user.id),
         user: Map.merge(@valid_attrs, %{password: "invalid-password"})
       )
 
@@ -119,7 +108,7 @@ defmodule Sso.User.EmailChangeControllerTest do
     end
 
     test "deliver an email address change mail", %{conn: conn, account: account, user: user} do
-      post_conn = post conn, user_email_change_path(conn, :create), user: @valid_attrs
+      post_conn = post conn, user_email_change_path(conn, :create, user.id), user: @valid_attrs
 
       assert post_conn.status == 201
       user = Repo.get(Sso.User, user.id)
@@ -130,7 +119,7 @@ defmodule Sso.User.EmailChangeControllerTest do
     end
 
     test "email address change mail", %{conn: conn, account: account, user: user} do
-      post_conn = post conn, user_email_change_path(conn, :create), user: @valid_attrs
+      post_conn = post conn, user_email_change_path(conn, :create, user.id), user: @valid_attrs
 
       assert post_conn.status == 201
       user = Repo.get(Sso.User, user.id)
@@ -147,7 +136,7 @@ defmodule Sso.User.EmailChangeControllerTest do
       post_conn =
         conn
         |> post(
-            user_email_change_path(conn, :create),
+            user_email_change_path(conn, :create, user.id),
             user: Map.merge(@valid_attrs, %{callback_url: @callback_url})
         )
 
@@ -164,7 +153,7 @@ defmodule Sso.User.EmailChangeControllerTest do
       post_conn =
         conn
         |> post(
-            user_email_change_path(conn, :create),
+            user_email_change_path(conn, :create, user.id),
             user: Map.merge(@valid_attrs, %{callback_url: @callback_url})
         )
 
@@ -208,13 +197,8 @@ defmodule Sso.User.EmailChangeControllerTest do
 
       conn = post(
         conn,
-        user_email_change_path(conn, :create),
-        user: Map.merge(
-          @valid_attrs,
-          %{
-            email: user.email
-          }
-        )
+        user_email_change_path(conn, :create, user.id),
+        user: @valid_attrs
       )
 
       assert conn.status == 201
@@ -233,13 +217,15 @@ defmodule Sso.User.EmailChangeControllerTest do
         |> put_req_header("accept", "application/vnd.dardy.sso.v1+json")
         |> put_req_header("authorization", "Dardy #{jwt}")
 
-        conn
-        |> post(
-            user_email_change_path(conn, :create),
-            user: @valid_attrs
-        )
+      conn
+      |> post(
+          user_email_change_path(conn, :create, user.id),
+          user: @valid_attrs
+      )
 
-      {:ok, conn: conn, account: account, user: user}
+      updated_user = Sso.Repo.get(Sso.User, user.id)
+
+      {:ok, conn: conn, account: account, user: updated_user}
     end
 
     test "invalid email change code", %{conn: conn} do
@@ -248,28 +234,28 @@ defmodule Sso.User.EmailChangeControllerTest do
       assert json_response(put_conn, 404)["errors"] == %{"code" => ["not found"]}
     end
 
-    test "valid email change code", %{conn: conn} do
-      user = Repo.one(from u in Sso.User, where: u.email == ^@valid_attrs.email)
+    test "valid email change code", %{conn: conn, user: user} do
+      user = Repo.one(from u in Sso.User, where: u.email == ^user.email)
 
       put_conn = put(conn, user_email_change_path(conn, :update, user.email_change_code))
 
       assert json_response(put_conn, 200)
     end
 
-    test "change user email with new email", %{conn: conn} do
-      user = Repo.one(from u in Sso.User, where: u.email == ^@valid_attrs.email)
+    test "change user email with new email", %{conn: conn, user: user} do
+      user = Repo.one(from u in Sso.User, where: u.email == ^user.email)
 
       put(conn, user_email_change_path(conn, :update, user.email_change_code))
 
-      old_user = Repo.one(from u in Sso.User, where: u.email == ^@valid_attrs.email)
+      old_user = Repo.one(from u in Sso.User, where: u.email == ^user.email)
       new_user = Repo.one(from u in Sso.User, where: u.email == ^@valid_attrs.new_email)
 
       refute old_user
       assert new_user
     end
 
-    test "on successful change, reset email change code and new email fields", %{conn: conn} do
-      user = Repo.one(from u in Sso.User, where: u.email == ^@valid_attrs.email)
+    test "on successful change, reset email change code and new email fields", %{conn: conn, user: user} do
+      user = Repo.one(from u in Sso.User, where: u.email == ^user.email)
 
       put(conn, user_email_change_path(conn, :update, user.email_change_code))
 
@@ -279,12 +265,12 @@ defmodule Sso.User.EmailChangeControllerTest do
       assert is_nil(new_user.new_email)
     end
 
-    test "archive old user", %{conn: conn} do
-      user = Repo.one(from u in Sso.User, where: u.email == ^@valid_attrs.email)
+    test "archive old user", %{conn: conn, user: user} do
+      user = Repo.one(from u in Sso.User, where: u.email == ^user.email)
 
       put(conn, user_email_change_path(conn, :update, user.email_change_code))
 
-      archived_user = Repo.one(from u in Sso.ArchivedUser, where: u.email == ^@valid_attrs.email)
+      archived_user = Repo.one(from u in Sso.ArchivedUser, where: u.email == ^user.email)
 
       assert archived_user
     end
