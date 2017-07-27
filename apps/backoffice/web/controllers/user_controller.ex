@@ -91,4 +91,19 @@ defmodule Backoffice.UserController do
 
     render(conn, Sso.UserView, "show_with_org_and_account.json", user: updated_user)
   end
+
+  def password_change(conn, %{"user_id" => user_id, "user" => user_params}) do
+    user = Sso.Repo.get!(User, user_id)
+
+    changeset = User.backoffice_password_change_changeset(user, user_params)
+
+    case Repo.update(changeset) do
+      {:ok, user} ->
+        send_resp(conn, 200, "")
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Backoffice.ChangesetView, "error.json", changeset: changeset)
+    end
+  end
 end

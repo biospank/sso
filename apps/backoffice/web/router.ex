@@ -40,6 +40,7 @@ defmodule Backoffice.Router do
       put "/activate", UserController, :activate, as: :activate
       put "/deactivate", UserController, :deactivate, as: :deactivate
       put "/authorize", UserController, :authorize, as: :authorize
+      put "/password/change", UserController, :password_change, as: :password_change
     end
 
     resources "/organization", OrganizationController, only: [:index, :create, :update]

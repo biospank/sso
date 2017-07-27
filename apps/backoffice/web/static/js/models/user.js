@@ -6,6 +6,11 @@ import Session from './session';
 
 const User = {
   url: '/user',
+  model: {
+    id: stream(undefined),
+    new_password: stream(""),
+    new_password_confirmation: stream("")
+  },
   filters: {
     field: stream(""),
     fieldLabel: stream(""),
@@ -78,6 +83,17 @@ const User = {
     return m.request({
       method: "PUT",
       url: `${Backoffice.apiBaseUrl()}${this.url}/${user.id}/authorize`,
+      config: function(xhr) {
+        xhr.setRequestHeader("accept", "application/json");
+        xhr.setRequestHeader("Authorization", `${Backoffice.realm} ${Session.token()}`)
+      }
+    });
+  },
+  changePassword(user) {
+    return m.request({
+      method: "PUT",
+      data: { user: this.model },
+      url: `${Backoffice.apiBaseUrl()}${this.url}/${user.id}/password/change`,
       config: function(xhr) {
         xhr.setRequestHeader("accept", "application/json");
         xhr.setRequestHeader("Authorization", `${Backoffice.realm} ${Session.token()}`)

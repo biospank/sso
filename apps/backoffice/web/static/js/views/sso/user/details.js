@@ -21,6 +21,12 @@ const content = ({state}) => {
       }),
       m("button", {
         className: "ui right floated teal basic button",
+        onclick() {
+          m.route.set(`/sso/user/${state.user.id}/password/change`)
+        }
+      }, 'Cambia password'),
+      m("button", {
+        className: "ui right floated teal basic button",
         href: '/sso/users',
         oncreate: m.route.link
       }, [
