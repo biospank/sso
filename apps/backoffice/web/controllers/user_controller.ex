@@ -93,17 +93,49 @@ defmodule Backoffice.UserController do
   end
 
   def password_change(conn, %{"user_id" => user_id, "user" => user_params}) do
-    user = Sso.Repo.get!(User, user_id)
+    user = User |> Sso.Repo.get!(user_id)
 
-    changeset = User.backoffice_password_change_changeset(user, user_params)
+    params_changeset = User.backoffice_password_change_changeset(user, user_params)
 
-    case Repo.update(changeset) do
-      {:ok, user} ->
+    case params_changeset.valid? do
+      true ->
+        user
+          |> Ecto.Changeset.change(password_hash: Comeonin.Bcrypt.hashpwsalt(user_params["new_password"]))
+          |> Sso.Repo.update!
+
         send_resp(conn, 200, "")
-      {:error, changeset} ->
+      false ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Backoffice.ChangesetView, "error.json", changeset: changeset)
+        |> render(Backoffice.ChangesetView, "error.json", changeset: params_changeset)
+    end
+  end
+
+  def email_change(conn, %{"user_id" => user_id, "user" => user_params}) do
+    user = Sso.Repo.get!(User, user_id)
+
+    params_changeset = User.backoffice_email_change_changeset(user, user_params)
+
+    case params_changeset.valid? do
+      true ->
+        user
+        |> build_assoc(:archived_users, %{
+            account_id: user.account_id,
+            organization_id: user.organization_id
+          })
+        |> Sso.ArchivedUser.clone_changeset(user)
+        |> Ecto.Changeset.put_change(:new_email, user_params["new_email"])
+        |> Sso.Repo.insert!
+
+        user
+        |> Ecto.Changeset.change(email: user.new_email)
+        |> Sso.Repo.update!
+
+        send_resp(conn, 200, "")
+      false ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Backoffice.ChangesetView, "error.json", changeset: params_changeset)
     end
   end
 end

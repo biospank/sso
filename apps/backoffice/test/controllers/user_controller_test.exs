@@ -2,6 +2,16 @@ defmodule Backoffice.UserControllerTest do
   use Backoffice.ConnCase
   use Bamboo.Test, shared: :true
 
+  @password_change_valid_attrs %{
+    "new_password" => "new_secret123",
+    "new_password_confirmation" => "new_secret123"
+  }
+
+  @email_change_valid_attrs %{
+    "new_email" => "test.new.email@example.com",
+    "new_email_confirmation" => "test.new.email@example.com"
+  }
+
   setup %{conn: conn} do
     # to avoid ** (DBConnection.OwnershipError) cannot find ownership process for #PID<0.674.0>.
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Sso.Repo)
@@ -17,7 +27,9 @@ defmodule Backoffice.UserControllerTest do
       Enum.each([
           get(conn, user_path(conn, :index)),
           put(conn, user_activate_path(conn, :activate, 123)),
-          put(conn, user_authorize_path(conn, :authorize, 123))
+          put(conn, user_authorize_path(conn, :authorize, 123)),
+          put(conn, user_password_change_path(conn, :password_change, 123)),
+          put(conn, user_email_change_path(conn, :email_change, 123))
         ], fn conn ->
           assert json_response(conn, 498)["errors"] == %{
             "message" => "Richiesta autorizzazione (token non valido)"
@@ -76,6 +88,72 @@ defmodule Backoffice.UserControllerTest do
 
       conn = put conn, user_authorize_path(conn, :authorize, user)
       assert json_response(conn, 200)["user"]["status"] == "verified"
+    end
+
+    test "change password", %{conn: conn} do
+      organization = insert_organization()
+      account = insert_account(organization)
+      user = insert_user(account)
+
+      conn = put conn, user_password_change_path(conn, :password_change, user), user: @password_change_valid_attrs
+      assert conn.status == 200
+    end
+
+    test "change password with invalid attrs", %{conn: conn} do
+      organization = insert_organization()
+      account = insert_account(organization)
+      user = insert_user(account)
+
+      conn = put conn, user_password_change_path(conn, :password_change, user), user: %{}
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+
+    test "change email", %{conn: conn} do
+      organization = insert_organization()
+      account = insert_account(organization)
+      user = insert_user(account)
+
+      conn = put conn, user_email_change_path(conn, :email_change, user), user: @email_change_valid_attrs
+      assert conn.status == 200
+    end
+
+    test "change email with invalid attrs", %{conn: conn} do
+      organization = insert_organization()
+      account = insert_account(organization)
+      user = insert_user(account)
+
+      conn = put conn, user_email_change_path(conn, :email_change, user), user: %{}
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+
+    test "change user email with new email", %{conn: conn} do
+      organization = insert_organization()
+      account = insert_account(organization)
+      user = insert_user(account)
+
+      put(conn, user_email_change_path(conn, :email_change, user), user: @email_change_valid_attrs)
+
+      IO.puts Map.get(@email_change_valid_attrs, "new_email")
+
+      old_user = Sso.Repo.one(from u in Sso.User, where: u.email == ^user.email)
+      # new_user = Sso.Repo.one(from u in Sso.User, where: u.email == ^Map.get(@email_change_valid_attrs, "new_email"))
+      new_user = Sso.Repo.get_by(Sso.User, email: "test.new.email@example.com")
+      IO.puts inspect(new_user)
+
+      refute old_user
+      assert new_user
+    end
+
+    test "archive old user", %{conn: conn} do
+      organization = insert_organization()
+      account = insert_account(organization)
+      user = insert_user(account)
+
+      put(conn, user_email_change_path(conn, :email_change, user), user: @email_change_valid_attrs)
+
+      archived_user = Sso.Repo.one(from u in Sso.ArchivedUser, where: u.email == ^user.email)
+
+      assert archived_user
     end
 
     test "deliver a courtesy email", %{conn: conn} do

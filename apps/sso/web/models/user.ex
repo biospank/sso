@@ -87,14 +87,22 @@ defmodule Sso.User do
     |> cast(params, [:new_password])
     |> validate_required([:new_password])
     |> validate_length(:new_password, min: 6)
-    |> validate_confirmation(:new_password, required: true, message: "non corrisponde")
-    |> put_new_password_hash()
+    |> validate_confirmation(:new_password, required: true, message: "does not match")
+    # |> put_new_password_hash()
   end
 
   def email_change_changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:new_email, :password])
     |> validate_required([:new_email, :password])
+    |> validate_format(:new_email, ~r/@/)
+    |> validate_confirmation(:new_email, required: true, message: "does not match")
+  end
+
+  def backoffice_email_change_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:new_email])
+    |> validate_required([:new_email])
     |> validate_format(:new_email, ~r/@/)
     |> validate_confirmation(:new_email, required: true, message: "does not match")
   end
