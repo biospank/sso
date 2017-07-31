@@ -128,7 +128,7 @@ defmodule Backoffice.UserController do
         |> Sso.Repo.insert!
 
         user
-        |> Ecto.Changeset.change(email: user.new_email)
+        |> Ecto.Changeset.change(email: user_params["new_email"])
         |> Sso.Repo.update!
 
         send_resp(conn, 200, "")

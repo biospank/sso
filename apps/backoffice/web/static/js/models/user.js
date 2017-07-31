@@ -95,7 +95,7 @@ const User = {
   changePassword(user) {
     return m.request({
       method: "PUT",
-      data: { user: this.model },
+      data: { user: this.password_change_model },
       url: `${Backoffice.apiBaseUrl()}${this.url}/${user.id}/password/change`,
       config: function(xhr) {
         xhr.setRequestHeader("accept", "application/json");
@@ -106,7 +106,7 @@ const User = {
   changeEmail(user) {
     return m.request({
       method: "PUT",
-      data: { user: this.model },
+      data: { user: this.email_change_model },
       url: `${Backoffice.apiBaseUrl()}${this.url}/${user.id}/email/change`,
       config: function(xhr) {
         xhr.setRequestHeader("accept", "application/json");

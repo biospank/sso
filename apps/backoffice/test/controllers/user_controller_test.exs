@@ -133,12 +133,8 @@ defmodule Backoffice.UserControllerTest do
 
       put(conn, user_email_change_path(conn, :email_change, user), user: @email_change_valid_attrs)
 
-      IO.puts Map.get(@email_change_valid_attrs, "new_email")
-
       old_user = Sso.Repo.one(from u in Sso.User, where: u.email == ^user.email)
-      # new_user = Sso.Repo.one(from u in Sso.User, where: u.email == ^Map.get(@email_change_valid_attrs, "new_email"))
       new_user = Sso.Repo.get_by(Sso.User, email: "test.new.email@example.com")
-      IO.puts inspect(new_user)
 
       refute old_user
       assert new_user
@@ -151,7 +147,11 @@ defmodule Backoffice.UserControllerTest do
 
       put(conn, user_email_change_path(conn, :email_change, user), user: @email_change_valid_attrs)
 
-      archived_user = Sso.Repo.one(from u in Sso.ArchivedUser, where: u.email == ^user.email)
+      archived_user = Sso.Repo.one(
+        from u in Sso.ArchivedUser,
+        where: u.email == ^user.email and
+          u.new_email == ^Map.get(@email_change_valid_attrs, "new_email")
+      )
 
       assert archived_user
     end
