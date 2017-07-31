@@ -29,7 +29,10 @@ msgid "is reserved"
 msgstr "non può essere utilizzato"
 
 msgid "does not match confirmation"
-msgstr "con corrisponde"
+msgstr "non corrisponde"
+
+msgid "does not match"
+msgstr "non corrisponde"
 
 msgid "is still associated to this entry"
 msgstr "è ancora associato"
