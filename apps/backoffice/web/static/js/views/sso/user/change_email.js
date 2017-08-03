@@ -21,11 +21,11 @@ const content = ({state}) => {
                 placeholder: 'Nuova mail',
                 oninput: m.withAttr("value", User.email_change_model.new_email),
               }),
-              m("i.at icon", {className: state.errors()["new_email"] ? "red" : "teal"})
+              m("i.at icon", {className: (state.errors()["email"] || state.errors()["new_email"]) ? "red" : "teal"})
             ]),
             m(".ui basic error pointing prompt label transition ", {
-              className: (state.errors()["new_email"] ? "visible" : "hidden")
-            }, m('p', state.errors()["new_email"]))
+              className: ((state.errors()["email"] || state.errors()["new_email"]) ? "visible" : "hidden")
+            }, m('p', (state.errors()["email"] || state.errors()["new_email"])))
           ]),
           m(".required field", {className: state.errors()["new_email_confirmation"] ? "error" : ""}, [
             m("label", "Conferma nuovo indirizzo email"),

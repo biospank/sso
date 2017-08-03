@@ -126,6 +126,51 @@ defmodule Backoffice.UserControllerTest do
       assert json_response(conn, 422)["errors"] != %{}
     end
 
+    test "change email with existing email into the same organization", %{conn: conn} do
+      organization = insert_organization()
+      account = insert_account(organization)
+      insert_user(account, %{
+          email: "user1@example.com"
+        })
+      user2 = insert_user(account, %{
+          email: "user2@example.com"
+        })
+
+      conn = put(
+        conn,
+        user_email_change_path(conn, :email_change, user2),
+        user: %{
+          "new_email" => "user1@example.com",
+          "new_email_confirmation" => "user1@example.com"
+        }
+      )
+
+      assert json_response(conn, 422)["errors"] == %{"email" => ["è già stato utilizzato"]}
+    end
+
+    test "change email with existing email into the same organization case insensitive", %{conn: conn} do
+      organization = insert_organization()
+      account = insert_account(organization)
+      insert_user(account, %{
+          email: "user1@example.com"
+        })
+      user2 = insert_user(account, %{
+          email: "user2@example.com"
+        })
+
+      conn = put(
+        conn,
+        user_email_change_path(conn, :email_change, user2),
+        user: %{
+          "new_email" => "uSeR1@example.com",
+          "new_email_confirmation" => "uSeR1@example.com"
+        }
+      )
+
+      assert json_response(conn, 422)["errors"] == %{"email" => ["è già stato utilizzato"]}
+    end
+
+
     test "change user email with new email", %{conn: conn} do
       organization = insert_organization()
       account = insert_account(organization)

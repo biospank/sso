@@ -118,20 +118,29 @@ defmodule Backoffice.UserController do
 
     case params_changeset.valid? do
       true ->
-        user
-        |> build_assoc(:archived_users, %{
-            account_id: user.account_id,
-            organization_id: user.organization_id
-          })
-        |> Sso.ArchivedUser.clone_changeset(user)
-        |> Ecto.Changeset.put_change(:new_email, user_params["new_email"])
-        |> Sso.Repo.insert!
+        email_changeset =
+          user
+          |> Ecto.Changeset.change(email: String.downcase(user_params["new_email"]))
+          |> Ecto.Changeset.unique_constraint(:email, name: :users_email_organization_id_index)
 
-        user
-        |> Ecto.Changeset.change(email: user_params["new_email"])
-        |> Sso.Repo.update!
+        case Sso.Repo.update(email_changeset) do
+          {:ok, _} ->
+            user
+            |> build_assoc(:archived_users, %{
+                account_id: user.account_id,
+                organization_id: user.organization_id
+              })
+            |> Sso.ArchivedUser.clone_changeset(user)
+            |> Ecto.Changeset.put_change(:new_email, user_params["new_email"])
+            |> Sso.Repo.insert!
 
-        send_resp(conn, 200, "")
+            send_resp(conn, 200, "")
+          {:error, changeset} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> render(Backoffice.ChangesetView, "error.json", changeset: changeset)
+        end
+
       false ->
         conn
         |> put_status(:unprocessable_entity)
