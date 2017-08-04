@@ -88,7 +88,6 @@ defmodule Sso.User do
     |> validate_required([:new_password])
     |> validate_length(:new_password, min: 6)
     |> validate_confirmation(:new_password, required: true, message: "does not match")
-    # |> put_new_password_hash()
   end
 
   def email_change_changeset(struct, params \\ %{}) do
