@@ -28,6 +28,7 @@ defmodule Sso.Profile do
     field :sso_privacy_consent, :boolean
     field :news_consent, :boolean, default: false
     field :data_transfer_consent, :boolean, default: false
+    field :activation_callback_url
   end
 
   @cast_fields [
@@ -102,6 +103,10 @@ defmodule Sso.Profile do
     struct
     |> changeset(Map.from_struct(profile))
     |> cast_embed(:app_consents, with: &Sso.Consent.clone_changeset/2)
+  end
+
+  def attrs_changeset(struct, attrs \\ %{}) do
+    struct |> Ecto.Changeset.change(attrs)
   end
 
   # def add_app_consents(user_params, account) do

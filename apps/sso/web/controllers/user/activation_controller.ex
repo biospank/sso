@@ -57,7 +57,7 @@ defmodule Sso.User.ActivationController do
         |> put_status(:not_found)
         |> render(Sso.ErrorView, :"404", errors: %{message: gettext("Email not found")})
       user ->
-        link = User.gen_registration_link(user, user_params)
+        link = User.gen_activation_link(user, user_params)
         account =
           account
           |> Repo.preload(:organization)

@@ -1,6 +1,7 @@
 import m from 'mithril';
 import _ from 'lodash';
 import registrationTabView from './registration_tab';
+import reminderTabView from './reminder_tab';
 import verificationTabView from './verification_tab';
 import passwordResetTabView from './password_reset_tab';
 import emailChangeTabView from './email_change_tab';
@@ -25,6 +26,20 @@ const templateTabsView = {
           "Registrazione",
           m("i.help circle outline icon", {
             "data-content": "Mail inviata all'utente all'atto della registrazione.",
+            oncreate({dom}) {
+              $(dom).popup();
+            }
+          })
+        ]),
+        m("a.item", {
+          "data-tab": "reminder",
+          onclick() {
+            $('div[data-tab="reminder"] .device.menu .item').tab('change tab', 'web');
+          }
+        }, [
+          "Reminder",
+          m("i.help circle outline icon", {
+            "data-content": "Mail inviata all'utente che non ha completato la registrazione nelle 24/48 ore.",
             oncreate({dom}) {
               $(dom).popup();
             }
@@ -74,6 +89,7 @@ const templateTabsView = {
         ])
       ]),
       m(registrationTabView),
+      m(reminderTabView),
       m(verificationTabView),
       m(passwordResetTabView),
       m(emailChangeTabView)

@@ -61,7 +61,8 @@ defmodule Sso.User.RegistrationController do
 
     case Repo.insert(changeset) do
       {:ok, user} ->
-        link = User.gen_registration_link(user, user_params)
+        link = User.gen_activation_link(user, user_params)
+
         account =
           account
           |> Repo.preload(:organization)

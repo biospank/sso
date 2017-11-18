@@ -135,10 +135,23 @@ defmodule Sso.User do
     end
   end
 
-  def gen_registration_link(user, %{"callback_url" => callback_url}) do
-    callback_url <> "?code=#{user.activation_code}"
+  def save_activation_link(link, user) do
+    profile_changeset =
+      Sso.Profile.attrs_changeset(user.profile, activation_callback_url: link)
+
+    user
+    |> change
+    |> put_embed(:profile, profile_changeset)
+    |> Sso.Repo.update
+
+    link
   end
-  def gen_registration_link(_, _) do
+
+  def gen_activation_link(user, %{"callback_url" => callback_url}) do
+    callback_url <> "?code=#{user.activation_code}"
+    |> save_registration_link(user)
+  end
+  def gen_activation_link(_, _) do
     nil
   end
 
@@ -154,6 +167,16 @@ defmodule Sso.User do
   end
   def gen_email_change_link(_, _) do
     nil
+  end
+
+  def pending_activations(from_days_ago, to_days_ago) do
+    query = from u in Sso.User,
+      where: u.inserted_at >= ^NaiveDateTime.from_erl!(from_days_ago)
+        and u.inserted_at <= ^NaiveDateTime.from_erl!(to_days_ago)
+        and u.active == false,
+      preload: [:account, :organization]
+
+    Sso.Repo.all(query)
   end
 
   def filter_by(query, field, term) do

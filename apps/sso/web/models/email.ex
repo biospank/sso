@@ -225,6 +225,61 @@ defmodule Sso.Email do
     end
   end
 
+  def reminder_template(user, account, link) when is_binary(link) do
+    bindings = [user: user, account: account, link: link]
+
+    with {:ok, subject_content} <- account.organization.settings
+                                    |> lookup_content_for(["email_template", "reminder", "subject"])
+                                    |> compile(bindings),
+         {:ok, html_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "reminder", "web", "html_body"])
+                                      |> compile(bindings),
+         {:ok, text_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "reminder", "web", "text_body"])
+                                      |> compile(bindings)
+    do
+      email = new_email
+        |> from(account)
+        |> to(user)
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
+
+      {:ok, email}
+    else
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  # actually mobile reminder is not used (see activation reminder)
+  def reminder_template(user, account, link)  when is_nil(link) do
+    bindings = [user: user, account: account]
+
+    with {:ok, subject_content} <- account.organization.settings
+                                    |> lookup_content_for(["email_template", "reminder", "subject"])
+                                    |> compile(bindings),
+         {:ok, html_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "reminder", "mobile", "html_body"])
+                                      |> compile(bindings),
+         {:ok, text_body_content} <- account.organization.settings
+                                      |> lookup_content_for(["email_template", "reminder", "mobile", "text_body"])
+                                      |> compile(bindings)
+    do
+      email = new_email
+        |> from(account)
+        |> to(user)
+        |> subject(subject_content)
+        |> html_body(html_body_content)
+        |> text_body(text_body_content)
+
+      {:ok, email}
+    else
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
   def preview(params)  do
     bindings = [
       user: params[:user],

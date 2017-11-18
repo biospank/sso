@@ -17,6 +17,7 @@ defmodule Sso do
       supervisor(Sso.Endpoint, []),
       # Start your own worker by calling: Sso.Worker.start_link(arg1, arg2, arg3)
       # worker(Sso.Worker, [arg1, arg2, arg3]),
+      worker(Sso.Workers.ActivationReminder, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
