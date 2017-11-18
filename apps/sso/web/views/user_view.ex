@@ -64,6 +64,7 @@ defmodule Sso.UserView do
       "Data registrazione", "Nome", "Cognome", "Email", "Attivo", "Stato",
       "Codice fiscale", "Data di Nascita", "Luogo di nascita",
       "Telefono", "Professione", "Specializzazione", "Attività lavorativa",
+      "Prov. attività lavorativa", "Ordine", "Num. iscr. ordine", "Prov. ordine",
       "Consensi privacy", "Consenso comunicazioni", "Consenso raccolta dati"
     ]
   end
@@ -80,6 +81,10 @@ defmodule Sso.UserView do
       "Telefono" => user.profile.phone_number, "Professione" => user.profile.profession,
       "Specializzazione" => user.profile.specialization,
       "Attività lavorativa" => user.profile.employment,
+      "Prov. attività lavorativa" => user.profile.province_enployment,
+      "Ordine" => user.profile.board_member,
+      "Num. iscr. ordine" => user.profile.board_number,
+      "Prov. ordine" => user.profile.province_board,
       "Consensi privacy" => "#{user.profile.app_consents |> Enum.join(", ")}",
       "Consenso comunicazioni" => user.profile.news_consent,
       "Consenso raccolta dati" => user.profile.data_transfer_consent
