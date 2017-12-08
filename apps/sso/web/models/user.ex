@@ -149,7 +149,7 @@ defmodule Sso.User do
 
   def gen_activation_link(user, %{"callback_url" => callback_url}) do
     callback_url <> "?code=#{user.activation_code}"
-    |> save_registration_link(user)
+    |> save_activation_link(user)
   end
   def gen_activation_link(_, _) do
     nil
