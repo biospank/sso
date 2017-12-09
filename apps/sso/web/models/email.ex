@@ -228,13 +228,13 @@ defmodule Sso.Email do
   def reminder_template(user, account, link) when is_binary(link) do
     bindings = [user: user, account: account, link: link]
 
-    with {:ok, subject_content} <- account.organization.settings
+    with {:ok, subject_content} <- user.organization.settings
                                     |> lookup_content_for(["email_template", "reminder", "subject"])
                                     |> compile(bindings),
-         {:ok, html_body_content} <- account.organization.settings
+         {:ok, html_body_content} <- user.organization.settings
                                       |> lookup_content_for(["email_template", "reminder", "web", "html_body"])
                                       |> compile(bindings),
-         {:ok, text_body_content} <- account.organization.settings
+         {:ok, text_body_content} <- user.organization.settings
                                       |> lookup_content_for(["email_template", "reminder", "web", "text_body"])
                                       |> compile(bindings)
     do
@@ -256,13 +256,13 @@ defmodule Sso.Email do
   def reminder_template(user, account, link)  when is_nil(link) do
     bindings = [user: user, account: account]
 
-    with {:ok, subject_content} <- account.organization.settings
+    with {:ok, subject_content} <- user.organization.settings
                                     |> lookup_content_for(["email_template", "reminder", "subject"])
                                     |> compile(bindings),
-         {:ok, html_body_content} <- account.organization.settings
+         {:ok, html_body_content} <- user.organization.settings
                                       |> lookup_content_for(["email_template", "reminder", "mobile", "html_body"])
                                       |> compile(bindings),
-         {:ok, text_body_content} <- account.organization.settings
+         {:ok, text_body_content} <- user.organization.settings
                                       |> lookup_content_for(["email_template", "reminder", "mobile", "text_body"])
                                       |> compile(bindings)
     do
