@@ -16,6 +16,11 @@ defmodule Sso.TestHelpers do
               html_body: "Gentile first name last name <%= user.activation_code %>"
             }
           },
+          reminder: %{
+            active: true,
+            subject: "app name - Conferma registrazione",
+            html_body: "Gentile first name last name"
+          },
           verification: %{
             subject: "app name - Conferma registrazione",
             html_body: "Gentile first name last name"

@@ -21,6 +21,9 @@ config :logger, level: :info
 
 config :sso, :recipient_email_notification, "dirosa.ilaria@gmail.com"
 
+config :sso, Sso.Workers.ActivationReminder,
+  enabled: true
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

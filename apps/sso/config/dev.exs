@@ -46,3 +46,6 @@ config :sso, Sso.Mailer,
 #   retries: 1
 
 config :sso, :recipient_email_notification, "dirosa.ilaria@gmail.com"
+
+config :sso, Sso.Workers.ActivationReminder,
+  enabled: true

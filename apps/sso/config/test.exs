@@ -23,3 +23,6 @@ config :bamboo, :refute_timeout, 10
 
 config :sso, Sso.Mailer,
   adapter: Bamboo.TestAdapter
+
+config :sso, Sso.Workers.ActivationReminder,
+  enabled: false

@@ -174,7 +174,8 @@ defmodule Sso.User do
       where: u.inserted_at >= ^NaiveDateTime.from_erl!(from_days_ago)
         and u.inserted_at <= ^NaiveDateTime.from_erl!(to_days_ago)
         and u.active == false,
-      preload: [:account, :organization]
+      preload: [:account, account: :organization]
+      # same as above preload: [{:account, [:organization]}, :account]
 
     Sso.Repo.all(query)
   end
