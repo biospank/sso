@@ -42,6 +42,12 @@ const mixinLayout = (content, layout) => {
             },
             className: (m.route.get() === '/sso/template') ? 'active' : ''
           }, "Template email"),
+          m("a.item teal", {
+            onclick() {
+              m.route.set('/sso/custom-fields')
+            },
+            className: (m.route.get() === '/sso/custom-fields') ? 'active' : ''
+          }, "Campi custom"),
           // m(".ui simple dropdown link item", [
           //   m("span", { class: "text" }, "Single Sign On"),
           //   m("i", { class: "dropdown icon" }),

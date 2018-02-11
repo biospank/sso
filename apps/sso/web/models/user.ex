@@ -15,7 +15,7 @@ defmodule Sso.User do
     field :email_change_code, :string
     field :active, :boolean, read_after_writes: true
     field :status, StatusEnum, read_after_writes: true
-    embeds_one :profile, Sso.Profile
+    field :profile, :map
 
     belongs_to :account, Sso.Account
     belongs_to :organization, Sso.Organization
@@ -252,7 +252,7 @@ defmodule Sso.User do
     %Sso.User{
       email: "mario.rossi@example.com",
       new_email: "vasco.rossi@example.com",
-      profile: %Sso.Profile{
+      profile: %{
         first_name: "Mario",
         last_name: "Rossi",
         fiscal_code: "mrarss21s50h501z",
@@ -265,11 +265,11 @@ defmodule Sso.User do
         board_number: "3773662882",
         province_board: "Roma",
         employment: "Medico generico",
+        province_enployment: "Roma",
         sso_privacy_consent: true,
         privacy_consent: false,
         news_consent: false,
-        data_transfer_consent: false,
-        province_enployment: "Roma"
+        data_transfer_consent: false
       },
       activation_code: "G89PAzhqjShK5_hBEZkbn_QrI5bpEK1E",
       reset_code: "Bqw75sWHV_Ufmnu7n3aLawBfU7gbp4XC",

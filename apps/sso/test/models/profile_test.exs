@@ -22,38 +22,142 @@ defmodule Sso.ProfileTest do
     data_transfer_consent: true,
     province_enployment: "Roma"
   }
+  @custom_fields [
+    %{
+      name: "first_name",
+      data_type: "string",
+      rule_type: "required",
+      default: ""
+    },
+    %{
+      name: "last_name",
+      data_type: "string",
+      rule_type: "required",
+      default: ""
+    },
+    %{
+      name: "fiscal_code",
+      data_type: "string",
+      rule_type: "required",
+      default: ""
+    },
+    %{
+      name: "date_of_birth",
+      data_type: "string",
+      rule_type: "required",
+      default: ""
+    },
+    %{
+      name: "place_of_birth",
+      data_type: "string",
+      rule_type: "required",
+      default: ""
+    },
+    %{
+      name: "phone_number",
+      data_type: "string",
+      rule_type: "required",
+      default: ""
+    },
+    %{
+      name: "profession",
+      data_type: "string",
+      rule_type: "required",
+      default: ""
+    },
+    %{
+      name: "specialization",
+      data_type: "string",
+      rule_type: "required",
+      default: ""
+    },
+    %{
+      name: "board_member",
+      data_type: "string",
+      rule_type: "required",
+      default: ""
+    },
+    %{
+      name: "board_number",
+      data_type: "string",
+      rule_type: "required",
+      default: ""
+    },
+    %{
+      name: "province_board",
+      data_type: "string",
+      rule_type: "required",
+      default: ""
+    },
+    %{
+      name: "employment",
+      data_type: "string",
+      rule_type: "optional",
+      default: ""
+    },
+    %{
+      name: "province_enployment",
+      data_type: "string",
+      rule_type: "required",
+      default: ""
+    },
+    %{
+      name: "privacy_consent",
+      data_type: "boolean",
+      rule_type: "required",
+      default: "false"
+    },
+    %{
+      name: "sso_privacy_consent",
+      data_type: "boolean",
+      rule_type: "required",
+      default: "false"
+    },
+    %{
+      name: "news_consent",
+      data_type: "boolean",
+      rule_type: "optional",
+      default: "false"
+    },
+    %{
+      name: "data_transfer_consent",
+      data_type: "boolean",
+      rule_type: "optional",
+      default: "false"
+    }
+  ]
 
   test "registration changeset with valid attributes" do
-    changeset = Profile.registration_changeset(%Profile{}, @valid_attrs)
+    changeset = Profile.registration_changeset(@custom_fields, @valid_attrs)
     assert changeset.valid?
   end
 
   test "registration changeset with missing privacy consent" do
-    changeset = Profile.registration_changeset(%Profile{}, Map.delete(@valid_attrs, :privacy_consent))
+    changeset = Profile.registration_changeset(@custom_fields, Map.delete(@valid_attrs, :privacy_consent))
     refute changeset.valid?
     assert changeset.errors[:privacy_consent] == {"must be accepted", [validation: :acceptance]}
   end
 
   test "registration changeset with invalid privacy consent" do
-    changeset = Profile.registration_changeset(%Profile{}, Map.put(@valid_attrs, :privacy_consent, false))
+    changeset = Profile.registration_changeset(@custom_fields, Map.put(@valid_attrs, :privacy_consent, false))
     refute changeset.valid?
     assert changeset.errors[:privacy_consent] == {"must be accepted", [validation: :acceptance]}
   end
 
   test "registration changeset with missing sso privacy consent" do
-    changeset = Profile.registration_changeset(%Profile{}, Map.delete(@valid_attrs, :sso_privacy_consent))
+    changeset = Profile.registration_changeset(@custom_fields, Map.delete(@valid_attrs, :sso_privacy_consent))
     refute changeset.valid?
     assert changeset.errors[:sso_privacy_consent] == {"must be accepted", [validation: :acceptance]}
   end
 
   test "registration changeset with invalid sso privacy consent" do
-    changeset = Profile.registration_changeset(%Profile{}, Map.put(@valid_attrs, :sso_privacy_consent, false))
+    changeset = Profile.registration_changeset(@custom_fields, Map.put(@valid_attrs, :sso_privacy_consent, false))
     refute changeset.valid?
     assert changeset.errors[:sso_privacy_consent] == {"must be accepted", [validation: :acceptance]}
   end
 
   test "registration changeset with missing news consent" do
-    changeset = Profile.registration_changeset(%Profile{}, Map.delete(@valid_attrs, :news_consent))
+    changeset = Profile.registration_changeset(@custom_fields, Map.delete(@valid_attrs, :news_consent))
 
     assert changeset.valid?
     profile = Ecto.Changeset.apply_changes(changeset)
@@ -61,7 +165,7 @@ defmodule Sso.ProfileTest do
   end
 
   test "registration changeset with missing data transfer consent" do
-    changeset = Profile.registration_changeset(%Profile{}, Map.delete(@valid_attrs, :data_transfer_consent))
+    changeset = Profile.registration_changeset(@custom_fields, Map.delete(@valid_attrs, :data_transfer_consent))
 
     assert changeset.valid?
     profile = Ecto.Changeset.apply_changes(changeset)
@@ -69,12 +173,12 @@ defmodule Sso.ProfileTest do
   end
 
   test "update changeset with missing privacy consent" do
-    changeset = Profile.update_changeset(Map.merge(%Profile{}, @valid_attrs) , Map.delete(@valid_attrs, :privacy_consent))
+    changeset = Profile.update_changeset(@custom_fields, Map.delete(@valid_attrs, :privacy_consent))
     assert changeset.valid?
   end
 
   test "update changeset with invalid sso privacy consent" do
-    changeset = Profile.update_changeset(%Profile{}, Map.put(@valid_attrs, :sso_privacy_consent, false))
+    changeset = Profile.update_changeset(@custom_fields, Map.put(@valid_attrs, :sso_privacy_consent, false))
     assert changeset.valid?
   end
 
@@ -84,7 +188,7 @@ defmodule Sso.ProfileTest do
       :phone_number, :profession, :specialization, :board_member, :board_number,
       :province_board, :province_enployment #, :employment,
     ], fn field ->
-      changeset = Profile.registration_changeset(%Profile{}, Map.delete(@valid_attrs, field))
+      changeset = Profile.registration_changeset(@custom_fields, Map.delete(@valid_attrs, field))
       refute changeset.valid?
       assert changeset.errors[field] == {"can't be blank", [validation: :required]}
     end)
@@ -96,7 +200,7 @@ defmodule Sso.ProfileTest do
       :phone_number, :profession, :specialization, :board_member, :board_number,
       :province_board, :province_enployment #, :employment,
     ], fn field ->
-      changeset = Profile.update_changeset(%Profile{}, Map.delete(@valid_attrs, field))
+      changeset = Profile.update_changeset(@custom_fields, Map.delete(@valid_attrs, field))
       refute changeset.valid?
       assert changeset.errors[field] == {"can't be blank", [validation: :required]}
     end)

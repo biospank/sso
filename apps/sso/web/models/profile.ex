@@ -2,100 +2,37 @@ defmodule Sso.Profile do
   @moduledoc false
   use Sso.Web, :model
 
+  alias Sso.Organization
   alias Sso.Consent
 
-  # embedded_schema is short for:
-  #
-  #   @primary_key {:id, :binary_id, autogenerate: true}
-  #   schema "embedded Item" do
-  #
-  embedded_schema do
-    field :first_name
-    field :last_name
-    field :fiscal_code
-    field :date_of_birth
-    field :place_of_birth
-    field :phone_number
-    field :profession
-    field :specialization
-    field :board_member
-    field :board_number
-    field :province_board
-    field :employment
-    field :province_enployment
-    field :privacy_consent, :boolean, virtual: true
-    embeds_many :app_consents, Consent
-    field :sso_privacy_consent, :boolean
-    field :news_consent, :boolean, default: false
-    field :data_transfer_consent, :boolean, default: false
-    field :activation_callback_url
-  end
-
-  @cast_fields [
-    :first_name,
-    :last_name,
-    :fiscal_code,
-    :date_of_birth,
-    :place_of_birth,
-    :phone_number,
-    :profession,
-    :specialization,
-    :board_member,
-    :board_number,
-    :province_board,
-    :employment,
-    :province_enployment,
-    :privacy_consent,
-    :sso_privacy_consent,
-    :news_consent,
-    :data_transfer_consent
-  ]
-
-  @cast_update_fields @cast_fields -- [
+  @optional_update_fields [
     :privacy_consent,
     :sso_privacy_consent
   ]
 
-  @optional_registration_fields [
-    :employment,
-    :news_consent,
-    :data_transfer_consent
-  ]
-
-  @optional_update_fields [
-    :employment,
-    :privacy_consent, # virtual field (always return nil)
-    :news_consent,
-    :data_transfer_consent
-  ]
-
-  @required_registration_fields @cast_fields -- @optional_registration_fields
-
-  @required_update_fields @cast_update_fields -- @optional_update_fields
-
-  def changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, @cast_fields)
+  def changeset(data_value, data_type, params \\ %{}) do
+    {data_value, data_type}
+    |> cast(params, Map.keys(data_type))
   end
 
-  def cast_update_changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, @cast_update_fields)
+  def cast_update_changeset(data_value, data_type, params \\ %{}) do
+    {data_value, data_type}
+    |> cast(params, (Map.keys(data_type) -- @optional_update_fields))
   end
 
-  def registration_changeset(struct, params \\ %{}) do
-    struct
-    |> changeset(params)
-    |> validate_required(@required_registration_fields)
+  def registration_changeset(fields, params \\ %{}) do
+    Organization.custom_fields(:data_value, fields)
+    |> changeset(Organization.custom_fields(:data_type, fields), params)
+    |> validate_required(Organization.custom_fields(:required, fields))
     |> validate_acceptance(:privacy_consent)
     |> validate_acceptance(:sso_privacy_consent)
     # |> cast_embed(:app_consents) we don't create app consents using params
   end
 
-  def update_changeset(struct, params \\ %{}) do
-    struct
-    |> cast_update_changeset(params)
-    |> validate_required(@required_update_fields)
+  def update_changeset(fields, params \\ %{}) do
+    Organization.custom_fields(:data_value, fields)
+    |> cast_update_changeset(Organization.custom_fields(:data_type, fields), params)
+    |> validate_required(Organization.custom_fields(:required, fields) -- @optional_update_fields)
     # |> cast_embed(:app_consents) we don't update app consents using params
   end
 

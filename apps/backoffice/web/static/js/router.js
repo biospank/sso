@@ -11,6 +11,7 @@ import organizationStep from './views/sso/credentials/organization_step';
 import companyStep from './views/sso/credentials/company_step';
 import Session from './models/session';
 import templateView from './views/sso/email/template';
+import indexView from './views/sso/custom_fields/index';
 
 export default m.route(document.getElementById('app'), "/", {
   // Login routing
@@ -93,6 +94,14 @@ export default m.route(document.getElementById('app'), "/", {
         m.route.set("/signin");
       else
         return templateView;
+    }
+  },
+  "/sso/custom-fields": {
+    onmatch() {
+      if(Session.isExpired())
+        m.route.set("/signin");
+      else
+        return indexView;
     }
   }
 });

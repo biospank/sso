@@ -6,6 +6,28 @@ defmodule Sso.TestHelpers do
       name: "name",
       ref_email: "test@example.com",
       settings: %{
+        custom_fields: [
+          %{
+            name: "field1",
+            data_type: "single",
+            rule_type: "optional"
+          },
+          %{
+            name: "field2",
+            data_type: "multiple",
+            rule_type: "optional"
+          },
+          %{
+            name: "field3",
+            data_type: "single",
+            rule_type: "required"
+          },
+          %{
+            name: "field4",
+            data_type: "multiple",
+            rule_type: "required"
+          }
+        ],
         email_template: %{
           registration: %{
             subject: "app name - Richiesta registrazione",
@@ -90,26 +112,18 @@ defmodule Sso.TestHelpers do
       employment: "Medico generico",
       sso_privacy_consent: true,
       privacy_consent: true,
-      province_enployment: "Roma"
+      province_enployment: "Roma",
+      app_consents: %{
+        app_id: account.id,
+        app_name: account.app_name,
+        privacy: true
+      }
     }, attrs["profile"] || %{})
-
-    consent_changeset =
-      %Sso.Consent{}
-      |> Sso.Consent.changeset(%{
-          app_id: account.id,
-          app_name: account.app_name,
-          privacy: true
-        })
-
-    profile_changeset =
-      %Sso.Profile{}
-      |> Sso.Profile.changeset(profile)
-      |> Ecto.Changeset.put_embed(:app_consents, [consent_changeset])
 
     account
     |> Ecto.build_assoc(:users, %{organization_id: account.organization_id})
     |> Ecto.Changeset.change(changes)
-    |> Ecto.Changeset.put_embed(:profile, profile_changeset)
+    |> Ecto.Changeset.put_change(:profile, profile)
     |> Repo.insert!
   end
 end

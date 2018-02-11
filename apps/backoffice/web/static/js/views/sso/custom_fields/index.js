@@ -4,18 +4,25 @@ import stream from 'mithril/stream';
 import mixinLayout from '../../layout/mixin_layout';
 import loader from '../../../components/loader';
 import organizationChoiceView from '../shared/organization_choice';
-import templateTabsView from './template_tabs';
 import loadingButton from '../../../components/loading_button';
 import Organization from '../../../models/organization';
+import CustomField from '../../../models/custom_field';
 import message from '../../../components/message';
+import textField from '../../../components/text_field';
+import formView from './form';
+import listView from './list';
 
-const templateContent = () => {
-  if(_.isEmpty(Organization.current()))
+const formContent = (state) => {
+  if(_.isEmpty(Organization.current())) {
     return m('.ui attached segment')
-  else
+  } else {
     return m('.ui attached segment', [
-      m(templateTabsView)
+      m('', JSON.stringify(CustomField.current())),
+      m('', JSON.stringify(CustomField.list())),
+      m(formView, {model: CustomField.model}),
+      m(listView, {list: CustomField.list})
     ]);
+  }
 };
 
 const content = ({state}) => {
@@ -45,7 +52,7 @@ const content = ({state}) => {
       m(".right menu", [
         m(".ui right aligned item", [
           m(loadingButton, {
-            action: state.saveTemplates,
+            action: state.saveCustomFields,
             disabled: _.isEmpty(Organization.current()),
             label: 'Salva',
             style: 'ui teal basic button'
@@ -53,18 +60,19 @@ const content = ({state}) => {
         ])
       ])
     ]),
-    templateContent(),
+    formContent(state),
     m(loader, {show: state.showLoader()})
   ];
 };
 
-const templateView = {
+const indexView = {
   oninit(vnode) {
+    // CustomField.reset();
     this.showLoader = stream(false);
     this.showSuccessMessage = stream(false);
     this.showErrorMessage = stream(false);
 
-    this.saveTemplates = () => {
+    this.saveCustomFields = () => {
       this.showLoader(true);
       return Organization.update().then((response) => {
         this.showLoader(false);
@@ -77,4 +85,4 @@ const templateView = {
   view: mixinLayout(content)
 }
 
-export default templateView;
+export default indexView;
