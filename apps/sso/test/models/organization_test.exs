@@ -7,28 +7,28 @@ defmodule Sso.OrganizationTest do
   @invalid_attrs %{}
   @custom_fields [
     %{
-      name: "field1",
-      data_type: "string",
-      rule_type: "optional",
-      default: ""
+      "name" => "field1",
+      "data_type" => "string",
+      "rule_type" => "optional",
+      "default" => ""
     },
     %{
-      name: "field2",
-      data_type: "string",
-      rule_type: "optional",
-      default: "field2 value"
+      "name" => "field2",
+      "data_type" => "string",
+      "rule_type" => "optional",
+      "default" => "field2 value"
     },
     %{
-      name: "field3",
-      data_type: "string",
-      rule_type: "required",
-      default: ""
+      "name" => "field3",
+      "data_type" => "string",
+      "rule_type" => "required",
+      "default" => ""
     },
     %{
-      name: "field4",
-      data_type: "string",
-      rule_type: "required",
-      default: ""
+      "name" => "field4",
+      "data_type" => "string",
+      "rule_type" => "required",
+      "default" => ""
     }
   ]
 

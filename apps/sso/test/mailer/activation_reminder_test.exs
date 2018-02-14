@@ -26,12 +26,14 @@ defmodule Sso.Mailer.ActivationReminderTest do
     setup %{user: user, location: location}= config do
       if config[:valid_user] do
         if config[:activation_callback_url] do
-          profile_changeset =
-            Sso.Profile.attrs_changeset(user.profile, activation_callback_url: location)
+          # profile_changeset =
+          #   Sso.Profile.attrs_changeset(user.profile, activation_callback_url: location)
+
+          user_profile = put_in(user.profile, [:activation_callback_url], location)
 
           user
           |> Ecto.Changeset.change
-          |> Ecto.Changeset.put_embed(:profile, profile_changeset)
+          |> Ecto.Changeset.put_change(:profile, user_profile)
           |> Sso.Repo.update!
 
         end

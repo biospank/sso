@@ -16,18 +16,21 @@ defmodule Sso.User.ProfileController do
   end
 
   def update(conn, %{"id" => user_id, "profile" => profile_params}, account) do
-    user = Repo.get_by(User, id: user_id, organization_id: account.organization_id)
+    user =
+      Repo.get_by(User, id: user_id, organization_id: account.organization_id)
+      |> Repo.preload(:organization)
 
     cond do
       user ->
-        app_consents_changeset =
-          user.profile.app_consents
-          |> Consent.update_app_consents_changeset(account, profile_params)
+        # app_consents_changeset =
+        #   user.profile.app_consents
+        #   |> Consent.update_app_consents_changeset(account, profile_params)
 
         profile_changeset =
           user.profile
-          |> Profile.update_changeset(profile_params)
-          |> Ecto.Changeset.put_embed(:app_consents, app_consents_changeset)
+          |> Map.merge(profile_params)
+          |> Profile.update_changeset(user.organization.settings[:custom_fields])
+          # |> Ecto.Changeset.put_embed(:app_consents, app_consents_changeset)
 
         changeset =
           user

@@ -20,6 +20,15 @@ defmodule Sso.Profile do
     |> cast(params, (Map.keys(data_type) -- @optional_update_fields))
   end
 
+  # def registration_changeset(struct, params \\ %{}) do
+  #   struct
+  #   |> changeset(params)
+  #   |> validate_required(@required_registration_fields)
+  #   |> validate_acceptance(:privacy_consent)
+  #   |> validate_acceptance(:sso_privacy_consent)
+  #  # |> cast_embed(:app_consents) we don't create app consents using params
+  # end
+
   def registration_changeset(fields, params \\ %{}) do
     Organization.custom_fields(:data_value, fields)
     |> changeset(Organization.custom_fields(:data_type, fields), params)
@@ -29,9 +38,9 @@ defmodule Sso.Profile do
     # |> cast_embed(:app_consents) we don't create app consents using params
   end
 
-  def update_changeset(fields, params \\ %{}) do
+  def update_changeset(struct, fields) do
     Organization.custom_fields(:data_value, fields)
-    |> cast_update_changeset(Organization.custom_fields(:data_type, fields), params)
+    |> cast_update_changeset(Organization.custom_fields(:data_type, fields), struct)
     |> validate_required(Organization.custom_fields(:required, fields) -- @optional_update_fields)
     # |> cast_embed(:app_consents) we don't update app consents using params
   end

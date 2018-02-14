@@ -17,18 +17,24 @@ defmodule Sso.User.RegistrationController do
   end
 
   def create(conn, %{"user" => user_params, "authorize" => _}, account) do
-    changeset =
+    user_changeset =
       account
       |> build_assoc(:users, %{organization_id: account.organization_id})
       |> User.registration_changeset(user_params)
-      |> Profile.add_app_consents(user_params, account)
+      # |> Profile.add_app_consents(user_params, account)
       |> User.activate_and_authorize_changeset
 
-    case Repo.insert(changeset) do
-      {:ok, user} ->
-        account =
-          account
-          |> Repo.preload(:organization)
+    if user_changeset.valid? do
+      account =
+        account
+        |> Repo.preload(:organization)
+
+      profile_changeset =
+        account.organization.settings["custom_fields"]
+        |> Profile.registration_changeset(user_params["profile"])
+
+      if profile_changeset.valid? do
+        user = Repo.insert!(user_changeset)
 
         case get_in(account.organization.settings, ["email_template", "verification", "active"]) do
           value when value in [true, nil] ->
@@ -45,27 +51,38 @@ defmodule Sso.User.RegistrationController do
         conn
         |> put_status(:created)
         |> render(Sso.UserView, "show.json", user: user)
-      {:error, changeset} ->
+      else
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Sso.ChangesetView, "error.json", changeset: changeset)
+        |> render(Sso.ChangesetView, "error.json", changeset: profile_changeset)
+      end
+    else
+      conn
+      |> put_status(:unprocessable_entity)
+      |> render(Sso.ChangesetView, "error.json", changeset: user_changeset)
     end
   end
 
   def create(conn, %{"user" => user_params}, account) do
-    changeset =
+    user_changeset =
       account
       |> build_assoc(:users, %{organization_id: account.organization_id})
       |> User.registration_changeset(user_params)
-      |> Profile.add_app_consents(user_params, account)
+      # |> Profile.add_app_consents(user_params, account)
 
-    case Repo.insert(changeset) do
-      {:ok, user} ->
+    if user_changeset.valid? do
+      account =
+        account
+        |> Repo.preload(:organization)
+
+      profile_changeset =
+        account.organization.settings["custom_fields"]
+        |> Profile.registration_changeset(user_params["profile"])
+
+      if profile_changeset.valid? do
+        user = Repo.insert!(user_changeset)
+
         link = User.gen_activation_link(user, user_params)
-
-        account =
-          account
-          |> Repo.preload(:organization)
 
         case Email.welcome_template(user, account, link) do
           {:error, message} ->
@@ -81,10 +98,15 @@ defmodule Sso.User.RegistrationController do
         |> put_status(:created)
         |> put_location_resp_header(link)
         |> render(Sso.UserView, "show.json", user: user)
-      {:error, changeset} ->
+      else
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Sso.ChangesetView, "error.json", changeset: changeset)
+        |> render(Sso.ChangesetView, "error.json", changeset: profile_changeset)
+      end
+    else
+      conn
+      |> put_status(:unprocessable_entity)
+      |> render(Sso.ChangesetView, "error.json", changeset: user_changeset)
     end
   end
 

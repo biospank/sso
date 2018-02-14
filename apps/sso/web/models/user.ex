@@ -33,15 +33,15 @@ defmodule Sso.User do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:email, :password])
-    |> validate_required([:email, :password])
+    |> cast(params, [:email, :password, :profile])
+    |> validate_required([:email, :password, :profile])
     |> validate_format(:email, ~r/@/)
   end
 
   def registration_changeset(struct, params \\ %{}) do
     struct
     |> changeset(params)
-    |> cast_embed(:profile, required: true, with: &Sso.Profile.registration_changeset/2)
+    # |> cast_embed(:profile, required: true, with: &Sso.Profile.registration_changeset/2)
     |> update_change(:email, &String.downcase/1)
     |> unique_constraint(:email, name: :users_email_organization_id_index)
     |> validate_length(:password, min: 6)
@@ -136,12 +136,14 @@ defmodule Sso.User do
   end
 
   def save_activation_link(link, user) do
-    profile_changeset =
-      Sso.Profile.attrs_changeset(user.profile, activation_callback_url: link)
+    # profile_changeset =
+    #   Sso.Profile.attrs_changeset(user.profile, activation_callback_url: link)
+
+    user_profile = put_in(user.profile, [:activation_callback_url], link)
 
     user
     |> change
-    |> put_embed(:profile, profile_changeset)
+    |> put_change(:profile, user_profile)
     |> Sso.Repo.update
 
     link
