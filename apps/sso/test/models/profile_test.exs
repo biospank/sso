@@ -173,12 +173,22 @@ defmodule Sso.ProfileTest do
   end
 
   test "update changeset with missing privacy consent" do
-    changeset = Profile.update_changeset(Map.delete(@valid_attrs, :privacy_consent), @custom_fields)
+    changeset = Profile.update_changeset(
+      @valid_attrs,
+      @custom_fields,
+      Map.delete(@valid_attrs, :privacy_consent)
+    )
+
     assert changeset.valid?
   end
 
   test "update changeset with invalid sso privacy consent" do
-    changeset = Profile.update_changeset(Map.put(@valid_attrs, :sso_privacy_consent, false), @custom_fields)
+    changeset = Profile.update_changeset(
+      @valid_attrs,
+      @custom_fields,
+      Map.put(@valid_attrs, :sso_privacy_consent, false)
+    )
+
     assert changeset.valid?
   end
 
@@ -200,7 +210,12 @@ defmodule Sso.ProfileTest do
       :phone_number, :profession, :specialization, :board_member, :board_number,
       :province_board, :province_enployment #, :employment,
     ], fn field ->
-      changeset = Profile.update_changeset(Map.delete(@valid_attrs, field), @custom_fields)
+      changeset = Profile.update_changeset(
+        @valid_attrs,
+        @custom_fields,
+        Map.delete(@valid_attrs, field)
+      )
+
       refute changeset.valid?
       assert changeset.errors[field] == {"can't be blank", [validation: :required]}
     end)

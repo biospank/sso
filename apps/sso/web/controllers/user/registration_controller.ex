@@ -21,7 +21,6 @@ defmodule Sso.User.RegistrationController do
       account
       |> build_assoc(:users, %{organization_id: account.organization_id})
       |> User.registration_changeset(user_params)
-      # |> Profile.add_app_consents(user_params, account)
       |> User.activate_and_authorize_changeset
 
     if user_changeset.valid? do
@@ -32,6 +31,7 @@ defmodule Sso.User.RegistrationController do
       profile_changeset =
         account.organization.settings["custom_fields"]
         |> Profile.registration_changeset(user_params["profile"])
+        |> Profile.add_app_consents(user_params["profile"], account)
 
       if profile_changeset.valid? do
         user = Repo.insert!(user_changeset)
@@ -68,7 +68,6 @@ defmodule Sso.User.RegistrationController do
       account
       |> build_assoc(:users, %{organization_id: account.organization_id})
       |> User.registration_changeset(user_params)
-      # |> Profile.add_app_consents(user_params, account)
 
     if user_changeset.valid? do
       account =
@@ -78,6 +77,7 @@ defmodule Sso.User.RegistrationController do
       profile_changeset =
         account.organization.settings["custom_fields"]
         |> Profile.registration_changeset(user_params["profile"])
+        |> Profile.add_app_consents(user_params["profile"], account)
 
       if profile_changeset.valid? do
         user = Repo.insert!(user_changeset)

@@ -13,7 +13,7 @@ defmodule Sso.ArchivedUser do
     field :email_change_code, :string
     field :active, :boolean, read_after_writes: true
     field :status, StatusEnum, read_after_writes: true
-    embeds_one :profile, Sso.Profile
+    field :profile, :map
 
     belongs_to :user, Sso.User
     belongs_to :account, Sso.Account
@@ -41,8 +41,8 @@ defmodule Sso.ArchivedUser do
       :reset_code,
       :email_change_code,
       :active,
-      :status
+      :status,
+      :profile
     ])
-    |> cast_embed(:profile, with: &Sso.Profile.clone_changeset/2)
   end
 end
