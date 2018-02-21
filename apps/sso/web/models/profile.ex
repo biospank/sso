@@ -29,17 +29,18 @@ defmodule Sso.Profile do
   end
 
   def update_changeset(struct, fields, params) do
-    struct
-    |> cast_update_changeset(Organization.custom_fields(:data_type, fields), params)
+    update_params = struct |> Map.merge(params)
+
+    Organization.custom_fields(:data_value, fields)
+    |> cast_update_changeset(Organization.custom_fields(:data_type, fields), update_params)
     |> validate_required(Organization.custom_fields(:required, fields) -- @optional_update_fields)
   end
 
-  def add_app_consents(profile_changeset, profile_params, account) do
+  def add_app_consents(profile, profile_params, account) do
     new_consents =
-      profile_changeset.data["app_consents"] || []
+      (profile["app_consents"] || [])
       |> Consent.update_app_consents(account, profile_params)
 
-    profile_changeset
-    |> put_change(:app_consents, new_consents)
+    profile |> put_in(["app_consents"], new_consents)
   end
 end

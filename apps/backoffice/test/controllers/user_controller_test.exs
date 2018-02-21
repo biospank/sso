@@ -257,7 +257,7 @@ defmodule Backoffice.UserControllerTest do
       {:ok, email} = Sso.Email.courtesy_template(user, account)
       assert email.to == user
       assert email.subject == "app name - Conferma registrazione"
-      assert email.html_body =~ user.profile.first_name
+      assert email.html_body =~ user.profile["first_name"]
     end
   end
 end

@@ -2,25 +2,25 @@ defmodule Sso.User.ProfileControllerTest do
   use Sso.ConnCase
 
   @valid_attrs %{
-    email: "some@content",
-    password: "secret",
-    password_confirmation: "secret",
-    profile: %{
-      first_name: "first name",
-      last_name: "last name",
-      fiscal_code: "ggrsta21s50h501z",
-      date_of_birth: "1997-02-12",
-      place_of_birth: "Roma",
-      phone_number: "227726622",
-      profession: "Medico generico",
-      specialization: "Pediatria",
-      board_member: "Medici",
-      board_number: "3773662882",
-      province_board: "Roma",
-      employment: "Medico generico",
-      sso_privacy_consent: true,
-      privacy_consent: true,
-      province_enployment: "Roma"
+    "email" => "some@content",
+    "password" => "secret",
+    "password_confirmation" => "secret",
+    "profile" => %{
+      "first_name" => "first name",
+      "last_name" => "last name",
+      "fiscal_code" => "ggrsta21s50h501z",
+      "date_of_birth" => "1997-02-12",
+      "place_of_birth" => "Roma",
+      "phone_number" => "227726622",
+      "profession" => "Medico generico",
+      "specialization" => "Pediatria",
+      "board_member" => "Medici",
+      "board_number" => "3773662882",
+      "province_board" => "Roma",
+      "employment" => "Medico generico",
+      "sso_privacy_consent" => true,
+      "privacy_consent" => true,
+      "province_enployment" => "Roma"
     }
   }
 
@@ -65,9 +65,9 @@ defmodule Sso.User.ProfileControllerTest do
       conn = put(
         conn,
         user_profile_path(conn, :update, user),
-        profile: %{
-          phone_number: "882726109998",
-        }
+          profile: %{
+            phone_number: "882726109998",
+          }
       )
 
       assert json_response(conn, 200)["user"]["profile"]["phone_number"] == "882726109998"
@@ -129,7 +129,7 @@ defmodule Sso.User.ProfileControllerTest do
         }
       )
 
-      assert json_response(put_conn, 422)["errors"] == %{"profile" => %{"phone_number" => ["can't be blank"]}}
+      assert json_response(put_conn, 422)["errors"] == %{"phone_number" => ["can't be blank"]}
     end
 
     # L'aggiornamento del profilo utente può essere effettuato

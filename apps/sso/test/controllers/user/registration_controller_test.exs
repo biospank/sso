@@ -11,49 +11,51 @@ defmodule Sso.User.RegistrationControllerTest do
   }
 
   @valid_attrs %{
-    email: "some@content",
-    password: "secret",
-    password_confirmation: "secret",
-    profile: %{
-      first_name: "first name",
-      last_name: "last name",
-      fiscal_code: "ggrsta21s50h501z",
-      date_of_birth: "1997-02-12",
-      place_of_birth: "Roma",
-      phone_number: "227726622",
-      profession: "Medico generico",
-      specialization: "Pediatria",
-      board_member: "Medici",
-      board_number: "3773662882",
-      province_board: "Roma",
-      employment: "Medico generico",
-      sso_privacy_consent: true,
-      privacy_consent: true,
-      province_enployment: "Roma"
+    "email" => "some@content",
+    "password" => "secret",
+    "password_confirmation" => "secret",
+    "profile" => %{
+      "first_name" => "first name",
+      "last_name" => "last name",
+      "fiscal_code" => "ggrsta21s50h501z",
+      "date_of_birth" => "1997-02-12",
+      "place_of_birth" => "Roma",
+      "phone_number" => "227726622",
+      "profession" => "Medico generico",
+      "specialization" => "Pediatria",
+      "board_member" => "Medici",
+      "board_number" => "3773662882",
+      "province_board" => "Roma",
+      "employment" => "Medico generico",
+      "privacy_consent" => true,
+      "sso_privacy_consent" => true,
+      "news_consent" => true,
+      "data_transfer_consent" => true,
+      "province_enployment" => "Roma"
     }
   }
   @invalid_attrs %{}
 
   @new_user %{
-    email: "some_other@content",
-    password: "secret",
-    password_confirmation: "secret",
-    profile: %{
-      first_name: "first name",
-      last_name: "last name",
-      fiscal_code: "ggrsta21s50h501z",
-      date_of_birth: "1997-02-12",
-      place_of_birth: "Roma",
-      phone_number: "227726622",
-      profession: "Medico generico",
-      specialization: "Pediatria",
-      board_member: "Medici",
-      board_number: "3773662882",
-      province_board: "Roma",
-      employment: "Medico generico",
-      sso_privacy_consent: true,
-      privacy_consent: true,
-      province_enployment: "Roma"
+    "email" => "some_other@content",
+    "password" => "secret",
+    "password_confirmation" => "secret",
+    "profile" => %{
+      "first_name" => "first name",
+      "last_name" => "last name",
+      "fiscal_code" => "ggrsta21s50h501z",
+      "date_of_birth" => "1997-02-12",
+      "place_of_birth" => "Roma",
+      "phone_number" => "227726622",
+      "profession" => "Medico generico",
+      "specialization" => "Pediatria",
+      "board_member" => "Medici",
+      "board_number" => "3773662882",
+      "province_board" => "Roma",
+      "employment" => "Medico generico",
+      "sso_privacy_consent" => true,
+      "privacy_consent" => true,
+      "province_enployment" => "Roma"
     }
   }
 
@@ -105,7 +107,7 @@ defmodule Sso.User.RegistrationControllerTest do
         conn
         |> post(
             user_registration_path(conn, :create),
-            user: Map.delete(@valid_attrs, :profile)
+            user: Map.delete(@valid_attrs, "profile")
           )
 
       assert json_response(conn, 422)["errors"] ["errors"] != %{}
@@ -134,7 +136,7 @@ defmodule Sso.User.RegistrationControllerTest do
 
       assert (first_consent |> Map.get("app_id")) ==  account.id
       assert (first_consent |> Map.get("app_name")) ==  account.app_name
-      assert (first_consent |> Map.get("privacy")) ==  get_in(@valid_attrs, [:profile, :privacy_consent])
+      assert (first_consent |> Map.get("privacy")) ==  get_in(@valid_attrs, ["profile", "privacy_consent"])
     end
 
     test "associate a newly created user by the authenticated account", %{conn: conn, account: account} do

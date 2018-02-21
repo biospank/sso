@@ -1,8 +1,6 @@
 defmodule Sso.ConsentTest do
   use Sso.ModelCase
 
-  alias Sso.Consent
-
   @valid_attrs %{
     app_id: 1,
     app_name: "app name",
@@ -28,7 +26,7 @@ defmodule Sso.ConsentTest do
 
     test "app consents does not change if the account is present" do
       account = %Sso.Account{id: 5, app_name: "new account"}
-      account_consent = %Sso.Consent{app_id: 5, app_name: "new account", privacy: true}
+      account_consent = %{"app_id" => 5, "app_name" => "new account", "privacy" => true}
       app_consents = [account_consent]
       result = Sso.Consent.update_app_consents(app_consents, account, %{"privacy_consent" => true})
       assert length(result) == 1
@@ -36,7 +34,7 @@ defmodule Sso.ConsentTest do
 
     test "add new account consent if the account is not present" do
       account = %Sso.Account{id: 3, app_name: "new account"}
-      account_consent = %Sso.Consent{app_id: 5, app_name: "account name", privacy: true}
+      account_consent = %{"app_id" => 5, "app_name" => "account name", "privacy" => true}
       app_consents = [account_consent]
       result = Sso.Consent.update_app_consents(app_consents, account, %{"privacy_consent" => true})
       assert length(result) == 2

@@ -31,10 +31,20 @@ defmodule Sso.User.RegistrationController do
       profile_changeset =
         account.organization.settings["custom_fields"]
         |> Profile.registration_changeset(user_params["profile"])
-        |> Profile.add_app_consents(user_params["profile"], account)
 
       if profile_changeset.valid? do
-        user = Repo.insert!(user_changeset)
+        profile_data =
+          profile_changeset
+          |> Ecto.Changeset.apply_changes
+          |> Profile.add_app_consents(user_params["profile"], account)
+
+        user =
+          user_changeset
+          |> Ecto.Changeset.put_change(:profile, profile_data)
+          |> Repo.insert!
+
+        # reload user to get profile with string keys
+        user = User |> Repo.get!(user.id)
 
         case get_in(account.organization.settings, ["email_template", "verification", "active"]) do
           value when value in [true, nil] ->
@@ -77,10 +87,20 @@ defmodule Sso.User.RegistrationController do
       profile_changeset =
         account.organization.settings["custom_fields"]
         |> Profile.registration_changeset(user_params["profile"])
-        |> Profile.add_app_consents(user_params["profile"], account)
 
       if profile_changeset.valid? do
-        user = Repo.insert!(user_changeset)
+        profile_data =
+          profile_changeset
+          |> Ecto.Changeset.apply_changes
+          |> Profile.add_app_consents(user_params["profile"], account)
+
+        user =
+          user_changeset
+          |> Ecto.Changeset.put_change(:profile, profile_data)
+          |> Repo.insert!
+
+        # reload user to get profile with string keys
+        user = User |> Repo.get!(user.id)
 
         link = User.gen_activation_link(user, user_params)
 

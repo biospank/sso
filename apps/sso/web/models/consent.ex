@@ -15,7 +15,7 @@ defmodule Sso.Consent do
   end
 
   def update_app_consents(consents, account, %{"privacy_consent" => privacy_consent}) when privacy_consent in [true, "true", "1"] do
-    case Enum.find_index(consents, fn(consent) -> consent[:app_id] == account.id end) do
+    case Enum.find_index(consents, fn(consent) -> consent["app_id"] == account.id end) do
       nil ->
         Enum.concat(consents, [create_new_consent(account, true)])
       idx ->
@@ -28,9 +28,9 @@ defmodule Sso.Consent do
 
   defp create_new_consent(account, privacy_consent) do
     %{
-      app_id: account.id,
-      app_name: account.app_name,
-      privacy: privacy_consent
+      "app_id" => account.id,
+      "app_name" => account.app_name,
+      "privacy" => privacy_consent
     }
   end
 

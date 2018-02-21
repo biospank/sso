@@ -28,20 +28,29 @@ defmodule Sso.User.ProfileController do
               user.organization.settings["custom_fields"],
               profile_params
             )
-          |> Profile.add_app_consents(profile_params, account)
 
-        changeset =
-          user
-          |> Ecto.Changeset.change
-          |> Ecto.Changeset.put_change(:profile, profile_changeset)
+        if profile_changeset.valid? do
+          profile_data =
+            profile_changeset
+            |> Ecto.Changeset.apply_changes
 
-        case Repo.update(changeset) do
-          {:ok, user} ->
-            render(conn, Sso.UserView, "show.json", user: user)
-          {:error, changeset} ->
-            conn
-            |> put_status(:unprocessable_entity)
-            |> render(Sso.ChangesetView, "error.json", changeset: changeset)
+          app_consents =
+            user.profile
+            |> Profile.add_app_consents(profile_params, account)
+
+          profile_with_consents = Map.merge(profile_data, app_consents)
+
+          user =
+            user
+            |> Ecto.Changeset.change
+            |> Ecto.Changeset.put_change(:profile, profile_with_consents)
+            |> Repo.update!
+
+          render(conn, Sso.UserView, "show.json", user: user)
+        else
+          conn
+          |> put_status(:unprocessable_entity)
+          |> render(Sso.ChangesetView, "error.json", changeset: profile_changeset)
         end
       true ->
         conn

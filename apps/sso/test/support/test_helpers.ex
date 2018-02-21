@@ -6,108 +6,108 @@ defmodule Sso.TestHelpers do
       name: "name",
       ref_email: "test@example.com",
       settings: %{
-        "custom_fields" => [
+        custom_fields: [
           %{
-            "name" => "first_name",
-            "data_type" => "string",
-            "rule_type" => "required",
-            "default" => ""
+            name: "first_name",
+            data_type: "string",
+            rule_type: "required",
+            default: ""
           },
           %{
-            "name" => "last_name",
-            "data_type" => "string",
-            "rule_type" => "required",
-            "default" => ""
+            name: "last_name",
+            data_type: "string",
+            rule_type: "required",
+            default: ""
           },
           %{
-            "name" => "fiscal_code",
-            "data_type" => "string",
-            "rule_type" => "required",
-            "default" => ""
+            name: "fiscal_code",
+            data_type: "string",
+            rule_type: "required",
+            default: ""
           },
           %{
-            "name" => "date_of_birth",
-            "data_type" => "string",
-            "rule_type" => "required",
-            "default" => ""
+            name: "date_of_birth",
+            data_type: "string",
+            rule_type: "required",
+            default: ""
           },
           %{
-            "name" => "place_of_birth",
-            "data_type" => "string",
-            "rule_type" => "required",
-            "default" => ""
+            name: "place_of_birth",
+            data_type: "string",
+            rule_type: "required",
+            default: ""
           },
           %{
-            "name" => "phone_number",
-            "data_type" => "string",
-            "rule_type" => "required",
-            "default" => ""
+            name: "phone_number",
+            data_type: "string",
+            rule_type: "required",
+            default: ""
           },
           %{
-            "name" => "profession",
-            "data_type" => "string",
-            "rule_type" => "required",
-            "default" => ""
+            name: "profession",
+            data_type: "string",
+            rule_type: "required",
+            default: ""
           },
           %{
-            "name" => "specialization",
-            "data_type" => "string",
-            "rule_type" => "required",
-            "default" => ""
+            name: "specialization",
+            data_type: "string",
+            rule_type: "required",
+            default: ""
           },
           %{
-            "name" => "board_member",
-            "data_type" => "string",
-            "rule_type" => "required",
-            "default" => ""
+            name: "board_member",
+            data_type: "string",
+            rule_type: "required",
+            default: ""
           },
           %{
-            "name" => "board_number",
-            "data_type" => "string",
-            "rule_type" => "required",
-            "default" => ""
+            name: "board_number",
+            data_type: "string",
+            rule_type: "required",
+            default: ""
           },
           %{
-            "name" => "province_board",
-            "data_type" => "string",
-            "rule_type" => "required",
-            "default" => ""
+            name: "province_board",
+            data_type: "string",
+            rule_type: "required",
+            default: ""
           },
           %{
-            "name" => "employment",
-            "data_type" => "string",
-            "rule_type" => "optional",
-            "default" => ""
+            name: "employment",
+            data_type: "string",
+            rule_type: "optional",
+            default: ""
           },
           %{
-            "name" => "province_enployment",
-            "data_type" => "string",
-            "rule_type" => "required",
-            "default" => ""
+            name: "province_enployment",
+            data_type: "string",
+            rule_type: "required",
+            default: ""
           },
           %{
-            "name" => "privacy_consent",
-            "data_type" => "boolean",
-            "rule_type" => "required",
-            "default" => "false"
+            name: "privacy_consent",
+            data_type: "boolean",
+            rule_type: "required",
+            default: "false"
           },
           %{
-            "name" => "sso_privacy_consent",
-            "data_type" => "boolean",
-            "rule_type" => "required",
-            "default" => "false"
+            name: "sso_privacy_consent",
+            data_type: "boolean",
+            rule_type: "required",
+            default: "false"
           },
           %{
-            "name" => "news_consent",
-            "data_type" => "boolean",
-            "rule_type" => "optional",
-            "default" => "false"
+            name: "news_consent",
+            data_type: "boolean",
+            rule_type: "optional",
+            default: "false"
           },
           %{
-            "name" => "data_transfer_consent",
-            "data_type" => "boolean",
-            "rule_type" => "optional",
-            "default" => "false"
+            name: "data_transfer_consent",
+            data_type: "boolean",
+            rule_type: "optional",
+            default: "false"
           }
         ],
         email_template: %{
