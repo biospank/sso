@@ -20,7 +20,11 @@ const formContent = (state) => {
       m('', JSON.stringify(CustomField.current())),
       m('', JSON.stringify(CustomField.list())),
       m(formView, {model: CustomField.model}),
-      m(listView, {list: CustomField.list})
+      m(listView, {customFields: _.get(
+        Organization.current(),
+        'settings.custom_fields',
+        []
+      )})
     ]);
   }
 };
@@ -73,6 +77,10 @@ const indexView = {
     this.showErrorMessage = stream(false);
 
     this.saveCustomFields = () => {
+      _.merge(
+        Organization.current(),
+        {settings: {custom_fields: CustomField.list()}}
+      );
       this.showLoader(true);
       return Organization.update().then((response) => {
         this.showLoader(false);

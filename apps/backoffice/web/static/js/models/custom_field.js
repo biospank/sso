@@ -4,22 +4,101 @@ import _ from 'lodash';
 
 const CustomField = {
   current: stream({}),
-  model() {
+  model(obj) {
+    if(obj) {
+      return {
+        id: obj.id || _.uniqueId(),
+        label: stream(obj.label),
+        name: stream(obj.name),
+        data_type: stream(obj.data_type),
+        rule_type: stream(obj.rule_type),
+        default: stream(obj.default),
+        customizable: obj.customizable
+      };
+    } else {
+      return {
+        id: _.uniqueId(),
+        label: stream(""),
+        name: stream(""),
+        data_type: stream(CustomField.dataTypes[0].typeValue),
+        rule_type: stream(CustomField.ruleTypes[0].ruleValue),
+        default: stream(""),
+        customizable: true
+      };
+    }
+  },
+  plainModel() {
+    let model =  CustomField.current();
+
     return {
-      name: stream(""),
-      data_type: stream(CustomField.dataTypes[0].typeValue),
-      rule_type: stream(CustomField.requiredRules[0].ruleValue)
+      id: model.id,
+      label: model.label(),
+      name: model.name(),
+      data_type: model.data_type(),
+      rule_type: model.rule_type(),
+      default: model.default(),
+      customizable: model.customizable
     }
   },
   list: stream([]),
+  initialize(withThese) {
+    if(withThese) {
+      return withThese.map((item) => {
+        return _.assign(item, {id: _.uniqueId()});
+      })
+    } else {
+      return [
+        {
+          id: _.uniqueId(),
+          label: 'Nome',
+          name: 'first_name',
+          data_type: 'string',
+          rule_type: 'required',
+          default: '',
+          customizable: false
+        },
+        {
+          id: _.uniqueId(),
+          label: 'Cognome',
+          name: 'last_name',
+          data_type: 'string',
+          rule_type: 'required',
+          default: '',
+          customizable: false
+        },
+        {
+          id: _.uniqueId(),
+          label: 'Consenso privacy',
+          name: 'privacy_consent',
+          data_type: 'boolean',
+          rule_type: 'required',
+          default: 'false',
+          customizable: false
+        },
+        {
+          id: _.uniqueId(),
+          label: 'Consenso privacy Sso',
+          name: 'sso_privacy_consent',
+          data_type: 'boolean',
+          rule_type: 'required',
+          default: 'false',
+          customizable: false
+        }
+      ];
+    }
+  },
   dataTypes: [
-    {typeLabel: 'Valore singolo', typeValue: 'single'},
-    {typeLabel: 'Valore multiplo', typeValue: 'multiple'}
+    {typeLabel: 'Stringa', typeValue: 'string'},
+    {typeLabel: 'Booleano', typeValue: 'boolean'}
   ],
-  requiredRules: [
+  ruleTypes: [
     {ruleLabel: 'Facoltativo', ruleValue: 'optional'},
     {ruleLabel: 'Obbligatorio', ruleValue: 'required'}
-  ]
+  ],
+  booleanDefaults: [
+    {booleanLabel: 'Vero', booleanValue: 'true'},
+    {booleanLabel: 'Falso', booleanValue: 'false'}
+  ],
 };
 
 export default CustomField;

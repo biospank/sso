@@ -6,31 +6,105 @@ import CustomField from '../../../models/custom_field';
 const formView = {
   oninit(vnode) {
     this.errors = stream({});
-    // this.model = vnode.attrs.model();
     CustomField.current(vnode.attrs.model());
 
-    this.addCustomField = () => {
-      CustomField.list().push(CustomField.current());
-      // this.model = vnode.attrs.model();
-      CustomField.current(vnode.attrs.model());
+    this.isValid = () => {
+      if(_.isEmpty(CustomField.current().label()))
+        this.errors({'label': 'Non può essere vuoto'});
+
+      return _.isEmpty(this.errors());
+    };
+
+    this.saveCustomField = () => {
+      this.errors({});
+
+      if(this.isValid()) {
+        let currentField = _.find(CustomField.list(), ["id", CustomField.current().id]);
+
+        if(currentField)
+          _.assign(currentField, CustomField.plainModel());
+        else
+          CustomField.list().push(CustomField.plainModel());
+
+        CustomField.current(vnode.attrs.model());
+      }
+    };
+
+    this.defaultField = () => {
+      if(_.isEqual(CustomField.current().data_type(), 'string')) {
+        return m(".field", [
+          m("label", "Valore predefinito"),
+          m("input", {
+            type: "text",
+            name: "cfDefaultString",
+            oninput: m.withAttr("value", CustomField.current().default),
+            value: CustomField.current().default()
+          })
+        ])
+      } else {
+        return m('.field', [
+          m("label", "Valore predefinito"),
+          m(".ui selection dropdown", {
+            oncreate(vnode) {
+              $('.ui.dropdown').dropdown();
+            }
+          }, [
+            m("input", {
+              type: "hidden",
+              name: "cfDefaultBoolean",
+              value: CustomField.current().default(),
+              onchange: m.withAttr("value", CustomField.current().default)
+            }),
+            m("i", { class: "dropdown icon" }),
+            m(".text", _.find(CustomField.booleanDefaults,
+                [
+                  "booleanValue",
+                  CustomField.current().default() || 'true'
+                ]
+              ).booleanLabel
+            ),
+            m(".menu", [
+              CustomField.booleanDefaults.map((booleanType) => {
+                return m('.item', {
+                  "data-value": booleanType.booleanValue,
+                  className: (booleanType.booleanValue === CustomField.current().default() ? "active selected" : "")
+                }, booleanType.booleanLabel);
+              })
+            ])
+          ])
+        ]);
+      }
     };
   },
   view({state}) {
     return m('.ui form error', [
       m('.fields', [
-        m(".required field", {className: state.errors()["name"] ? "error" : ""}, [
-          m("label", "Nome campo"),
+        m(".required field", {className: state.errors()["label"] ? "error" : ""}, [
+          m("label", "Etichetta"),
           m("input", {
             autofocus: true,
             type: "text",
-            name: "cfName",
-            oninput: m.withAttr("value", CustomField.current().name),
-            value: CustomField.current().name(),
-            placeholder: "Nome campo"
+            name: "cfLabel",
+            oninput(event) {
+              CustomField.current().label(event.target.value);
+              CustomField.current().name(_.snakeCase(_.deburr(event.target.value)));
+            },
+            value: CustomField.current().label(),
+            placeholder: "Etichetta"
           }),
           m(".ui basic error pointing prompt label transition ", {
-            className: (state.errors()["name"] ? "visible" : "hidden")
-          }, m('p', state.errors()["name"]))
+            className: (state.errors()["label"] ? "visible" : "hidden")
+          }, m('p', state.errors()["label"]))
+        ]),
+        m(".field", [
+          m("label", "Nome"),
+          m("input", {
+            type: "text",
+            disabled: "disabled",
+            name: "cfName",
+            oninput: m.withAttr("value", CustomField.current().name),
+            value: CustomField.current().name()
+          })
         ]),
         m('.field', [
           m("label", "Tipologia"),
@@ -41,12 +115,15 @@ const formView = {
           }, [
             m("input", {
               type: "hidden",
-              name: "name",
+              name: "cfType",
               value: CustomField.current().data_type(),
               onchange: m.withAttr("value", CustomField.current().data_type)
             }),
             m("i", { class: "dropdown icon" }),
-            m(".text", CustomField.current().data_type() || CustomField.dataTypes[0].typeLabel),
+            m(".text", _.find(CustomField.dataTypes,
+                ["typeValue", CustomField.current().data_type()]
+              ).typeLabel || CustomField.dataTypes[0].typeLabel
+            ),
             m(".menu", [
               CustomField.dataTypes.map((dataType) => {
                 return m('.item', {
@@ -57,6 +134,7 @@ const formView = {
             ])
           ])
         ]),
+        state.defaultField(),
         m('.field', [
           m("label", "Regola"),
           m(".ui selection dropdown", {
@@ -66,14 +144,17 @@ const formView = {
           }, [
             m("input", {
               type: "hidden",
-              name: "name",
+              name: "cfRule",
               value: CustomField.current().rule_type(),
               onchange: m.withAttr("value", CustomField.current().rule_type)
             }),
             m("i", { class: "dropdown icon" }),
-            m(".text", CustomField.current().rule_type() || CustomField.requiredRules[0].ruleLabel),
+            m(".text", _.find(CustomField.ruleTypes,
+                ["ruleValue", CustomField.current().rule_type()]
+              ).ruleLabel || CustomField.ruleTypes[0].ruleLabel
+            ),
             m(".menu", [
-              CustomField.requiredRules.map((ruleType) => {
+              CustomField.ruleTypes.map((ruleType) => {
                 return m('.item', {
                   "data-value": ruleType.ruleValue,
                   className: (ruleType.ruleValue === CustomField.current().rule_type() ? "active selected" : "")
@@ -86,8 +167,7 @@ const formView = {
           m('label', 'vaffa'),
           m('.ui primary labeled icon button', {
             onclick() {
-              console.log('adding..')
-              state.addCustomField();
+              state.saveCustomField();
             }
           }, [
             m('i', {className: 'user icon'}),
