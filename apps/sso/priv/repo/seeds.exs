@@ -47,10 +47,11 @@ for n <- 1..120 do
     board_member: Faker.Company.buzzword_prefix,
     board_number: Faker.Phone.EnUs.subscriber_number,
     province_board: Faker.Address.city,
-    employment: Faker.Team.En.name,
+    enployment: Faker.Team.En.name,
     province_enployment: Faker.Address.city,
     sso_privacy_consent: true,
-    privacy_consent: true
+    privacy_consent: true,
+    app_consents: []
   }
 
   password = Faker.Internet.user_name
@@ -63,6 +64,6 @@ for n <- 1..120 do
         password_hash: Comeonin.Bcrypt.hashpwsalt(password),
         activation_code: Crypto.random_string(32)
       })
-    |> Ecto.Changeset.put_embed(:profile, profile)
+    |> Ecto.Changeset.put_change(:profile, profile)
     |> Repo.insert!
 end

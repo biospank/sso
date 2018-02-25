@@ -20,10 +20,11 @@ const listView = {
       ]),
       m('tbody', CustomField.list().map((field) => {
         return m('tr', {
-          style: field.customizable ? 'cursor: pointer;' : '',
-          className: field.customizable ? '' : 'disabled',
+          style: field.customizable ? 'cursor: pointer;' : 'cursor: not-allowed;',
+          className: field.customizable ? '' : 'error',
           onclick() {
-            CustomField.current(CustomField.model(field));
+            if(field.customizable)
+              CustomField.current(CustomField.model(field));
           }
         }, [
             m('td', field.label),

@@ -30,6 +30,18 @@ const formView = {
       }
     };
 
+    this.deleteCustomField = () => {
+      _.remove(CustomField.list(), (field, index, array) => {
+        return CustomField.current().id === field.id;
+      });
+
+      CustomField.current(vnode.attrs.model());
+    };
+
+    this.newCustomField = () => {
+      CustomField.current(vnode.attrs.model());
+    };
+
     this.defaultField = () => {
       if(_.isEqual(CustomField.current().data_type(), 'string')) {
         return m(".field", [
@@ -164,15 +176,25 @@ const formView = {
           ])
         ]),
         m('.field', [
-          m('label', 'vaffa'),
-          m('.ui primary labeled icon button', {
+          m('.ui primary basic button', {
+            onclick() {
+              state.newCustomField();
+            }
+          }, 'Nuovo')
+        ]),
+        m('.field', [
+          m('.ui positive basic button', {
             onclick() {
               state.saveCustomField();
             }
-          }, [
-            m('i', {className: 'user icon'}),
-            'Add Field'
-          ])
+          }, 'Salva')
+        ]),
+        m('.field', [
+          m('.ui negative basic button', {
+            onclick() {
+              state.deleteCustomField();
+            }
+          }, 'Elimina')
         ])
       ])
     ])
