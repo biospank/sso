@@ -3,6 +3,7 @@ import _ from 'lodash';
 import format from 'date-fns/format';
 import mixinLayout from '../../layout/mixin_layout';
 import User from '../../../models/user';
+import CustomField from '../../../models/custom_field';
 import loadingButton from '../../../components/loading_button';
 
 const content = ({state}) => {
@@ -42,7 +43,7 @@ const content = ({state}) => {
       m("span", { class: "ui orange label" }, `${state.user.profile.first_name} ${state.user.profile.last_name} (${state.user.email})` ),
       m("h2", { class: "ui dividing header pb-10 mb-25 teal weight-light" }, "Dettaglio Utente"),
       m(".ui grid",
-        _.map(state.unset(['id', 'privacy_consent', 'sso_privacy_consent', 'app_consents']), (value, key) => {
+        _.map(state.removeHiddenFields(), (value, key) => {
           return m(".four wide column", [
             m(".field", [
               m("label", state.labelFor(key)),
@@ -112,10 +113,10 @@ const userDetails = {
       ).label
     };
 
-    this.unset = (properties) => {
+    this.removeHiddenFields = () => {
       let obj = _.clone(this.user.profile);
 
-      _.forEach(properties, (prop) => {
+      _.forEach(CustomField.hidden, (prop) => {
         _.unset(obj, prop);
       });
 

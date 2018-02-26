@@ -17,8 +17,8 @@ const formContent = (state) => {
     return m('.ui attached segment')
   } else {
     return m('.ui attached segment', [
-      m('', JSON.stringify(CustomField.current())),
-      m('', JSON.stringify(CustomField.list())),
+      // m('', JSON.stringify(CustomField.current())),
+      // m('', JSON.stringify(CustomField.list())),
       m(formView, {model: CustomField.model}),
       m(listView, {customFields: _.get(
         Organization.current(),

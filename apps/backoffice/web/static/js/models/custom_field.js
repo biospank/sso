@@ -50,25 +50,7 @@ const CustomField = {
       return [
         {
           id: _.uniqueId(),
-          label: 'Nome',
-          name: 'first_name',
-          data_type: 'string',
-          rule_type: 'required',
-          default: '',
-          customizable: false
-        },
-        {
-          id: _.uniqueId(),
-          label: 'Cognome',
-          name: 'last_name',
-          data_type: 'string',
-          rule_type: 'required',
-          default: '',
-          customizable: false
-        },
-        {
-          id: _.uniqueId(),
-          label: 'Consenso privacy',
+          label: 'Privacy consent',
           name: 'privacy_consent',
           data_type: 'boolean',
           rule_type: 'required',
@@ -77,7 +59,7 @@ const CustomField = {
         },
         {
           id: _.uniqueId(),
-          label: 'Consenso privacy Sso',
+          label: 'Sso privacy consent',
           name: 'sso_privacy_consent',
           data_type: 'boolean',
           rule_type: 'required',
@@ -99,6 +81,13 @@ const CustomField = {
     {booleanLabel: 'Vero', booleanValue: 'true'},
     {booleanLabel: 'Falso', booleanValue: 'false'}
   ],
+  hidden: [
+    'id',
+    'privacy_consent',
+    'sso_privacy_consent',
+    'app_consents',
+    'activation_callback_url'
+  ]
 };
 
 export default CustomField;
