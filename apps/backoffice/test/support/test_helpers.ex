@@ -23,7 +23,7 @@ defmodule Backoffice.TestHelpers do
         custom_fields: [
           %{
             id: "1",
-            label: "field 1",
+            label: "field First name",
             name: "first_name",
             data_type: "string",
             rule_type: "required",
