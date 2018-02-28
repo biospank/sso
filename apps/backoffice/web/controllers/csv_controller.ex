@@ -1,11 +1,15 @@
 defmodule Backoffice.CsvController do
   use Backoffice.Web, :controller
 
-  alias Sso.{User}
+  alias Sso.{User, Organization}
 
   def user_export(conn, params) do
     case Guardian.decode_and_verify(params["token"]) do
       { :ok, _claims } ->
+        organization =
+          Organization
+          |> Backoffice.Repo.get!(params["filters"]["organization"])
+
         query_filter = case params["filters"] do
           nil ->
             User
@@ -28,7 +32,7 @@ defmodule Backoffice.CsvController do
         conn
         |> put_resp_content_type("text/csv")
         |> put_resp_header("content-disposition", "attachment; filename=\"export_#{Chronos.now |> Chronos.epoch_time}.csv\"")
-        |> send_resp(200, Sso.UserView.csv_content(filtered_users))
+        |> send_resp(200, Sso.UserView.csv_content(organization, filtered_users))
       { :error, _reason } ->
         conn
         |> put_status(498)

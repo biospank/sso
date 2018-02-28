@@ -3,6 +3,7 @@ import _ from 'lodash';
 import User from '../../../models/user';
 import Account from '../../../models/account';
 import Organization from '../../../models/organization';
+import CustomField from '../../../models/custom_field';
 
 const userFilters = {
   oninit(vnode) {
@@ -55,68 +56,15 @@ const userFilters = {
       }
     };
 
+    this.hiddenFields = (field) => {
+      return _.includes(CustomField.hidden, field.name)
+    };
+
     this.getAllAccounts();
     this.getAllOrganizations();
   },
   view({state}) {
     return m("form", { class: "ui form segment mb-40" }, [
-      m(".four fields", [
-        m(".field", [
-          m(".ui fluid selection dropdown", {
-            oncreate: function(vnode) {
-              $('.ui.dropdown').dropdown();
-            }
-          }, [
-            m("input", {
-              type: "hidden",
-              name: "field",
-              value: User.filters.field(),
-              onchange: m.withAttr("value", User.filters.field)
-            }),
-            m("i", { class: "dropdown icon" }),
-            m(".text", User.filters.fieldLabel()),
-            m(".menu", [
-              User.filterFields.map((filter) => {
-                return m('.item', {
-                  "data-value": filter.fieldValue,
-                  className: (filter.fieldValue === User.filters.field() ? "active selected" : ""),
-                  onclick: (event) => {
-                    User.filters.fieldLabel(event.target.outerText);
-                  }
-                }, filter.fieldLabel);
-              })
-            ])
-          ])
-        ]),
-        m(".field", [
-          m("input", {
-            oninput: m.withAttr("value", User.filters.term),
-            value: User.filters.term,
-            type: "text",
-            placeholder: "Termine di ricerca"
-          })
-        ]),
-        m(".field", [
-          m("input", {
-            oninput: m.withAttr("value", User.filters.email),
-            value: User.filters.email,
-            type: "email",
-            placeholder: "Filtra per Email"
-          })
-        ]),
-        m(".field", [
-          m("button", {
-            onclick: (event) => {
-              event.preventDefault();
-              this.exportUsers({filters: User.filters});
-            },
-            class: "ui submit teal basic button full"
-          }, [
-            m("i.icon download"),
-            "Esporta"
-          ])
-        ])
-      ]),
       m(".four fields", [
         m(".field", [
           m(".ui fluid selection dropdown", {
@@ -201,6 +149,74 @@ const userFilters = {
               })
             ])
           ])
+        ]),
+        m(".field", [
+          m("button.ui submit teal basic button full", {
+            onclick: (event) => {
+              event.preventDefault();
+              this.exportUsers({filters: User.filters});
+            },
+            className: (User.filters.organization() === "") ? "disabled" : ""
+          }, [
+            m("i.icon download"),
+            "Esporta"
+          ])
+        ])
+      ]),
+      m(".four fields", [
+        m(".field", [
+          m(".ui fluid selection dropdown", {
+            className: (User.filters.organization() === "") ? "disabled" : "",
+            oncreate: function(vnode) {
+              $('.ui.dropdown').dropdown();
+            }
+          }, [
+            m("input", {
+              type: "hidden",
+              name: "field",
+              value: User.filters.field(),
+              onchange: m.withAttr("value", User.filters.field)
+            }),
+            m("i", { class: "dropdown icon" }),
+            m(".text", (User.filters.organization() === "") ? "" : User.filters.fieldLabel()),
+            m(".menu",
+              _.reject(
+                _.get(
+                  _.find(
+                    state.organizations,
+                    ['name', User.filters.organizationLabel()]
+                  ),
+                  'settings.custom_fields',
+                  []
+                ),
+                state.hiddenFields
+              ).map((filter) => {
+                return m('.item', {
+                  "data-value": filter.name,
+                  className: (filter.name === User.filters.field() ? "active selected" : ""),
+                  onclick: (event) => {
+                    User.filters.fieldLabel(event.target.outerText);
+                  }
+                }, filter.label);
+              })
+            )
+          ])
+        ]),
+        m(".field", [
+          m("input", {
+            oninput: m.withAttr("value", User.filters.term),
+            value: User.filters.term,
+            type: "text",
+            placeholder: "Termine di ricerca"
+          })
+        ]),
+        m(".field", [
+          m("input", {
+            oninput: m.withAttr("value", User.filters.email),
+            value: User.filters.email,
+            type: "email",
+            placeholder: "Filtra per Email"
+          })
         ]),
         m(".field", [
           m("button", {

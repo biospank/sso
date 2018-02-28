@@ -51,9 +51,9 @@ const listItem = {
         m('img.ui avatar mini image', {src: "/images/user.png"})
       ]),
       m('.content', [
-        m("h3", { class: "header mtb-10 text-teal weight-bold" }, `${this.user.profile.first_name} ${this.user.profile.last_name}`),
-        m("p", { class: "meta" }, this.user.profile.profession),
-        m("p", { class: "description" }, this.user.profile.specialization),
+        m("h3", {
+          class: "header mtb-10 text-teal weight-bold"
+        }, `${this.user.profile.nome || this.user.profile.first_name} ${this.user.profile.cognome || this.user.profile.last_name}`),
         m('.extra', _.concat(
           this.orgTagView(this.user),
           this.accountTagView(this.user),
@@ -63,10 +63,6 @@ const listItem = {
           m("label", { class: "ui label" }, [
             m('i.at icon'),
             this.user.email
-          ]),
-          m("label", { class: "ui label" }, [
-            m('i.call icon'),
-            this.user.profile.phone_number
           ]),
           m(loadingButton, {
             action: this.authUser,

@@ -40,12 +40,17 @@ defmodule Sso.Organization do
       {field["name"] |> String.to_atom, field["data_type"] |> String.to_atom}
     end)
   end
-  def custom_fields(rule, fields) do
+  def custom_fields(rule, fields) when rule in [:optional, :required] do
     field_rule = Atom.to_string(rule)
 
     Enum.filter_map(fields, fn(field) ->
       field["rule_type"] == field_rule
     end, &(&1["name"] |> String.to_atom))
+  end
+  def custom_fields(rule, fields) when rule == :label do
+    Enum.map(fields, fn(field) ->
+      field["label"]
+    end)
   end
 
   defp to_value(field) do

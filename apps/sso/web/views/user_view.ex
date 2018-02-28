@@ -50,44 +50,37 @@ defmodule Sso.UserView do
     }
   end
 
-  def csv_content(users) do
+  def csv_content(organization, users) do
     users
     |> Stream.map(&csv_data/1)
-    |> CSV.encode(headers: csv_headers, separator: ?\t)
+    |> CSV.encode(headers: csv_headers(organization), separator: ?\t)
     |> Enum.to_list
     |> to_string
   end
 
-  defp csv_headers() do
+  defp csv_headers(organization) do
     [
-      "Organizzazione", "App",
-      "Data registrazione", "Nome", "Cognome", "Email", "Attivo", "Stato",
-      "Codice fiscale", "Data di Nascita", "Luogo di nascita",
-      "Telefono", "Professione", "Specializzazione", "Attività lavorativa",
-      "Prov. attività lavorativa", "Ordine", "Num. iscr. ordine", "Prov. ordine",
-      "Consensi privacy", "Consenso comunicazioni", "Consenso raccolta dati"
+      "Organizzazione", "App", "Data registrazione",
+      "Email", "Attivo", "Stato"
     ]
+    |> Enum.concat(
+      Sso.Organization.custom_fields(
+        :label,
+        organization.settings["custom_fields"]
+      )
+    )
   end
 
   defp csv_data(user) do
     %{
       "Organizzazione" => user.organization.name, "App" => user.account.app_name,
       "Data registrazione" => "#{user.inserted_at |> NaiveDateTime.to_erl |> Chronos.Formatter.strftime("%d/%m/%Y")}",
-      "Nome" => user.profile.first_name, "Cognome" => user.profile.last_name,
-      "Email" => user.email, "Attivo" => user.active, "Stato" => user.status,
-      "Codice fiscale" => user.profile.fiscal_code,
-      "Data di Nascita" => user.profile.date_of_birth,
-      "Luogo di nascita" => user.profile.place_of_birth,
-      "Telefono" => user.profile.phone_number, "Professione" => user.profile.profession,
-      "Specializzazione" => user.profile.specialization,
-      "Attività lavorativa" => user.profile.employment,
-      "Prov. attività lavorativa" => user.profile.province_enployment,
-      "Ordine" => user.profile.board_member,
-      "Num. iscr. ordine" => user.profile.board_number,
-      "Prov. ordine" => user.profile.province_board,
-      "Consensi privacy" => "#{user.profile.app_consents |> Enum.join(", ")}",
-      "Consenso comunicazioni" => user.profile.news_consent,
-      "Consenso raccolta dati" => user.profile.data_transfer_consent
+      "Email" => user.email, "Attivo" => user.active, "Stato" => user.status
     }
+    |> Map.merge(
+      Map.new(user.organization.settings["custom_fields"], fn(field) ->
+        {field["label"], get_in(user.profile, [field["name"]])}
+      end)
+    )
   end
 end

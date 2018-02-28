@@ -5,30 +5,43 @@ defmodule Sso.OrganizationTest do
 
   @valid_attrs %{name: "OrganizationName", ref_email: "test@organization.com"}
   @invalid_attrs %{}
+
   @custom_fields [
     %{
+      "id" => "1",
+      "label" => "field 1",
       "name" => "field1",
       "data_type" => "string",
       "rule_type" => "optional",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "2",
+      "label" => "field 2",
       "name" => "field2",
       "data_type" => "string",
       "rule_type" => "optional",
-      "default" => "field2 value"
+      "default" => "field2 value",
+      "customizable" => true
     },
     %{
+      "id" => "3",
+      "label" => "field 3",
       "name" => "field3",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "4",
+      "label" => "field 4",
       "name" => "field4",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     }
   ]
 
@@ -60,5 +73,9 @@ defmodule Sso.OrganizationTest do
 
   test "optional custom fields" do
     assert Organization.custom_fields(:optional, @custom_fields) == [:field1, :field2]
+  end
+
+  test "custom field labels" do
+    assert Organization.custom_fields(:label, @custom_fields) == ["field 1", "field 2", "field 3", "field 4"]
   end
 end

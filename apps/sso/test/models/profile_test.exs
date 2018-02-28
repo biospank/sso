@@ -24,106 +24,157 @@ defmodule Sso.ProfileTest do
   }
   @custom_fields [
     %{
+      "id" => "1",
+      "label" => "field 1",
       "name" => "first_name",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "2",
+      "label" => "Last name",
       "name" => "last_name",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "3",
+      "label" => "Fiscal code",
       "name" => "fiscal_code",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "4",
+      "label" => "Date of birth",
       "name" => "date_of_birth",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "5",
+      "label" => "Place of birth",
       "name" => "place_of_birth",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "6",
+      "label" => "Phone number",
       "name" => "phone_number",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "7",
+      "label" => "Profession",
       "name" => "profession",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "8",
+      "label" => "Specialization",
       "name" => "specialization",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "9",
+      "label" => "Board member",
       "name" => "board_member",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "10",
+      "label" => "Board number",
       "name" => "board_number",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "11",
+      "label" => "Province board",
       "name" => "province_board",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
-      "name" => "employment",
+      "id" => "12",
+      "label" => "Enployment",
+      "name" => "enployment",
       "data_type" => "string",
       "rule_type" => "optional",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "13",
+      "label" => "Province enployment",
       "name" => "province_enployment",
       "data_type" => "string",
       "rule_type" => "required",
-      "default" => ""
+      "default" => "",
+      "customizable" => true
     },
     %{
+      "id" => "14",
+      "label" => "Privacy consent",
       "name" => "privacy_consent",
       "data_type" => "boolean",
       "rule_type" => "required",
-      "default" => "false"
+      "default" => "false",
+      "customizable" => false
     },
     %{
+      "id" => "15",
+      "label" => "Sso privacy consent",
       "name" => "sso_privacy_consent",
       "data_type" => "boolean",
       "rule_type" => "required",
-      "default" => "false"
+      "default" => "false",
+      "customizable" => false
     },
     %{
+      "id" => "16",
+      "label" => "News consent",
       "name" => "news_consent",
       "data_type" => "boolean",
       "rule_type" => "optional",
-      "default" => "false"
+      "default" => "false",
+      "customizable" => true
     },
     %{
+      "id" => "17",
+      "label" => "Data transfer consent",
       "name" => "data_transfer_consent",
       "data_type" => "boolean",
       "rule_type" => "optional",
-      "default" => "false"
+      "default" => "false",
+      "customizable" => true
     }
   ]
 

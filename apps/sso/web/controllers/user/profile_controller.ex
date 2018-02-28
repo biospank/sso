@@ -1,7 +1,7 @@
 defmodule Sso.User.ProfileController do
   use Sso.Web, :controller
 
-  alias Sso.{User, Profile, Consent}
+  alias Sso.{User, Profile}
 
   plug :scrub_params, "profile"
 
