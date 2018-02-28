@@ -61,7 +61,7 @@ const content = ({state}) => {
       m(".inline fields", [
         m(".field", [
           m("label", "Privacy:"),
-          state.user.profile.app_consents.map((consent) => {
+          (state.user.profile.app_consents || []).map((consent) => {
             return m("label", { class: "ui label" }, [
               m('i.checkmark box green icon'),
               consent.app_name
