@@ -47,26 +47,7 @@ const CustomField = {
         return _.assign(item, {id: _.uniqueId()});
       })
     } else {
-      return [
-        {
-          id: _.uniqueId(),
-          label: 'Privacy consent',
-          name: 'privacy_consent',
-          data_type: 'boolean',
-          rule_type: 'required',
-          default: 'false',
-          customizable: false
-        },
-        {
-          id: _.uniqueId(),
-          label: 'Sso privacy consent',
-          name: 'sso_privacy_consent',
-          data_type: 'boolean',
-          rule_type: 'required',
-          default: 'false',
-          customizable: false
-        }
-      ];
+      return CustomField.defaults;
     }
   },
   dataTypes: [
@@ -87,6 +68,44 @@ const CustomField = {
     'sso_privacy_consent',
     'app_consents',
     'activation_callback_url'
+  ],
+  defaults: [
+    {
+      id: _.uniqueId(),
+      label: 'Privacy consent',
+      name: 'privacy_consent',
+      data_type: 'boolean',
+      rule_type: 'required',
+      default: 'false',
+      customizable: false
+    },
+    {
+      id: _.uniqueId(),
+      label: 'Sso privacy consent',
+      name: 'sso_privacy_consent',
+      data_type: 'boolean',
+      rule_type: 'required',
+      default: 'false',
+      customizable: false
+    },
+    {
+      id: _.uniqueId(),
+      label: 'First name',
+      name: 'first_name',
+      data_type: 'string',
+      rule_type: 'required',
+      default: '',
+      customizable: true
+    },
+    {
+      id: _.uniqueId(),
+      label: 'Last name',
+      name: 'last_name',
+      data_type: 'string',
+      rule_type: 'required',
+      default: '',
+      customizable: true
+    }
   ]
 };
 

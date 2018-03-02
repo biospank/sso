@@ -5,6 +5,7 @@ import mixinLayout from '../../layout/mixin_layout';
 import menuStep from '../../sso/credentials/menu_step';
 import Account from '../../../models/account';
 import AccountWidzard from '../../../models/account_widzard';
+import CustomField from '../../../models/custom_field'
 import loadingButton from '../../../components/loading_button';
 
 const content = ({state}) => {
@@ -89,7 +90,10 @@ const companyStep = {
         this.account = {
           org: {
             name: AccountWidzard.model.orgName(),
-            ref_email: AccountWidzard.model.orgEmail()
+            ref_email: AccountWidzard.model.orgEmail(),
+            settings: {
+              custom_fields: CustomField.defaults
+            }
           },
           app_name: AccountWidzard.model.accountName(),
           ref_email: AccountWidzard.model.accountEmail()
