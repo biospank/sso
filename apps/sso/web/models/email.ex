@@ -63,8 +63,7 @@ defmodule Sso.Email do
     |> html_body("""
         <p>
         Nome agenzia - #{account.organization.name}<br />
-        Nome utente - #{user.profile["first_name"] || user.profile["nome"]}
-          #{user.profile["last_name"] || user.profile["cognome"]}<br />
+        Nome utente - #{user.profile["first_name"] || user.profile["nome"]} #{user.profile["last_name"] || user.profile["cognome"]}<br />
         Nome app - #{account.app_name}<br />
         Email - #{user.email}
         </p>
