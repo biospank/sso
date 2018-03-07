@@ -9,7 +9,7 @@ defmodule Sso.Auth.User do
     account = Keyword.fetch!(opts, :account)
     user =
       Sso.User.to_lowercase(:email, email)
-      |> repo.one
+      |> repo.get_by(organization_id: account.organization_id)
 
     cond do
       user && user.organization_id != account.organization_id ->
