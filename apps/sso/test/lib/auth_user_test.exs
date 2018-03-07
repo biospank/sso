@@ -52,6 +52,18 @@ defmodule Sso.Auth.UserTest do
       )
     end
 
+    test "email duplicated for different organizations", %{conn: conn, account: account} do
+      insert_user(account, %{email: "test@example.com", active: true, status: :verified})
+
+      org = insert_organization(%{name: "NewOrg", ref_email: "neworg@example.com"})
+      acc = insert_account(org, %{app_name: "NewApp"})
+      user2 = insert_user(acc, %{email: "test@example.com", active: true, status: :verified})
+
+      assert {:ok, _, _} = Sso.Auth.User.login_by_email_and_password(
+        conn, user2.email, user2.password, repo: Sso.Repo, account: acc
+      )
+    end
+
     test "user not found for a different account", %{conn: conn, account: account} do
       user = insert_user(account, %{active: true, status: :verified})
 
