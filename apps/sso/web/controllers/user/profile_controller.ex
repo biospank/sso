@@ -34,11 +34,14 @@ defmodule Sso.User.ProfileController do
             profile_changeset
             |> Ecto.Changeset.apply_changes
 
-          app_consents =
+          profile_consents =
             user.profile
             |> Profile.add_app_consents(profile_params, account)
 
-          profile_with_consents = Map.merge(profile_data, app_consents)
+          profile_with_consents = Map.merge(
+            profile_data,
+            %{app_consents: profile_consents["app_consents"]}
+          )
 
           user =
             user
