@@ -1,0 +1,1792 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Documentazione API SSO</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+.highlight .err {
+  color: #272822;
+  background-color: #f92672;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #f4bf75;
+}
+.highlight .nt {
+  color: #f4bf75;
+}
+.highlight .o, .highlight .ow {
+  color: #f8f8f2;
+}
+.highlight .p, .highlight .pi {
+  color: #f8f8f2;
+}
+.highlight .gi {
+  color: #a6e22e;
+}
+.highlight .gd {
+  color: #f92672;
+}
+.highlight .gh {
+  color: #66d9ef;
+  background-color: #272822;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #ae81ff;
+}
+.highlight .kc {
+  color: #fd971f;
+}
+.highlight .kt {
+  color: #fd971f;
+}
+.highlight .kd {
+  color: #fd971f;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #a6e22e;
+}
+.highlight .sr {
+  color: #a1efe4;
+}
+.highlight .si {
+  color: #cc6633;
+}
+.highlight .se {
+  color: #cc6633;
+}
+.highlight .nn {
+  color: #f4bf75;
+}
+.highlight .nc {
+  color: #f4bf75;
+}
+.highlight .no {
+  color: #f4bf75;
+}
+.highlight .na {
+  color: #66d9ef;
+}
+.highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
+  color: #a6e22e;
+}
+.highlight .ss {
+  color: #a6e22e;
+}
+    </style>
+    <link href="/stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="/stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="/javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;ruby&quot;,&quot;javascript&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="/images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="/images/logo.png" alt="Logo" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+              <a href="#" data-language-name="ruby">ruby</a>
+              <a href="#" data-language-name="javascript">javascript</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+
+          <h1 id="introduction">Introduction</h1>
+
+<h3 id="description">Description</h3>
+
+<p>SSO is a centralized authentication system for Internet and mobile networks.
+It delivers services (endpoints) in REST mode for registration, authentication, and mail notifications.</p>
+
+<p>Registered accounts that want to use the authentication system have the following functions available.</p>
+
+<ul>
+<li>Account session</li>
+<li>User registration (double opt-in)</li>
+<li>User authentication</li>
+<li>Reset user password (double opt-in)</li>
+<li>Change user password</li>
+<li>User details</li>
+<li>Update user profile </li>
+</ul>
+
+          <h1 id="session">Session</h1>
+
+<h3 id="description">Description</h3>
+
+<p>SSO requires access keys for the use of APIs. Contact the Dardy provider to request access keys.</p>
+
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl -i
+  -X POST
+  -d <span class="s1">'{"account": {
+        "access_key": "&lt;access_key&gt;",
+        "secret_key": "&lt;secret_key&gt;"
+      }
+    }'</span>
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  https://dardy-sso-test.herokuapp.com/sso/session
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/session'</span><span class="p">,</span>
+  <span class="ss">body: </span><span class="s1">'{"account": {
+            "access_key": "&lt;access_key&gt;",
+            "secret_key": "&lt;secret_key&gt;"
+           }
+         }'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/session"</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
+    <span class="s1">'"account": {'</span> <span class="o">+</span>
+      <span class="s1">'"access_key": "&lt;access_key&gt;",'</span> <span class="o">+</span>
+      <span class="s1">'"secret_key": "&lt;secret_key&gt;"'</span> <span class="o">+</span>
+    <span class="s1">'}'</span> <span class="o">+</span>
+  <span class="s1">'}'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>Return a JSON structure</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"account"</span><span class="p">:</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"app_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Test"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"access_key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;access_key&gt;"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http-request">HTTP request</h3>
+
+<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/session</code></p>
+
+<h3 id="headers-http">Headers HTTP</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p>Replace <code class="prettyprint">&lt;access_key&gt;</code> and <code class="prettyprint">&lt;secret_key&gt;</code> with the access keys provided by Dardy.</p>
+
+<h3 id="http-reply-headers">HTTP reply headers</h3>
+
+<p><code class="prettyprint">authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  <code>&lt;jwt&gt;</code> is the token required for calls to the other endpoints.
+x-expires:
+</aside>
+
+<p><code class="prettyprint">x-expires: &lt;timestamp&gt;</code></p>
+
+<aside class="notice">
+  <code>&lt;timestamp&gt;</code> indicates the session expiry date (1 day)
+</aside>
+
+<h3 id="http-reply-codes">HTTP reply codes</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>201</td>
+<td>Created &ndash; The request was successful</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; Account not found</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized &ndash; Account not authorized</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity &ndash; Validation error</td>
+</tr>
+<tr>
+<td>423</td>
+<td>Locked &ndash; Account temporarily disabled</td>
+</tr>
+</tbody></table>
+
+          <h1 id="user-registration">User Registration</h1>
+
+<h3 id="description">Description</h3>
+
+<p>Two forms of registration are available:</p>
+
+<ol>
+<li>Registration with activation</li>
+<li>Preauthorized registration</li>
+</ol>
+
+<p>Registration with activation has two stages:</p>
+
+<ul>
+<li>Registration</li>
+<li>Activation</li>
+</ul>
+
+<p>Preauthorized registration has one stage:</p>
+
+<ul>
+<li>Registration</li>
+</ul>
+
+<h2 id="registration-with-activation">Registration with activation</h2>
+
+<h3 id="description">Description</h3>
+
+<p>This creates an <code class="prettyprint">unenabled</code> user whose status is <code class="prettyprint">unverified</code>. An e-mail is sent to the address specified by the user in the registration procedure and an e-mail notification is sent to the account address.</p>
+
+<p>There are two templates for the registration e-mail:</p>
+
+<ol>
+<li>With an activation code (mobile network)
+
+<ul>
+<li>Excluding the <code class="prettyprint">callback_url</code> from the HTTP message body</li>
+</ul></li>
+<li>With a link to the activation page (Internet)
+
+<ul>
+<li>Including the <code class="prettyprint">callback_url</code> in the HTTP message body</li>
+<li>The activation code is appended to the <code class="prettyprint">callback_url</code></li>
+</ul></li>
+</ol>
+
+<h3 id="privacy">Privacy</h3>
+
+<p>Privacy consent is obligatory and is conceded both to the app/site on which the user registers and the SSO service.</p>
+
+<p>The obligatory consent items are:</p>
+
+<ol>
+<li><code class="prettyprint">privacy_consent: true</code></li>
+<li><code class="prettyprint">sso_privacy_consent: true</code></li>
+</ol>
+
+<p>If registration is completed correctly, the privacy information provided to the app/site is added to the field:</p>
+
+<p><code class="prettyprint">app_consents: [...]</code></p>
+
+<p>Consult this field to check if a user has given privacy consent for a particular app/site.</p>
+
+<h2 id="preauthorized-registration">Preauthorized registration</h2>
+
+<h3 id="description">Description</h3>
+
+<p>This creates an <code class="prettyprint">active</code> user whose status is <code class="prettyprint">verified</code>. A courtesy e-mail is sent to the address specified by the user.</p>
+
+<h3 id="privacy">Privacy</h3>
+
+<p>Privacy consent is obligatory and is conceded both to the app/site on which the user registers and the SSO service.</p>
+
+<p>The obligatory consent items are:</p>
+
+<ol>
+<li><code class="prettyprint">privacy_consent: true</code></li>
+<li><code class="prettyprint">sso_privacy_consent: true</code></li>
+</ol>
+
+<p>If registration is completed correctly, the privacy information provided to the app/site is added to the field:</p>
+
+<p><code class="prettyprint">app_consents: [...]</code></p>
+
+<p>Consult this field to check if a user has given privacy consent for a particular app/site.</p>
+
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X POST
+  -d <span class="s1">'{"user": {
+        "email": "test@example.com (obbligatorio)",
+        "password": "secret123 (obbligatorio)",
+        "password_confirmation": "secret123 (obbligatorio)",
+        "callback_url": "https//mio.sito.com/user/activate (opzionale)",
+        "profile": {
+          "first_name": "nome (obbligatorio)",
+          "last_name": "congome (obbligatorio)",
+          "fiscal_code": "codice fiscale (obbligatorio)",
+          "date_of_birth": "data di nascita (yyyy-mm-dd) (obbligatorio)",
+          "place_of_birth": "luogo di nascita (obbligatorio)",
+          "phone_number": "numero di telefono (obbligatorio)",
+          "profession": "professione (obbligatorio)",
+          "specialization": "specializzazione (obbligatorio)",
+          "board_member": "iscrizione ordine (obbligatorio)",
+          "board_number": "numero iscrizione (obbligatorio)",
+          "province_board": "provincia iscrizione (obbligatorio)",
+          "employment": "attività lavorativa (opzionale)",
+          "province_enployment": "provincia attività lavorativa (obbligatorio)",
+          "privacy_consent": "consenso privacy app (obbligatorio a true)",
+          "sso_privacy_consent": "consenso privacy sso (obbligatorio a true)",
+          "news_consent": "consenso invio comunicazioni (opzionale true/false)",
+          "data_transfer_consent": "consenso trattamento dati (opzionale true/false)"
+        }
+      }'</span>
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/signup
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/signup'</span><span class="p">,</span>
+  <span class="ss">body: </span><span class="s1">'{"user": {
+          "email": "test@example.com (obbligatorio)",
+          "password": "secret123 (obbligatorio)",
+          "password_confirmation": "secret123 (obbligatorio)",
+          "callback_url": "https//mio.sito.com/user/activate (opzionale)" (opzionale),
+          "profile": {
+            "first_name": "nome (obbligatorio)",
+            "last_name": "congome (obbligatorio)",
+            "fiscal_code": "codice fiscale (obbligatorio)",
+            "date_of_birth": "data di nascita (yyyy-mm-dd) (obbligatorio)",
+            "place_of_birth": "luogo di nascita (obbligatorio)",
+            "phone_number": "numero di telefono (obbligatorio)",
+            "profession": "professione (obbligatorio)",
+            "specialization": "specializzazione (obbligatorio)",
+            "board_member": "iscrizione ordine (obbligatorio)",
+            "board_number": "numero iscrizione (obbligatorio)",
+            "province_board": "provincia iscrizione (obbligatorio)",
+            "employment": "attività lavorativa (opzionale)" (opzionale),
+            "province_enployment": "provincia attività lavorativa (obbligatorio)",
+            "privacy_consent": "consenso privacy app (obbligatorio a true)",
+            "sso_privacy_consent": "consenso privacy sso (obbligatorio a true)",
+            "news_consent": "consenso invio comunicazioni (opzionale true/false)",
+            "data_transfer_consent": "consenso trattamento dati (opzionale true/false)"
+          }
+        }'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/signup"</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="s1">'{"user": {'</span> <span class="o">+</span>
+          <span class="s1">'"email": "test@example.com (obbligatorio)",'</span> <span class="o">+</span>
+          <span class="s1">'"password": "secret123 (obbligatorio)",'</span> <span class="o">+</span>
+          <span class="s1">'"password_confirmation": "secret123 (obbligatorio)",'</span> <span class="o">+</span>
+          <span class="s1">'"callback_url": "https//mio.sito.com/user/activate (opzionale)",'</span> <span class="o">+</span>
+          <span class="s1">'"profile": {'</span> <span class="o">+</span>
+            <span class="s1">'"first_name": "nome (obbligatorio)",'</span> <span class="o">+</span>
+            <span class="s1">'"last_name": "congome (obbligatorio)",'</span> <span class="o">+</span>
+            <span class="s1">'"fiscal_code": "codice fiscale (obbligatorio)",'</span> <span class="o">+</span>
+            <span class="s1">'"date_of_birth": "data di nascita (yyyy-mm-dd) (obbligatorio)",'</span> <span class="o">+</span>
+            <span class="s1">'"place_of_birth": "luogo di nascita (obbligatorio)",'</span> <span class="o">+</span>
+            <span class="s1">'"phone_number": "numero di telefono (obbligatorio)",'</span> <span class="o">+</span>
+            <span class="s1">'"profession": "professione (obbligatorio)",'</span> <span class="o">+</span>
+            <span class="s1">'"specialization": "specializzazione (obbligatorio)",'</span> <span class="o">+</span>
+            <span class="s1">'"board_member": "iscrizione ordine (obbligatorio)",'</span> <span class="o">+</span>
+            <span class="s1">'"board_number": "numero iscrizione (obbligatorio)",'</span> <span class="o">+</span>
+            <span class="s1">'"province_board": "provincia iscrizione (obbligatorio)",'</span> <span class="o">+</span>
+            <span class="s1">'"employment": "attività lavorativa (opzionale)",'</span> <span class="o">+</span>
+            <span class="s1">'"province_enployment": "provincia attività lavorativa (obbligatorio)",'</span> <span class="o">+</span>
+            <span class="s1">'"privacy_consent": "consenso privacy app (obbligatorio a true)",'</span> <span class="o">+</span>
+            <span class="s1">'"sso_privacy_consent": "consenso privacy sso (obbligatorio a true)",'</span> <span class="o">+</span>
+            <span class="s1">'"new_consent": "consenso invio comunicazioni (opzionale true/false)",'</span> <span class="o">+</span>
+            <span class="s1">'"data_transfer_consent": "consenso trattamento dati (opzionale true/false)",'</span> <span class="o">+</span>
+          <span class="s1">'}'</span> <span class="o">+</span>
+        <span class="s1">'}'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>Return a JSON structure</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">37</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unverified"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="err">...</span><span class="w">
+      </span><span class="nt">"app_consents"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"app_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"identificativo app/sito"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"app_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nome app/sito a cui è stato dato il consenso"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"privacy"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+      </span><span class="err">...</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><strong>Note</strong></p>
+
+<p>In order to use this endpoint it is necessary to create a <a href="#session">session</a>.</p>
+
+<h3 id="http-request-registration-with-activation">HTTP request (registration with activation)</h3>
+
+<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user/signup</code></p>
+
+<h3 id="http-request-preauthorized-registration">HTTP request (preauthorized registration)</h3>
+
+<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user/signup?authorize</code></p>
+
+<h3 id="http-headers">HTTP headers</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Replace  <code>&lt;jwt&gt;</code> with the token in the header of the reply to the session call.
+</aside>
+
+<h3 id="http-reply-codes">HTTP reply codes</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>201</td>
+<td>Created &ndash; The request was successful</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; Invalid activation code</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity &ndash; Validation error</td>
+</tr>
+</tbody></table>
+
+<h2 id="activation">Activation</h2>
+
+<h3 id="description">Description</h3>
+
+<p>Send activation request.</p>
+
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X PUT
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/activate/&lt;activation-code&gt;
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span>
+  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/activate/&lt;activation-code&gt;'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"PUT"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/activate/&lt;activation-code&gt;"</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>Return a JSON structure</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unverified"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">37</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><strong>Note</strong></p>
+
+<p>In order to use this endpoint it is necessary to create a <a href="#session">session</a>.</p>
+
+<h3 id="http-request">HTTP request</h3>
+
+<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/activate/&lt;activation-code&gt;</code></p>
+
+<h3 id="http-headers">HTTP headers</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Replace <code>&lt;jwt&gt;</code> with the token in the header of the reply to the session call.
+</aside>
+
+<aside class="info">
+  Replace <code>&lt;activation-code&gt;</code> with the activation code provided by the user who has received the e-mail
+</aside>
+
+<h3 id="parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>&lt;activation-code&gt;</td>
+<td>Activation code provided by the user who has received the e-mail</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-reply-codes">HTTP reply codes</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td>Success &ndash; The request was successful</td>
+</tr>
+<tr>
+<td>304</td>
+<td>Not Modified &ndash; User already activated</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; Invalid activation code</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity &ndash; Validation error</td>
+</tr>
+</tbody></table>
+
+          <h2 id="resend-activation-code">Resend activation code</h2>
+
+<h3 id="description">Description</h3>
+
+<p>The registration e-mail is resent to the address specified by the user.</p>
+
+<p>There are two templates for sending the activation code:</p>
+
+<ol>
+<li>With an activation code (mobile network)
+
+<ul>
+<li>Excluding the <code class="prettyprint">callback_url</code> from the HTTP message body</li>
+</ul></li>
+<li>With a link to the activation page (Internet)
+
+<ul>
+<li>Including the <code class="prettyprint">callback_url</code> in the HTTP message body</li>
+<li>The activation code is appended to the <code class="prettyprint">callback_url</code></li>
+</ul></li>
+</ol>
+
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X POST
+  -d <span class="s1">'{"user": {
+        "email": "test@example.com",
+        "callback_url": "https//mio.sito.com/activate (opzionale)"
+      }
+    }'</span>
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/activation/resend
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span>
+  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/activation/resend'</span><span class="p">,</span>
+  <span class="ss">body: </span><span class="s1">'{"user": {
+            "email": "test@example.com",
+            "callback_url": "https//mio.sito.com/activate (opzionale)"
+           }
+         }'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/activation/resend"</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
+    <span class="s1">'"user": {'</span> <span class="o">+</span>
+      <span class="s1">'"email": "test@example.com",'</span> <span class="o">+</span>
+      <span class="s1">'"callback_url": "https//mio.sito.com/activate (opzionale)"'</span> <span class="o">+</span>
+    <span class="s1">'}'</span> <span class="o">+</span>
+  <span class="s1">'}'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>Return a JSON structure</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unverified"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">37</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><strong>Note</strong></p>
+
+<p>In order to use this endpoint it is necessary to create a <a href="#session">session</a>.</p>
+
+<h3 id="http-request">HTTP request</h3>
+
+<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user//activation/resend</code></p>
+
+<h3 id="http-headers">HTTP headers</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Replace <code>&lt;jwt&gt;</code> with the token in the header of the reply to the session call.
+</aside>
+
+<h3 id="http-reply-codes">HTTP reply codes</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td>Success &ndash; The request was successful</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; E-mail not found</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity &ndash; Validation error</td>
+</tr>
+</tbody></table>
+
+          <h1 id="user-authentication">User Authentication</h1>
+
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X POST
+  -d <span class="s1">'{"user": {
+        "email": "test@example.com",
+        "password": "secret123"
+      }
+    }'</span>
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/signin
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/signin'</span><span class="p">,</span>
+  <span class="ss">body: </span><span class="s1">'{"user": {
+            "email": "test@example.com",
+            "password": "secret123"
+           }
+         }'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/signin"</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
+    <span class="s1">'"user": {'</span> <span class="o">+</span>
+      <span class="s1">'"email": "test@example.com",'</span> <span class="o">+</span>
+      <span class="s1">'"password": "secret123"'</span> <span class="o">+</span>
+    <span class="s1">'}'</span> <span class="o">+</span>
+  <span class="s1">'}'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>Return a JSON structure</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"verified"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">37</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="description">Description</h3>
+
+<p>This authenticates a registered user who provides their e-mail address and password.</p>
+
+<p><strong>Note</strong></p>
+
+<p>In order to use this endpoint it is necessary to create a <a href="#session">session</a>.</p>
+
+<h3 id="http-request">HTTP request</h3>
+
+<p><code class="prettyprint">POST https://api.dardy.me/user/signin</code></p>
+
+<h3 id="http-headers">HTTP headers</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Replace <code>&lt;jwt&gt;</code> with the token in the header of the reply to the session call.
+</aside>
+
+<h3 id="http-reply-codes">HTTP reply codes</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>201</td>
+<td>Created &ndash; The request was successful</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; User not found</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized &ndash; User not authorized</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity &ndash; Validation error</td>
+</tr>
+<tr>
+<td>423</td>
+<td>Locked &ndash; User temporarily disabled</td>
+</tr>
+<tr>
+<td>451</td>
+<td>Unavailable For Legal Reason - Unverified user</td>
+</tr>
+</tbody></table>
+
+          <h1 id="reset-user-password">Reset User Password</h1>
+
+<h3 id="description">Description</h3>
+
+<p>Password reset includes two stages:</p>
+
+<ul>
+<li>Password reset request</li>
+<li>Reset password</li>
+</ul>
+
+<h2 id="password-reset-request">Password reset request</h2>
+
+<h3 id="description">Description</h3>
+
+<p>An e-mail is sent to the user who requested a password reset.</p>
+
+<p>There are two templates for the password reset e-mail:</p>
+
+<ol>
+<li>With a password reset code (mobile network)
+
+<ul>
+<li>Excluding the <code class="prettyprint">callback_url</code> from the HTTP message body</li>
+</ul></li>
+<li>With a link to the password reset page (Internet)
+
+<ul>
+<li>Including the <code class="prettyprint">callback_url</code> in the HTTP message body</li>
+<li>The password reset code is appended to the <code class="prettyprint">callback_url</code></li>
+</ul></li>
+</ol>
+
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X POST
+  -d <span class="s1">'{"user": {
+        "email": "test@example.com",
+        "callback_url": "https//mio.sito.com/change/password (opzionale)"
+      }
+    }'</span>
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/password/reset
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/password/reset'</span><span class="p">,</span>
+  <span class="ss">body: </span><span class="s1">'{"user": {
+            "email": "test@example.com",
+            "callback_url": "https//mio.sito.com/change/password (opzionale)"
+           }
+         }'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/password/reset"</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
+    <span class="s1">'"user": {'</span> <span class="o">+</span>
+      <span class="s1">'"email": "test@example.com",'</span> <span class="o">+</span>
+      <span class="s1">'"callback_url": "https//mio.sito.com/change/password (opzionale)"'</span> <span class="o">+</span>
+    <span class="s1">'}'</span> <span class="o">+</span>
+  <span class="s1">'}'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<p><strong>Note</strong></p>
+
+<p>In order to use this endpoint it is necessary to create a <a href="#session">session</a>.</p>
+
+<h3 id="http-request">HTTP request</h3>
+
+<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user/password/reset</code></p>
+
+<h3 id="http-headers">HTTP headers</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Replace <code>&lt;jwt&gt;</code> with the token in the header of the reply to the session call.
+</aside>
+
+<h3 id="http-reply-codes">HTTP reply codes</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>201</td>
+<td>Created &ndash; The request was successful</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; E-mail not found</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity &ndash; Validation error</td>
+</tr>
+</tbody></table>
+
+<h2 id="reset-password">Reset password</h2>
+
+<h3 id="description">Description</h3>
+
+<p>The password is reset using the new credentials.</p>
+
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X PUT
+  -d <span class="s1">'{"user": {
+        "password": "new_secret123",
+        "password_confirmation": "new_secret123"
+      }
+    }'</span>
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/password/reset/&lt;reset-code&gt;
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span>
+  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/password/reset/&lt;reset-code&gt;'</span><span class="p">,</span>
+  <span class="ss">body: </span><span class="s1">'{"user": {
+            "password": "new_secret123",
+            "password_confirmation": "new_secret123"
+           }
+         }'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"PUT"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/password/reset/&lt;reset-code&gt;"</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
+    <span class="s1">'"user": {'</span> <span class="o">+</span>
+      <span class="s1">'"password": "new_secret123",'</span> <span class="o">+</span>
+      <span class="s1">'"password_confirmation": "new_secret123"'</span> <span class="o">+</span>
+    <span class="s1">'}'</span> <span class="o">+</span>
+  <span class="s1">'}'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<p><strong>Note</strong></p>
+
+<p>In order to use this endpoint it is necessary to create a <a href="#session">session</a>.</p>
+
+<h3 id="http-request">HTTP request</h3>
+
+<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/password/reset/&lt;reset-code&gt;</code></p>
+
+<h3 id="parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>&lt;reset-code&gt;</td>
+<td>Reset code provided by the user who received the e-mail</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-headers">HTTP headers</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Replace <code>&lt;jwt&gt;</code> with the token in the header of the reply to the session call.
+</aside>
+
+<h3 id="http-reply-codes">HTTP reply codes</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td>OK - The request was successful</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found - Code not found</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity - Validation error</td>
+</tr>
+</tbody></table>
+
+          <h1 id="change-user-password">Change User Password</h1>
+
+<h3 id="description">Description</h3>
+
+<p>Password change is applied for all users that who have accessed the system.</p>
+
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X PUT
+  -d <span class="s1">'{"user": {
+        "password": "new_secret123",
+        "new_password": "new_secret123",
+        "new_password_confirmation": "new_secret123"
+      }
+    }'</span>
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/password/change
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span>
+  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/password/change'</span><span class="p">,</span>
+  <span class="ss">body: </span><span class="s1">'{"user": {
+            "password": "new_secret123",
+            "new_password": "new_secret123",
+            "new_password_confirmation": "new_secret123"
+           }
+         }'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"PUT"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/password/change"</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
+    <span class="s1">'"user": {'</span> <span class="o">+</span>
+      <span class="s1">'"password": "new_secret123",'</span> <span class="o">+</span>
+      <span class="s1">'"new_password": "new_secret123",'</span> <span class="o">+</span>
+      <span class="s1">'"new_password_confirmation": "new_secret123"'</span> <span class="o">+</span>
+    <span class="s1">'}'</span> <span class="o">+</span>
+  <span class="s1">'}'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<p>The password is changed using the new credentials.</p>
+
+<p><strong>Note</strong></p>
+
+<p>In order to use this endpoint it is necessary to create a <a href="#session">session</a>.</p>
+
+<h3 id="http-request">HTTP request</h3>
+
+<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/password/change</code></p>
+
+<h3 id="parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>&lt;id&gt;</td>
+<td>Id of the user who has accessed the system</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-headers">HTTP headers</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Replace <code>&lt;jwt&gt;</code> with the token in the header of the reply to the session call.
+</aside>
+
+<h3 id="http-reply-codes">HTTP reply codes</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td>OK &ndash; The request was successful</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; User not found</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity &ndash; Validation error</td>
+</tr>
+</tbody></table>
+
+          <h1 id="change-user-e-mail">Change User E-mail</h1>
+
+<h3 id="description">Description</h3>
+
+<p>An e-mail address is changed in two stages:</p>
+
+<ul>
+<li>Change e-mail request</li>
+<li>Change e-mail</li>
+</ul>
+
+<h2 id="change-e-mail-request">Change e-mail request</h2>
+
+<h3 id="description">Description</h3>
+
+<p>An e-mail is sent to the new address of the user who requested to change e-mail address.</p>
+
+<p>There are two e-mail templates for the change e-mail request:</p>
+
+<ol>
+<li>With a change e-mail code (mobile network)
+
+<ul>
+<li>Excluding the <code class="prettyprint">callback_url</code> from the HTTP message body</li>
+</ul></li>
+<li>With a link to the change e-mail page (Internet)
+
+<ul>
+<li>Including the <code class="prettyprint">callback_url</code> in the HTTP message body</li>
+<li>The change e-mail code is appended to the <code class="prettyprint">callback_url</code></li>
+</ul></li>
+</ol>
+
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X POST
+  -d <span class="s1">'{"user": {
+        "new_email": "test.cambio.mail@example.com",
+        "new_email_confirmation": "test.cambio.mail@example.com",
+        "password": "secret123",
+        "callback_url": "https//mio.sito.com/cambio/password (opzionale)"
+      }
+    }'</span>
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/email/change
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/email/change'</span><span class="p">,</span>
+  <span class="ss">body: </span><span class="s1">'{"user": {
+            "new_email": "test.cambio.mail@example.com",
+            "new_email_confirmation": "test.cambio.mail@example.com",
+            "password": "secret123",
+            "callback_url": "https//mio.sito.com/cambio/password (opzionale)"
+           }
+         }'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/email/change"</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
+    <span class="s1">'"user": {'</span> <span class="o">+</span>
+      <span class="s1">'"new_email": "test.cambio.mail@example.com",'</span> <span class="o">+</span>
+      <span class="s1">'"new_email_confirmation": "test.cambio.mail@example.com",'</span> <span class="o">+</span>
+      <span class="s1">'"password": "secret123",'</span> <span class="o">+</span>
+      <span class="s1">'"callback_url": "https//mio.sito.com/change/password (opzionale)"'</span> <span class="o">+</span>
+    <span class="s1">'}'</span> <span class="o">+</span>
+  <span class="s1">'}'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<p><strong>Note</strong></p>
+
+<p>In order to use this endpoint it is necessary to create a <a href="#session">session</a>.</p>
+
+<h3 id="http-request">HTTP request</h3>
+
+<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/email/change</code></p>
+
+<h3 id="parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>&lt;id&gt;</td>
+<td>Id of the user who accessed the system</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-headers">HTTP headers</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Replace <code>&lt;jwt&gt;</code> with the token in the header of the reply to the session call.
+</aside>
+
+<h3 id="http-reply-codes">HTTP reply codes</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>201</td>
+<td>Created &ndash; The request was successful</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized &ndash; User not authorized</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; User not found</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity &ndash; Validation error</td>
+</tr>
+</tbody></table>
+
+<h2 id="change-e-mail">Change e-mail</h2>
+
+<h3 id="description">Description</h3>
+
+<p>This changes the e-mail.</p>
+
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X PUT
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/email/change/&lt;email-change-code&gt;
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span>
+  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/email/change/&lt;email-change-code&gt;'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"PUT"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/email/change/&lt;email-change-code&gt;"</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<p><strong>Note</strong></p>
+
+<p>In order to use this endpoint it is necessary to create a <a href="#session">session</a>.</p>
+
+<h3 id="http-request">HTTP request</h3>
+
+<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/email/change/&lt;email-change-code&gt;</code></p>
+
+<h3 id="parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>&lt;email-change-code&gt;</td>
+<td>Code included in the e-mail received by the user (Internet/mobile network)</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-headers">HTTP headers</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Replace <code>&lt;jwt&gt;</code> with the token in the header of the reply to the session call.
+</aside>
+
+<h3 id="http-reply-codes">HTTP reply codes</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td>OK &ndash; The request was successful</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; Code not found</td>
+</tr>
+</tbody></table>
+
+          <h1 id="update-user-profile">Update User Profile</h1>
+
+<h3 id="description">Description</h3>
+
+<p>This updates the user profile with the data submitted in the body of the HTTP message.</p>
+
+<h3 id="privacy">Privacy</h3>
+
+<p>Privacy consent is obligatory and must be submitted by the app/site that registers the user.
+Consent can be given after registration only if the consent comes from an app/site other than the registering app/site.</p>
+
+<p>The consent to be submitted is:</p>
+
+<ol>
+<li><code class="prettyprint">privacy_consent: true</code></li>
+</ol>
+
+<p>If profile updating is completed correctly, the privacy information provided to the app/site is added to the field:</p>
+
+<p><code class="prettyprint">app_consents: [...]</code></p>
+
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X PUT
+  -d <span class="s1">'{"profile": {
+        "phone_number": "nuovo numero di telefono",
+        "profession": "nuova professione"
+      }
+    }'</span>
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/profile
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/profile'</span><span class="p">,</span>
+  <span class="ss">body: </span><span class="s1">'{"profile": {
+            "phone_number": "nuovo numero di telefono",
+            "profession": "nuova professione"
+           }
+         }'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"PUT"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/profile"</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
+    <span class="s1">'"profile": {'</span> <span class="o">+</span>
+      <span class="s1">'"phone_number": "nuovo numero di telefono",'</span> <span class="o">+</span>
+      <span class="s1">'"profession": "nuova professione"'</span> <span class="o">+</span>
+    <span class="s1">'}'</span> <span class="o">+</span>
+  <span class="s1">'}'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>Return a JSON structure</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"verified"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="err">...</span><span class="w">
+      </span><span class="nt">"phone_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nuovo numero di telefono"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"profession"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nuova professione"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"app_consents"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"app_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"identificativo app/sito di registrazione"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"app_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nome app/sito a cui è stato dato il consenso"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"privacy"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"app_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"identificativo app/sito"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"app_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nome app/sito a cui è stato dato il consenso"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"privacy"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+      </span><span class="err">...</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">37</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><strong>Note</strong></p>
+
+<p>In order to use this endpoint it is necessary to create a <a href="#session">session</a>.</p>
+
+<h3 id="http-request">HTTP request</h3>
+
+<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/profile</code></p>
+
+<h3 id="parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>&lt;id&gt;</td>
+<td>Id of the user who requested the profile update</td>
+</tr>
+</tbody></table>
+
+<h3 id="http-headers">HTTP headers</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Replace <code>&lt;jwt&gt;</code> with the token in the header of the reply to the session call.
+</aside>
+
+<h3 id="http-reply-codes">HTTP reply codes</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td>OK &ndash; The request was successful</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; User not found</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity &ndash; Validation error</td>
+</tr>
+</tbody></table>
+
+          <h1 id="user-details">User Details</h1>
+
+<h3 id="description">Description</h3>
+
+<p>This returns the details to the user.</p>
+
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight shell"><code>
+<span class="c"># cURL</span>
+
+curl
+  -X GET
+  -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
+  https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;
+</code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
+
+<span class="nb">require</span> <span class="s1">'httparty'</span>
+
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;'</span><span class="p">,</span>
+  <span class="ss">headers: </span><span class="p">{</span>
+    <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Authorization'</span> <span class="o">=&gt;</span> <span class="s1">'Dardy &lt;jwt&gt;'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript"><code><span class="c1">// jQuery</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">type</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;"</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
+    <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+    <span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Dardy &lt;jwt&gt;"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>Return a JSON structure</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">37</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"verified"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="err">...</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p><strong>Note</strong></p>
+
+<p>In order to use this endpoint it is necessary to create a <a href="#session">session</a>.</p>
+
+<h3 id="http-request">HTTP request</h3>
+
+<p><code class="prettyprint">GET https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;</code></p>
+
+<h3 id="parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>&lt;id&gt;</td>
+<td>User id</td>
+</tr>
+</tbody></table>
+
+<h3 id="headers-http">Headers HTTP</h3>
+
+<p><code class="prettyprint">Accept: application/vnd.dardy.sso.v1+json</code></p>
+
+<p><code class="prettyprint">Authorization: Dardy &lt;jwt&gt;</code></p>
+
+<aside class="warning">
+  Replace <code>&lt;jwt&gt;</code> with the token in the header of the reply to the session call.
+</aside>
+
+<h3 id="codici-risposta-http">Codici risposta HTTP</h3>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td>OK &ndash; The request was successful</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; User not found</td>
+</tr>
+</tbody></table>
+
+          <h1 id="i18n">I18n</h1>
+
+<h3 id="description">Description</h3>
+
+<p>In order to localize error messages in Italian, set the following header in the http requests:</p>
+
+<p><code class="prettyprint">Accept-Language: it</code></p>
+
+          <h1 id="http-error-codes">HTTP Error Codes</h1>
+
+<h3 id="description">Description</h3>
+
+<p>SSO uses the following error codes, in addition to the specific ones, on all the endpoints:</p>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>406</td>
+<td>Not Acceptable &ndash; <code class="prettyprint">Accept</code> Invalid accept header</td>
+</tr>
+<tr>
+<td>498</td>
+<td>Authentication required &ndash; Invalid token</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error &ndash; Problems on the SSO server.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable &ndash; Offline for maintenance. Try again later.</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+                <a href="#" data-language-name="ruby">ruby</a>
+                <a href="#" data-language-name="javascript">javascript</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

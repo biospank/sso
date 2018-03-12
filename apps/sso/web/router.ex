@@ -41,6 +41,7 @@ defmodule Sso.Router do
   end
 
   scope "/sso", Sso do
+    get "/doc/:locale", DocController, :index
     get "/doc", DocController, :index
   end
 end
