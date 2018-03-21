@@ -29,10 +29,9 @@ defmodule Sso.Profile do
   end
 
   def update_changeset(struct, fields, params) do
-    update_params = struct |> Map.merge(params)
-
-    Organization.custom_fields(:data_value, fields)
-    |> cast_update_changeset(Organization.custom_fields(:data_type, fields), update_params)
+    struct
+    |> to_atom_keys
+    |> cast_update_changeset(Organization.custom_fields(:data_type, fields), params)
     |> validate_required(Organization.custom_fields(:required, fields) -- @optional_update_fields)
   end
 
@@ -42,5 +41,9 @@ defmodule Sso.Profile do
       |> Consent.update_app_consents(account, profile_params)
 
     profile |> put_in(["app_consents"], new_consents)
+  end
+
+  defp to_atom_keys(string_key_map) do
+    for {key, val} <- string_key_map, into: %{}, do: {String.to_atom(key), val}
   end
 end
