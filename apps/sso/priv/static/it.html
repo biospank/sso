@@ -134,6 +134,7 @@ Espone servizi (endpoints) in modalità REST per la registrazione, autenticazion
 <li>Autenticazione utente</li>
 <li>Reset password utente (double opt-in)</li>
 <li>Cambio password utente</li>
+<li>Cambio mail utente (double opt-in)</li>
 <li>Dettaglio utente</li>
 <li>Aggiornamento profilo utente</li>
 </ul>
@@ -159,12 +160,12 @@ curl -i
     }'</span>
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
-  https://dardy-sso-test.herokuapp.com/sso/session
+  https://api.dardy.me/sso/session
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
-<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/session'</span><span class="p">,</span>
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://api.dardy.me/sso/session'</span><span class="p">,</span>
   <span class="ss">body: </span><span class="s1">'{"account": {
             "access_key": "&lt;access_key&gt;",
             "secret_key": "&lt;secret_key&gt;"
@@ -179,7 +180,7 @@ curl -i
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/session"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://api.dardy.me/sso/session"</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
     <span class="s1">'"account": {'</span> <span class="o">+</span>
       <span class="s1">'"access_key": "&lt;access_key&gt;",'</span> <span class="o">+</span>
@@ -207,7 +208,7 @@ curl -i
 </span></code></pre>
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/session</code></p>
+<p><code class="prettyprint">POST https://api.dardy.me/sso/session</code></p>
 
 <h3 id="headers-http">Headers HTTP</h3>
 
@@ -381,12 +382,12 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/user/signup
+  https://api.dardy.me/sso/user/signup
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
-<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/signup'</span><span class="p">,</span>
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://api.dardy.me/sso/user/signup'</span><span class="p">,</span>
   <span class="ss">body: </span><span class="s1">'{"user": {
           "email": "test@example.com (obbligatorio)",
           "password": "secret123 (obbligatorio)",
@@ -422,7 +423,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/signup"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://api.dardy.me/sso/user/signup"</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="s1">'{"user": {'</span> <span class="o">+</span>
           <span class="s1">'"email": "test@example.com (obbligatorio)",'</span> <span class="o">+</span>
           <span class="s1">'"password": "secret123 (obbligatorio)",'</span> <span class="o">+</span>
@@ -484,11 +485,11 @@ curl
 
 <h3 id="richiesta-http-registrazione-con-attivazione">Richiesta HTTP (registrazione con attivazione)</h3>
 
-<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user/signup</code></p>
+<p><code class="prettyprint">POST https://api.dardy.me/sso/user/signup</code></p>
 
 <h3 id="richiesta-http-registrazione-preautorizzata">Richiesta HTTP (registrazione preautorizzata)</h3>
 
-<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user/signup?authorize</code></p>
+<p><code class="prettyprint">POST https://api.dardy.me/sso/user/signup?authorize</code></p>
 
 <h3 id="headers-http">Headers HTTP</h3>
 
@@ -539,13 +540,13 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/user/activate/&lt;activation-code&gt;
+  https://api.dardy.me/sso/user/activate/&lt;activation-code&gt;
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
 <span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span>
-  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/activate/&lt;activation-code&gt;'</span><span class="p">,</span>
+  <span class="s1">'https://api.dardy.me/sso/user/activate/&lt;activation-code&gt;'</span><span class="p">,</span>
   <span class="ss">headers: </span><span class="p">{</span>
     <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
     <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
@@ -556,7 +557,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"PUT"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/activate/&lt;activation-code&gt;"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://api.dardy.me/sso/user/activate/&lt;activation-code&gt;"</span><span class="p">,</span>
   <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
     <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
@@ -582,7 +583,7 @@ curl
 
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/activate/&lt;activation-code&gt;</code></p>
+<p><code class="prettyprint">PUT https://api.dardy.me/sso/user/activate/&lt;activation-code&gt;</code></p>
 
 <h3 id="headers-http">Headers HTTP</h3>
 
@@ -676,13 +677,13 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/user/activation/resend
+  https://api.dardy.me/sso/user/activation/resend
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
 <span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span>
-  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/activation/resend'</span><span class="p">,</span>
+  <span class="s1">'https://api.dardy.me/sso/user/activation/resend'</span><span class="p">,</span>
   <span class="ss">body: </span><span class="s1">'{"user": {
             "email": "test@example.com",
             "callback_url": "https//mio.sito.com/activate (opzionale)"
@@ -698,7 +699,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/activation/resend"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://api.dardy.me/sso/user/activation/resend"</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
     <span class="s1">'"user": {'</span> <span class="o">+</span>
       <span class="s1">'"email": "test@example.com",'</span> <span class="o">+</span>
@@ -730,7 +731,7 @@ curl
 
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user//activation/resend</code></p>
+<p><code class="prettyprint">POST https://api.dardy.me/sso/user//activation/resend</code></p>
 
 <h3 id="headers-http">Headers HTTP</h3>
 
@@ -782,12 +783,12 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/user/signin
+  https://api.dardy.me/sso/user/signin
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
-<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/signin'</span><span class="p">,</span>
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://api.dardy.me/sso/user/signin'</span><span class="p">,</span>
   <span class="ss">body: </span><span class="s1">'{"user": {
             "email": "test@example.com",
             "password": "secret123"
@@ -803,7 +804,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/signin"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://api.dardy.me/sso/user/signin"</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
     <span class="s1">'"user": {'</span> <span class="o">+</span>
       <span class="s1">'"email": "test@example.com",'</span> <span class="o">+</span>
@@ -934,12 +935,12 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/user/password/reset
+  https://api.dardy.me/sso/user/password/reset
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
-<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/password/reset'</span><span class="p">,</span>
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://api.dardy.me/sso/user/password/reset'</span><span class="p">,</span>
   <span class="ss">body: </span><span class="s1">'{"user": {
             "email": "test@example.com",
             "callback_url": "https//mio.sito.com/change/password (opzionale)"
@@ -955,7 +956,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/password/reset"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://api.dardy.me/sso/user/password/reset"</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
     <span class="s1">'"user": {'</span> <span class="o">+</span>
       <span class="s1">'"email": "test@example.com",'</span> <span class="o">+</span>
@@ -975,7 +976,7 @@ curl
 
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user/password/reset</code></p>
+<p><code class="prettyprint">POST https://api.dardy.me/sso/user/password/reset</code></p>
 
 <h3 id="headers-http">Headers HTTP</h3>
 
@@ -1031,13 +1032,13 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/user/password/reset/&lt;reset-code&gt;
+  https://api.dardy.me/sso/user/password/reset/&lt;reset-code&gt;
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
 <span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span>
-  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/password/reset/&lt;reset-code&gt;'</span><span class="p">,</span>
+  <span class="s1">'https://api.dardy.me/sso/user/password/reset/&lt;reset-code&gt;'</span><span class="p">,</span>
   <span class="ss">body: </span><span class="s1">'{"user": {
             "password": "new_secret123",
             "password_confirmation": "new_secret123"
@@ -1053,7 +1054,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"PUT"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/password/reset/&lt;reset-code&gt;"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://api.dardy.me/sso/user/password/reset/&lt;reset-code&gt;"</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
     <span class="s1">'"user": {'</span> <span class="o">+</span>
       <span class="s1">'"password": "new_secret123",'</span> <span class="o">+</span>
@@ -1073,7 +1074,7 @@ curl
 
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/password/reset/&lt;reset-code&gt;</code></p>
+<p><code class="prettyprint">PUT https://api.dardy.me/sso/user/password/reset/&lt;reset-code&gt;</code></p>
 
 <h3 id="parametri">Parametri</h3>
 
@@ -1144,13 +1145,13 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/password/change
+  https://api.dardy.me/sso/user/&lt;id&gt;/password/change
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
 <span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span>
-  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/password/change'</span><span class="p">,</span>
+  <span class="s1">'https://api.dardy.me/sso/user/&lt;id&gt;/password/change'</span><span class="p">,</span>
   <span class="ss">body: </span><span class="s1">'{"user": {
             "password": "new_secret123",
             "new_password": "new_secret123",
@@ -1167,7 +1168,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"PUT"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/password/change"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://api.dardy.me/sso/user/&lt;id&gt;/password/change"</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
     <span class="s1">'"user": {'</span> <span class="o">+</span>
       <span class="s1">'"password": "new_secret123",'</span> <span class="o">+</span>
@@ -1190,7 +1191,7 @@ curl
 
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/password/change</code></p>
+<p><code class="prettyprint">PUT https://api.dardy.me/sso/user/&lt;id&gt;/password/change</code></p>
 
 <h3 id="parametri">Parametri</h3>
 
@@ -1289,12 +1290,12 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/email/change
+  https://api.dardy.me/sso/user/&lt;id&gt;/email/change
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
-<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/email/change'</span><span class="p">,</span>
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://api.dardy.me/sso/user/&lt;id&gt;/email/change'</span><span class="p">,</span>
   <span class="ss">body: </span><span class="s1">'{"user": {
             "new_email": "test.cambio.mail@example.com",
             "new_email_confirmation": "test.cambio.mail@example.com",
@@ -1312,7 +1313,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/email/change"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://api.dardy.me/sso/user/&lt;id&gt;/email/change"</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
     <span class="s1">'"user": {'</span> <span class="o">+</span>
       <span class="s1">'"new_email": "test.cambio.mail@example.com",'</span> <span class="o">+</span>
@@ -1334,7 +1335,7 @@ curl
 
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">POST https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/email/change</code></p>
+<p><code class="prettyprint">POST https://api.dardy.me/sso/user/&lt;id&gt;/email/change</code></p>
 
 <h3 id="parametri">Parametri</h3>
 
@@ -1403,13 +1404,13 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/user/email/change/&lt;email-change-code&gt;
+  https://api.dardy.me/sso/user/email/change/&lt;email-change-code&gt;
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
 <span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span>
-  <span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/email/change/&lt;email-change-code&gt;'</span><span class="p">,</span>
+  <span class="s1">'https://api.dardy.me/sso/user/email/change/&lt;email-change-code&gt;'</span><span class="p">,</span>
   <span class="ss">headers: </span><span class="p">{</span>
     <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
     <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
@@ -1420,7 +1421,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"PUT"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/email/change/&lt;email-change-code&gt;"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://api.dardy.me/sso/user/email/change/&lt;email-change-code&gt;"</span><span class="p">,</span>
   <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
     <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
@@ -1434,7 +1435,7 @@ curl
 
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/email/change/&lt;email-change-code&gt;</code></p>
+<p><code class="prettyprint">PUT https://api.dardy.me/sso/user/email/change/&lt;email-change-code&gt;</code></p>
 
 <h3 id="parametri">Parametri</h3>
 
@@ -1515,12 +1516,12 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/profile
+  https://api.dardy.me/sso/user/&lt;id&gt;/profile
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
-<span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/profile'</span><span class="p">,</span>
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="s1">'https://api.dardy.me/sso/user/&lt;id&gt;/profile'</span><span class="p">,</span>
   <span class="ss">body: </span><span class="s1">'{"profile": {
             "phone_number": "nuovo numero di telefono",
             "profession": "nuova professione"
@@ -1536,7 +1537,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"PUT"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/profile"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://api.dardy.me/sso/user/&lt;id&gt;/profile"</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="s1">'{'</span> <span class="o">+</span>
     <span class="s1">'"profile": {'</span> <span class="o">+</span>
       <span class="s1">'"phone_number": "nuovo numero di telefono",'</span> <span class="o">+</span>
@@ -1586,7 +1587,7 @@ curl
 
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">PUT https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;/profile</code></p>
+<p><code class="prettyprint">PUT https://api.dardy.me/sso/user/&lt;id&gt;/profile</code></p>
 
 <h3 id="parametri">Parametri</h3>
 
@@ -1651,12 +1652,12 @@ curl
   -H <span class="s2">"Accept: application/vnd.dardy.sso.v1+json"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Dardy &lt;jwt&gt;"</span>
-  https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;
+  https://api.dardy.me/sso/user/&lt;id&gt;
 </code></pre><pre class="highlight ruby"><code><span class="c1"># Ruby</span>
 
 <span class="nb">require</span> <span class="s1">'httparty'</span>
 
-<span class="no">HTTParty</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="s1">'https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;'</span><span class="p">,</span>
+<span class="no">HTTParty</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="s1">'https://api.dardy.me/sso/user/&lt;id&gt;'</span><span class="p">,</span>
   <span class="ss">headers: </span><span class="p">{</span>
     <span class="s1">'Accept'</span> <span class="o">=&gt;</span> <span class="s1">'application/vnd.dardy.sso.v1+json'</span><span class="p">,</span>
     <span class="s1">'Content-Type'</span> <span class="o">=&gt;</span> <span class="s1">'application/json'</span><span class="p">,</span>
@@ -1667,7 +1668,7 @@ curl
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="na">type</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">,</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;"</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s2">"https://api.dardy.me/sso/user/&lt;id&gt;"</span><span class="p">,</span>
   <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.dardy.sso.v1+json"</span><span class="p">,</span>
     <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
@@ -1696,7 +1697,7 @@ curl
 
 <h3 id="richiesta-http">Richiesta HTTP</h3>
 
-<p><code class="prettyprint">GET https://dardy-sso-test.herokuapp.com/sso/user/&lt;id&gt;</code></p>
+<p><code class="prettyprint">GET https://api.dardy.me/sso/user/&lt;id&gt;</code></p>
 
 <h3 id="parametri">Parametri</h3>
 
